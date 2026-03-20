@@ -17,9 +17,26 @@ These are **two different Pis**.
 - Use it to **inspect entities**, **test services**, and **validate** automations while editing this repo.
 - **Never** commit the long-lived token, **never** paste it into markdown or chat logs you might save publicly.
 
+### Where to put the token (Cursor + `ha-mcp`)
+
+On **macOS**, Cursor’s MCP config is usually:
+
+**`~/.cursor/mcp.json`**
+
+Add or edit the server that runs **`ha-mcp`** (often installed via `uvx ha-mcp@latest`). Set **environment variables** there — **not** in the magic-mirror git repo:
+
+| Variable | Value |
+|----------|--------|
+| `HOMEASSISTANT_URL` | Your HA base URL, e.g. `http://<pi5-hostname-or-ip>:8123` (use `https://` if you terminate TLS) |
+| `HOMEASSISTANT_TOKEN` | Long-lived token from HA → **Profile** (user menu) → **Security** → **Long-lived access tokens** |
+
+Alternatively: **Cursor Settings → MCP** and configure the same server/env in the UI (Cursor writes `mcp.json`).
+
+After saving, **restart Cursor** or reload MCP so the new token is picked up.
+
 **Safer patterns**
 
-- Store the token in **Cursor MCP server config** (local only) or a **`.env`** file that is **gitignored**.
+- Keep tokens **only** in `~/.cursor/mcp.json` (or UI equivalent) / a **gitignored** `.env` — never in this repo.
 - In repo: only **`.env.example`** with empty `HA_URL=` and `HA_TOKEN=` placeholders if needed for scripts later.
 
 ---
