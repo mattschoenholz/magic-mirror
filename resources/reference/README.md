@@ -22,7 +22,7 @@ Create `links.md` with sections such as:
 - Raspberry Pi kiosk / Chromium
 - AIY Voice Kit (your revision)
 - Home Assistant REST / WebSocket
-- Magic Mirror framework (if evaluated)
+- **Custom web + HA** (this project — not MagicMirror² for v1); see `.cursor/skills/mm-*`
 - Local voice stacks (optional)
 
 Example row:

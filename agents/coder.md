@@ -5,6 +5,9 @@ description: >-
   FR/NFR traceability, explicit HA/cloud error handling. Use after spec sign-off.
 skills:
   - mm-mirror-context
+  - mm-home-assistant
+  - mm-kiosk-pi
+  - mm-voice-aiy-google
 ---
 
 # Agent: Coder
@@ -19,7 +22,8 @@ Implement features **after** FSD/Architecture sign-off for the target milestone.
 
 - `docs/MIRROR_CONTEXT.md`  
 - `docs/FSD.md`, `docs/ARCHITECTURE.md`  
-- `agents/tester.md`, `docs/LESSONS_LEARNED.md`
+- `agents/tester.md`, `docs/LESSONS_LEARNED.md`  
+- Cursor skills: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voice-aiy-google`**
 
 ## Non-negotiables
 

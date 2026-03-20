@@ -4,6 +4,19 @@ Single reference for agents and skills. **Update this file** when hardware facts
 
 ---
 
+## Stack (locked)
+
+| Layer | Choice |
+|-------|--------|
+| **Mirror UI** | **Custom web app** (vanilla or light framework) in **Chromium kiosk** on Pi |
+| **Home Assistant** | **REST + WebSocket** from a **local backend** on the Pi; token **never** in the browser bundle (**FR-006**) |
+| **Voice** | **AIY Voice HAT** + **Google cloud** (v1) |
+| **Not used** | **MagicMirror²** / Electron mirror frameworks for v1 (reduces lock-in; full control for glass + night mode) |
+
+Domain reference skills (Cursor / Claude): `mm-home-assistant`, `mm-kiosk-pi`, `mm-voice-aiy-google`, `mm-dev-mcp-ha` (MCP = dev machine only).
+
+---
+
 ## Hardware & assumptions (from PROJECT_BRIEF)
 
 | Topic | Value / status |
@@ -49,7 +62,8 @@ Full detail in `agents/planner.md`. Phases **0–5**:
 - [ ] Long-lived token on Pi only; file perms **600**; never in git or browser bundle  
 - [ ] Prefer WebSocket for live state; define reconnect/backoff  
 - [ ] Whitelist service calls / intents; document entity IDs in ARCHITECTURE as templates only  
-- [ ] Behavior when HA unreachable: show stale state + indicator vs blank (decide in FSD)
+- [ ] Behavior when HA unreachable: show stale state + indicator vs blank (decide in FSD)  
+- [ ] See **`.cursor/skills/mm-home-assistant/reference.md`** for API patterns
 
 ---
 
@@ -57,7 +71,8 @@ Full detail in `agents/planner.md`. Phases **0–5**:
 
 - [ ] AIY / Assistant software path pinned in ARCHITECTURE when chosen  
 - [ ] OAuth / credentials on device only; pattern documented, values never committed  
-- [ ] Fallback when cloud fails (retry, user message, push-to-talk only — decide in FSD)
+- [ ] Fallback when cloud fails (retry, user message, push-to-talk only — decide in FSD)  
+- [ ] See **`.cursor/skills/mm-voice-aiy-google/reference.md`**
 
 ---
 

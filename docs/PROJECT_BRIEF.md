@@ -1,6 +1,6 @@
 # Project brief — Wall Magic Mirror
 
-**Version:** 0.2  
+**Version:** 0.3  
 **Last updated:** 2026-03-20
 
 ---
@@ -27,7 +27,7 @@ You want a **wall-mounted mirror** that doubles as a **low-distraction informati
 ### In scope (candidate)
 
 - **Enclosure:** Mirror glass + Samsung TV are **already mounted in a wooden frame** — remaining work is cabling, Pi placement, service access, and any trim tweaks.
-- Pi OS image, kiosk display, auto-start UI.
+- Pi OS image, **Chromium kiosk** hosting a **custom web UI** (not MagicMirror² for v1); auto-start UI + **local backend** for Home Assistant API (**FR-006**).
 - HA integration (entities, scenes, possibly calendar via HA).
 - Voice: **Google account / cloud** acceptable — AIY Voice HAT + Assistant-style flow (details in architecture phase).
 - **Night mode:** calmer UI and restrained audio/TTS for bedroom use.
@@ -55,28 +55,31 @@ You want a **wall-mounted mirror** that doubles as a **low-distraction informati
 
 ## 5. High-level architecture (one paragraph)
 
-The Pi renders a **full-screen web UI** (or equivalent) on the HDMI display. A **local service** subscribes to Home Assistant (WebSocket/REST) for entity state and optional actions. **Voice** captures audio via the HAT, uses **Google cloud–backed** recognition/Assistant as agreed, and maps allowed phrases to HA service calls. **Cursor MCP** supports developers working on automations and docs, not the mirror runtime unless explicitly added later.
+The Pi runs **Chromium in kiosk mode** showing a **custom-built web mirror UI**. A **local backend** on the Pi holds the HA token and talks to Home Assistant via **REST/WebSocket**; the browser talks only to loopback (**FR-006**). **Voice** uses the AIY HAT with **Google cloud–backed** recognition/Assistant and maps **whitelisted** intents to HA (often via the same backend). **Cursor + HA MCP** are for **development on your PC only**, not part of the wall-mounted runtime.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for diagrams and options.
 
 ---
 
-## 6. Frugal stack — options to compare (no decision lock yet)
+## 6. Stack decisions
 
-| Area | Low-cost / free-leaning | Tradeoff |
-|------|-------------------------|----------|
-| Mirror UI | Static or light SPA + HA data | You build/maintain more vs off-the-shelf mirror framework |
-| Voice | AIY + Google Assistant path | Account + cloud dependency *(accepted for v1)* |
-| Voice (alt.) | Wake word on Pi + HA “Assist” / conversation | More integration work, fewer vendor ties |
-| Calendar | HA + local CalDAV / family shared calendar | Privacy-friendly; setup complexity |
-| Remote admin | SSH over LAN / Tailscale (if you already use it) | Policy: keys only, no password SSH |
+| Area | Decision | Notes |
+|------|----------|--------|
+| **Mirror UI** | **Custom web + local HA backend** | Full control for glass, night mode, FR-006; more code than MagicMirror² |
+| **MagicMirror²** | **Deferred for v1** | Can revisit if maintenance cost of custom UI grows |
+| Voice | **AIY + Google Assistant / cloud** | Account + cloud dependency *(accepted for v1)* |
+| Voice (future) | Wake word + HA Assist | Fewer vendor ties; more integration later |
+| Calendar / weather | Prefer **HA entities** | Avoid extra paid APIs |
+| Remote admin | SSH over LAN / Tailscale | Keys only, no password SSH |
+
+Reference skills in repo: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voice-aiy-google`**, **`mm-dev-mcp-ha`** (MCP dev-only).
 
 ---
 
 ## 7. Home Assistant & MCP
 
 - **Runtime:** Mirror should use HA **REST + WebSocket** with a **long-lived token** stored in a root-only file or OS secret mechanism — **never** in git.
-- **MCP:** Use during development to inspect entities, test services, and pull docs into `resources/reference/`. Document any “dev-only” workflows in [GITHUB.md](GITHUB.md) or a future `docs/DEV_ENV.md`.
+- **MCP:** **Dev machine only** (Cursor). Skill **`mm-dev-mcp-ha`** — verify entities/services while editing; **never** paste tokens into chat. Not used on the Pi at runtime. Optional: document workflows in [GITHUB.md](GITHUB.md) or `docs/DEV_ENV.md`.
 
 ---
 
@@ -123,5 +126,5 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for diagrams and options.
 1. Confirm **display resolution** and **Pi RAM**; update FSD + UX type scale for **59 cm tall** viewable area.
 2. Lock **v1 module list** and **night mode** behavior in [FSD.md](FSD.md).
 3. UX Designer: layout zones + typography for **32.5×59 cm** at viewing distance.
-4. Architect: UI stack + **audio routing** (HAT vs HDMI); voice stack using **Google cloud**; update ARCHITECTURE.md.
+4. Architect: **custom web + backend** locked; next — **audio routing** (HAT vs HDMI) and voice stack details in ARCHITECTURE.md.
 5. Keep **GitHub** in sync with local (see [GITHUB.md](GITHUB.md)).

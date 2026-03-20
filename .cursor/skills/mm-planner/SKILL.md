@@ -15,7 +15,7 @@ description: >-
 
 ## Instructions
 
-1. Read **`docs/MIRROR_CONTEXT.md`**, then **`docs/PROJECT_BRIEF.md`** and **`docs/FSD.md`**.
+1. Read **`docs/MIRROR_CONTEXT.md`**, then **`docs/PROJECT_BRIEF.md`** and **`docs/FSD.md`** (stack = **custom web + HA API**, not MagicMirror²).
 2. Use **phases 0–5** and **task template** from `agents/planner.md`.
 3. Every milestone lists **exit criteria** testable by **Tester** (FR/NFR IDs).
 4. Maintain a short **risk register** (probability, impact, mitigation).

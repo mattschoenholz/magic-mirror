@@ -17,6 +17,18 @@ description: >-
 
 1. Read **`docs/MIRROR_CONTEXT.md`** end-to-end.
 2. Then open the role-specific doc (`docs/FSD.md`, `docs/ARCHITECTURE.md`, etc.) as needed.
+3. Load **domain reference skills** when work touches that layer:
+
+| Skill | Use |
+|-------|-----|
+| **`mm-home-assistant`** | Runtime HA REST/WebSocket, tokens, FR-006 proxy pattern |
+| **`mm-kiosk-pi`** | Chromium kiosk, systemd autostart, HDMI/audio on Pi |
+| **`mm-voice-aiy-google`** | AIY HAT, Google cloud voice, intent → HA whitelist |
+| **`mm-dev-mcp-ha`** | Cursor + HA MCP **only** (never Pi runtime) |
+
+## Stack reminder
+
+**Custom web UI** (HTML/CSS/JS or light framework) + **local backend** for HA — **not** MagicMirror² (see `docs/ARCHITECTURE.md`).
 
 ## Outputs
 

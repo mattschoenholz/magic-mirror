@@ -26,6 +26,8 @@ Open this folder as the Cursor **workspace root** so `.cursor/skills/` load corr
 
 Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md).
 
+**Implementation stack (v1):** **Custom web UI** in **Chromium kiosk** + **local backend** on the Pi for **Home Assistant REST/WebSocket** (token never in the browser — **FR-006**). **Not** MagicMirror². Reference Cursor skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-voice-aiy-google`, `mm-dev-mcp-ha` (MCP = dev PC only).
+
 ---
 
 ## Quick links
@@ -45,7 +47,7 @@ Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT
 
 ## Frugal / free-leaning practices (starting point)
 
-- **UI:** Open web stack on the Pi (e.g. Chromium kiosk) or a maintained Magic Mirror–style framework — decide in architecture phase.
+- **UI:** **Custom** open web stack on the Pi + Chromium kiosk; you own the code path for glass and night mode.
 - **Voice:** Cloud-backed Google path **accepted** for v1; document privacy boundaries in FSD.
 - **Home Assistant:** Prefer **local WebSocket/API** and **long-lived tokens** on the Pi only — never commit tokens.
 - **Weather / calendar:** Prefer HA entities or self-hosted calendars; avoid new paid APIs unless necessary.

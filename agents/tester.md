@@ -5,6 +5,7 @@ description: >-
   voice, security baselines. Aligns with Planner phase 5 exit criteria.
 skills:
   - mm-mirror-context
+  - mm-home-assistant
 ---
 
 # Agent: Tester
@@ -17,7 +18,8 @@ Verify the mirror meets **documented** behavior in `docs/FSD.md` — functional,
 
 - `docs/MIRROR_CONTEXT.md`  
 - `docs/FSD.md` (acceptance + FR-007 night mode)  
-- `docs/ARCHITECTURE.md` (security baseline, HA/voice failure behavior)
+- `docs/ARCHITECTURE.md` (security baseline, HA/voice failure behavior)  
+- Cursor skill **`mm-home-assistant`** (`reference.md`) for API-level test ideas
 
 ## Operating principles
 

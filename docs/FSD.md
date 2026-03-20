@@ -2,7 +2,7 @@
 
 **Project:** Wall Magic Mirror (Pi 4 + AIY Voice Hat + Home Assistant)  
 **Document type:** Living specification — update on every scope or behavior change.  
-**Version:** 0.3  
+**Version:** 0.4  
 **Last updated:** 2026-03-20
 
 ---
@@ -14,6 +14,7 @@
 | 0.1 | 2026-03-20 | — | Initial skeleton + placeholder requirements |
 | 0.2 | 2026-03-20 | — | Hardware inventory; night mode FR; 720p planning assumption |
 | 0.3 | 2026-03-20 | — | Agent/skill refresh; see [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md) for shared baselines |
+| 0.4 | 2026-03-20 | — | **Custom web UI + local HA backend** stack; reference skills `mm-home-assistant`, `mm-kiosk-pi`, `mm-voice-aiy-google`, `mm-dev-mcp-ha` |
 
 ---
 
@@ -30,6 +31,8 @@
 | Term | Definition |
 |------|------------|
 | **Module** | A UI region showing one concern (e.g. clock, weather summary). |
+| **Mirror app** | **Custom web frontend** (HTML/CSS/JS or light framework) shown in Chromium kiosk — **not** MagicMirror² for v1. |
+| **Local backend** | Process on the Pi that holds the HA token and exposes a minimal API to the browser (**FR-006**). |
 | **Intent** | A voice-mapped action resolved to a Home Assistant service call. |
 | **Kiosk mode** | Full-screen display with no casual OS chrome visible. |
 
@@ -55,7 +58,7 @@
 
 | ID | Requirement | Priority (MoSCoW) | Notes / source |
 |----|-------------|-------------------|----------------|
-| FR-001 | System shall show a full-screen mirror UI after boot without manual login | Must | Kiosk autostart |
+| FR-001 | System shall show a full-screen **custom web** mirror UI after boot without manual login | Must | Chromium kiosk + autostart; see **`mm-kiosk-pi`** |
 | FR-002 | System shall display accurate local time | Must | NTP |
 | FR-003 | System shall reflect HA entity updates within **TBD** seconds | Must | WebSocket preferred |
 | FR-004 | User shall trigger **TBD** HA actions by voice | Should | Map to HA services |
@@ -104,6 +107,8 @@
 
 Duplicated from brief; keep in sync with [PROJECT_BRIEF.md](PROJECT_BRIEF.md).
 
+- **MagicMirror²** (or similar mirror frameworks) for **v1** — custom web UI only; may revisit later.
+
 ---
 
 ## 9. Acceptance criteria template
@@ -120,3 +125,4 @@ For each FR/UC, add:
 - **0.1** — Skeleton created; requirements to be refined after inventory and UX pass.
 - **0.2** — Inventory filled (glass, TV, Pi, AIY, Google cloud, audio options); FR-007 night mode; 720p baseline.
 - **0.3** — Planner phases + task template; UX/architect/coder/tester rigor; [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md); `.claude` symlinks.
+- **0.4** — Stack locked: custom web + local HA API backend; domain reference skills; MagicMirror² out of scope for v1.

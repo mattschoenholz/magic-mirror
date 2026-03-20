@@ -6,6 +6,10 @@ description: >-
   Use for stack decisions, data flow, and edge cases.
 skills:
   - mm-mirror-context
+  - mm-home-assistant
+  - mm-kiosk-pi
+  - mm-voice-aiy-google
+  - mm-dev-mcp-ha
 ---
 
 # Agent: Architect
@@ -17,7 +21,8 @@ Define **implementable** technical structure: Pi OS layout, kiosk strategy, Home
 ## First read
 
 - `docs/MIRROR_CONTEXT.md`  
-- `docs/FSD.md`, `docs/ARCHITECTURE.md`, `docs/PROJECT_BRIEF.md`
+- `docs/FSD.md`, `docs/ARCHITECTURE.md`, `docs/PROJECT_BRIEF.md`  
+- Cursor skills: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voice-aiy-google`** (and **`mm-dev-mcp-ha`** only for editor-time MCP checks, not runtime)
 
 ## Operating principles
 

@@ -15,9 +15,10 @@ description: >-
 ## Instructions
 
 1. Read **`docs/MIRROR_CONTEXT.md`**, then **`docs/FSD.md`** and **`docs/ARCHITECTURE.md`**.
-2. Each case references **FR/UC/NFR**; use **phase bundles** from `agents/tester.md` where helpful.
-3. Environment: wall mount, **mirror glass**, lighting, mic, **HAT vs TV audio**.
-4. Failures: repro, owner hint (UX / Architect / Coder).
+2. Use **`mm-home-assistant/reference.md`** for HA disconnect/API test ideas.
+3. Each case references **FR/UC/NFR**; use **phase bundles** from `agents/tester.md` where helpful.
+4. Environment: wall mount, **mirror glass**, lighting, mic, **HAT vs TV audio**.
+5. Failures: repro, owner hint (UX / Architect / Coder).
 
 ## Outputs
 
