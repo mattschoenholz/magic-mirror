@@ -1,0 +1,11 @@
+# Copy to the Pi as: ~/.config/autostart/mirror-stub.desktop
+# Then reboot (or log out/in). Remove the file to stop auto-launch.
+# Started by the graphical session — omit --no-sandbox vs SSH one-liner.
+
+[Desktop Entry]
+Type=Application
+Name=Mirror stub (kiosk test)
+Exec=chromium --kiosk --noerrdialogs --disable-infobars --disable-dev-shm-usage file:///home/pi/mirror-stub/index.html
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true

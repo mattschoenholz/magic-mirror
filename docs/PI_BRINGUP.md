@@ -105,11 +105,31 @@ ssh pi@mirror-pi4.local 'bash ~/pi-mirror-stub.sh --open'
 
 That creates **`~/mirror-stub/index.html`** on the Pi and launches kiosk. The script sets **`DISPLAY=:0`** when you use SSH so Chromium targets the **HDMI desktop** (remote shells have no display by default).
 
-**If you still see “Missing X server or $DISPLAY”:** open **Terminal on the Pi** (keyboard/mouse on the mirror) and run:
+**SSH only (no keyboard/mouse on the Pi)** — remote shells lack a display, and Chromium’s **sandbox** often breaks when started from **sshd** (e.g. `Failed global descriptor lookup`). Use the **full environment + flags** below (stub page only; **`--no-sandbox`** is for this local test, not general browsing):
 
-`chromium --kiosk "file:///home/pi/mirror-stub/index.html"`
+**On the Pi** (interactive SSH session as `pi` — `ssh pi@…` then paste):
 
-Or from SSH explicitly: `DISPLAY=:0 chromium --kiosk "file:///home/pi/mirror-stub/index.html"`
+```bash
+export DISPLAY=:0
+export XAUTHORITY="$HOME/.Xauthority"
+export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+chromium \
+  --no-sandbox --disable-dev-shm-usage \
+  --kiosk --noerrdialogs --disable-infobars \
+  "file:///home/pi/mirror-stub/index.html"
+```
+
+**One shot from your Mac** (single command; replace host):
+
+```bash
+ssh pi@YOUR_PI_HOST 'export DISPLAY=:0 XAUTHORITY=$HOME/.Xauthority XDG_RUNTIME_DIR=/run/user/$(id -u); chromium --no-sandbox --disable-dev-shm-usage --kiosk --noerrdialogs --disable-infobars "file:///home/pi/mirror-stub/index.html"'
+```
+
+If `XDG_RUNTIME_DIR` is wrong, run `ls /run/user` on the Pi and use the numeric directory that matches **`id -u`** for `pi`.
+
+Updated **`pi-mirror-stub.sh`** applies **`--no-sandbox`** and **`--disable-dev-shm-usage`** automatically when **`SSH_CONNECTION`** is set (i.e. you ran `bash ~/pi-mirror-stub.sh --open` over SSH).
+
+**Autostart (optional):** if you want the stub every boot without SSH, add a **`.desktop`** file under **`~/.config/autostart/`** on the Pi with an `Exec=` line like the desktop case (you can omit **`--no-sandbox`** when the app is started by the graphical session). Example: [mirror-stub.desktop.example](../scripts/mirror-stub.desktop.example).
 
 **Exit kiosk:** **Alt+F4**, or SSH: `pkill chromium` (or `pkill -f chromium`).
 

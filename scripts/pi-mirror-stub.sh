@@ -70,16 +70,30 @@ fi
 FILE_URL="file://${STUB_DIR}/index.html"
 echo "Stub written: ${STUB_DIR}/index.html"
 echo "On the Pi desktop (Terminal app):  ${CHROME} --kiosk \"${FILE_URL}\""
-echo "From SSH (show on HDMI):           DISPLAY=:0 ${CHROME} --kiosk \"${FILE_URL}\""
+echo "From SSH: see PI_BRINGUP.md — needs DISPLAY, XAUTHORITY, runtime dir, and extra Chromium flags."
 
 if [[ "${1:-}" == "--open" ]]; then
-  # SSH sessions have no $DISPLAY; attach to the local X session on HDMI.
+  # SSH: no $DISPLAY; attach to the HDMI session. Chromium often needs these env vars when
+  # the parent is sshd. Stub-only; --no-sandbox is for this local test, not general browsing.
   if [[ -z "${DISPLAY:-}" ]]; then
     export DISPLAY=:0
-    if [[ -z "${XAUTHORITY:-}" && -f "${HOME}/.Xauthority" ]]; then
-      export XAUTHORITY="${HOME}/.Xauthority"
-    fi
-    echo "DISPLAY was unset — using DISPLAY=:0 (local screen). If Chromium still fails, open Terminal on the Pi and run the command printed above." >&2
+    echo "DISPLAY was unset — using :0 (HDMI session)." >&2
   fi
-  exec "$CHROME" --kiosk --noerrdialogs --disable-infobars "$FILE_URL"
+  if [[ -z "${XAUTHORITY:-}" && -f "${HOME}/.Xauthority" ]]; then
+    export XAUTHORITY="${HOME}/.Xauthority"
+  fi
+  if [[ -z "${XDG_RUNTIME_DIR:-}" && -d "/run/user/$(id -u)" ]]; then
+    export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+  fi
+
+  ssh_chromium_flags=()
+  if [[ -n "${SSH_CONNECTION:-}" ]]; then
+    ssh_chromium_flags+=(--no-sandbox --disable-dev-shm-usage)
+    echo "SSH session detected — adding --no-sandbox --disable-dev-shm-usage for Chromium." >&2
+  fi
+
+  exec "$CHROME" \
+    "${ssh_chromium_flags[@]}" \
+    --kiosk --noerrdialogs --disable-infobars \
+    "$FILE_URL"
 fi

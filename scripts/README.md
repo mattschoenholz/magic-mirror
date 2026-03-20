@@ -15,4 +15,4 @@ ssh pi@mirror-pi4.local 'bash ~/pi-mirror-stub.sh --open'
 
 **Sanity checks:** `ls scripts/pi-mirror-stub.sh` should succeed before `scp`. Example with IP: `pi@192.168.1.50`.
 
-See [docs/PI_BRINGUP.md](../docs/PI_BRINGUP.md).
+See [docs/PI_BRINGUP.md](../docs/PI_BRINGUP.md). **SSH-only:** Chromium needs extra flags — see bring-up doc; optional boot autostart: [mirror-stub.desktop.example](mirror-stub.desktop.example).
