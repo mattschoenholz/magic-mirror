@@ -1,6 +1,6 @@
 # Project brief — Wall Magic Mirror
 
-**Version:** 0.3  
+**Version:** 0.4  
 **Last updated:** 2026-03-20
 
 ---
@@ -38,6 +38,12 @@ You want a **wall-mounted mirror** that doubles as a **low-distraction informati
 - Facial recognition, camera inside mirror glass.
 - Heavy animations or video wallpaper.
 - Replacing HA as source of truth for complex logic.
+
+### Related ideation (not yet full requirements)
+
+Ideas, MoSCoW primer, Alexa/Echo-as-satellite, camera/LD4020/gesture concepts: **[IDEATION_BACKLOG.md](IDEATION_BACKLOG.md)**. Promote items to [FSD.md](FSD.md) when ready to build and test.
+
+**Home:** **Alexa Devices** integration is set up in HA with discovered devices. Echo Dot is the preferred **music** output and **Alexa-only** features; **routines** should drive HA entities/scenes that the mirror reflects (e.g. good morning / good night modes).
 
 ---
 
@@ -98,6 +104,9 @@ Reference skills in repo: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voic
 | Voice / cloud | **Google account + cloud OK** |
 | Audio | HAT speaker **and/or** TV speakers via HDMI — **TBD default** |
 | Night mode | **Required** (UI + audio behavior in FSD) |
+| **Echo Dot** | In-room; **Alexa Devices** in HA authenticated; use as **music + Alexa-only** + **routines → HA** (see [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md)) |
+| **Camera** | USB or **Pi Camera v2.1** — presence / gesture ideation only until promoted to FSD |
+| **LD4020** | Presence sensor (confirm exact model / HA integration path; often mmWave-class — see ideation doc) |
 
 **Still to fill**
 

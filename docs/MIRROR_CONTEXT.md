@@ -41,6 +41,7 @@ Domain reference skills (Cursor / Claude): `mm-home-assistant`, `mm-kiosk-pi`, `
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Diagrams, decisions, security |
 | [LESSONS_LEARNED.md](LESSONS_LEARNED.md) | Postmortems |
 | [GITHUB.md](GITHUB.md) | Remotes, HTTPS workflow |
+| [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) | Future ideas, MoSCoW, Alexa/camera — before FSD promotion |
 
 ---
 

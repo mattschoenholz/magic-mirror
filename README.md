@@ -40,6 +40,7 @@ Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT
 | [FSD.md](docs/FSD.md) | Living functional specification |
 | [GITHUB.md](docs/GITHUB.md) | Remotes, branching, sync habits |
 | [LESSONS_LEARNED.md](docs/LESSONS_LEARNED.md) | Mistakes and fixes |
+| [IDEATION_BACKLOG.md](docs/IDEATION_BACKLOG.md) | Ideas, MoSCoW, Alexa / camera / gesture (pre-FSD) |
 | [agents/](agents/README.md) | Planner, UX, Architect, Coder, Tester |
 | [resources/reference/](resources/reference/README.md) | Links and datasheets |
 

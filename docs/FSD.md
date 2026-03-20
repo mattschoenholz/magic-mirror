@@ -2,7 +2,7 @@
 
 **Project:** Wall Magic Mirror (Pi 4 + AIY Voice Hat + Home Assistant)  
 **Document type:** Living specification — update on every scope or behavior change.  
-**Version:** 0.4  
+**Version:** 0.5  
 **Last updated:** 2026-03-20
 
 ---
@@ -15,6 +15,7 @@
 | 0.2 | 2026-03-20 | — | Hardware inventory; night mode FR; 720p planning assumption |
 | 0.3 | 2026-03-20 | — | Agent/skill refresh; see [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md) for shared baselines |
 | 0.4 | 2026-03-20 | — | **Custom web UI + local HA backend** stack; reference skills `mm-home-assistant`, `mm-kiosk-pi`, `mm-voice-aiy-google`, `mm-dev-mcp-ha` |
+| 0.5 | 2026-03-20 | — | Link [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md); Alexa/Echo + camera ideas pending promotion |
 
 ---
 
@@ -22,7 +23,7 @@
 
 **Purpose:** Define *what* the system must do for users and *how* success is verified — without prescribing final implementation.
 
-**Scope:** See [PROJECT_BRIEF.md](PROJECT_BRIEF.md). Shared hardware/checklist context: [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md). This FSD tracks **functional** and **non-functional** requirements and traceability to tests.
+**Scope:** See [PROJECT_BRIEF.md](PROJECT_BRIEF.md). Shared hardware/checklist context: [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md). **Ideas not yet specified:** [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) (MoSCoW + Alexa/camera/gesture notes — promote here when binding). This FSD tracks **functional** and **non-functional** requirements and traceability to tests.
 
 ---
 
@@ -35,6 +36,7 @@
 | **Local backend** | Process on the Pi that holds the HA token and exposes a minimal API to the browser (**FR-006**). |
 | **Intent** | A voice-mapped action resolved to a Home Assistant service call. |
 | **Kiosk mode** | Full-screen display with no casual OS chrome visible. |
+| **MoSCoW** | **Must / Should / Could / Won’t** — priority labels in §4–§5; explained in [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md). |
 
 ---
 
@@ -126,3 +128,4 @@ For each FR/UC, add:
 - **0.2** — Inventory filled (glass, TV, Pi, AIY, Google cloud, audio options); FR-007 night mode; 720p baseline.
 - **0.3** — Planner phases + task template; UX/architect/coder/tester rigor; [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md); `.claude` symlinks.
 - **0.4** — Stack locked: custom web + local HA API backend; domain reference skills; MagicMirror² out of scope for v1.
+- **0.5** — [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md): Alexa satellite, routines, camera/LD4020/gesture ideation; MoSCoW definition.
