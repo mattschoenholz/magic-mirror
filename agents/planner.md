@@ -32,7 +32,7 @@ Keep the Magic Mirror project **on scope**, **on budget (time + money)**, and **
 
 ### Phase 0 — Baseline & unknowns
 
-- Confirm **effective HDMI resolution** (plan at 720p until TV native res known).
+- Confirm **effective HDMI resolution** — **1080×1920** portrait baseline ([PI_BRINGUP.md](../docs/PI_BRINGUP.md)).
 - Note **Pi RAM** (`free -h`); thermal headroom in frame if possible.
 - Test **TV + HDMI**: does the panel wake or switch input from Pi alone?
 - Identify **AIY HAT revision** (v1 vs v2) from docs/photos if unmarked.
@@ -58,9 +58,9 @@ Keep the Magic Mirror project **on scope**, **on budget (time + money)**, and **
 
 ### Phase 3 — UX
 
-- **Zones** and hierarchy for **32.5×59 cm** mirror at **1280×720** (until 1080p).
+- **Zones** and hierarchy for **32.5×59 cm** mirror at **1080×1920** portrait.
 - **Type scale**, color tokens, motion rules; **voice affordances** on screen.
-- Optional **layout artifact** (SVG or equivalent) at 1280×720.
+- Optional **layout artifact** (SVG or equivalent) at **1080×1920** portrait.
 
 **Quality gate:** UX sign-off criteria in FSD or linked note; night mode visually specified.
 

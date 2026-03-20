@@ -46,6 +46,7 @@ Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT
 | [UI_MODES.md](docs/UI_MODES.md) | Sleep / passive / active / Pomodoro modes; dual viewing distance; weather hierarchy |
 | [HA_DEV.md](docs/HA_DEV.md) | HA on Pi 5, mirror Pi 4, MCP + tokens (no secrets in git) |
 | [PI_BRINGUP.md](docs/PI_BRINGUP.md) | **Pi 4:** flash OS, HDMI, resolution, SSH, HA reachability |
+| [scripts/](scripts/README.md) | **pi-mirror-stub.sh** — kiosk viewport test on the Pi |
 | [agents/](agents/README.md) | Planner, UX, Architect, Coder, Tester |
 | [resources/reference/](resources/reference/README.md) | Links and datasheets |
 

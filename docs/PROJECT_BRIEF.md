@@ -1,6 +1,6 @@
 # Project brief — Wall Magic Mirror
 
-**Version:** 0.7  
+**Version:** 0.8  
 **Last updated:** 2026-03-20
 
 ---
@@ -58,7 +58,7 @@ Ideas, MoSCoW primer, Alexa/Echo-as-satellite, camera/LD4020/gesture concepts: *
 ## 4. Constraints & assumptions
 
 - **Mirror glass — viewable area:** **32.5 cm × 59 cm** (two-way glass; thickness TBD if needed for CAD).
-- **Display:** Older **Samsung TV** (model number and **native resolution not yet recorded**). **Planning assumption: 1280×720 (720p)** until confirmed; move UI/layout to **1080p** if the panel supports it.
+- **Display:** Older **Samsung TV** (model number TBD). **HDMI negotiates 1920×1080**; mirror is used in **portrait** (rotate in **Screen Configuration** / `xrandr` — see [PI_BRINGUP.md](PI_BRINGUP.md)). **UI canvas:** design for **1080×1920** CSS pixels once rotation is correct (verify with [stub script](../scripts/pi-mirror-stub.sh)); supersede old 720p-only planning for layout work.
 - **Power:** TV has **120 V plug on the back** — separate from Pi power; **HDMI wake behavior unknown** (test: does panel show Pi signal only when TV is “on”?).
 - **Compute:** **Raspberry Pi 4 Model B (2018)** — onboard RAM size TBD (`free -h` on device). **v1:** display + backend only (no mic/speaker required on Pi for voice).
 - **AIY Voice HAT:** **Optional / deferred** — on hand for a **later** phase if you add mirror-local voice.
@@ -106,7 +106,7 @@ Reference skills: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-dev-mcp-ha`*
 | Item | Status |
 |------|--------|
 | Two-way mirror glass — viewable **32.5 × 59 cm** | Installed in frame |
-| Samsung TV | In frame; model & **native res TBD**; plan at **720p** first |
+| Samsung TV | In frame; model TBD; **1920×1080** negotiated; **portrait** mount |
 | TV power | **120 V** rear plug |
 | HDMI wake from Pi | **Unknown** — test when Pi image ready |
 | Raspberry Pi 4B (2018) | On hand; **RAM size TBD** |

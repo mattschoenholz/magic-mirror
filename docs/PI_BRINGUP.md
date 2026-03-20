@@ -1,6 +1,6 @@
 # Mirror Pi 4 — bring-up (display + network foundation)
 
-Goal: **Pi 4 booting**, **desktop on the Samsung TV**, **known HDMI resolution**, **SSH from your Mac**, **LAN reachability to Home Assistant (Pi 5)**. No mirror app or HA token on the Pi yet — this is the hardware/OS baseline to design and build against.
+Goal: **Pi 4 booting**, **desktop on the Samsung TV**, **known HDMI resolution** (including **portrait** if the glass/TV is mounted vertically), **SSH from your Mac**, **LAN reachability to Home Assistant (Pi 5)**. No mirror app or HA token on the Pi yet — this is the hardware/OS baseline to design and build against.
 
 See also: **`.cursor/skills/mm-kiosk-pi/reference.md`**, [PROJECT_BRIEF.md](PROJECT_BRIEF.md), [HA_DEV.md](HA_DEV.md).
 
@@ -70,24 +70,45 @@ On the Pi **with desktop**:
 
 3. **Write these into** [PROJECT_BRIEF.md](PROJECT_BRIEF.md) inventory / “still to fill”: **Samsung model**, **native / negotiated resolution**, **Pi RAM** (`free -h`).
 
-Planning baseline remains **1280×720** until you confirm the panel actually prefers **1080p** or something else.
+**Confirmed example (your rig):** panel negotiates **1920×1080**; mirror is **portrait** — after rotation, the browser **viewport** is typically **1080×1920** CSS pixels (short side horizontal, long side vertical). Use the **stub** below to read the exact numbers.
+
+### Portrait orientation (match physical mount)
+
+If the TV is mounted **vertically**, set rotation in software so text is upright (not “sideways landscape”).
+
+1. **GUI:** **Preferences → Screen Configuration** (right-click desktop or main menu). Select the HDMI output → **Orientation** → **90° Left** or **90° Right** until it matches the glass. **Apply** and, if offered, **save** so it survives reboot.
+2. **Terminal (X11):** run `xrandr` to see output names (e.g. `HDMI-1`, `HDMI-2`). Then try one of:
+   - `xrandr --output HDMI-1 --rotate left`
+   - `xrandr --output HDMI-1 --rotate right`
+   Replace `HDMI-1` with your line from `xrandr`. **Left** vs **right** is which way matches your “counter‑clockwise” mount.
+3. **Wayland / newer Pi OS:** prefer **Screen Configuration**; persistence is stored by the compositor — avoid hand-editing unless you know your session (Bookworm may use **wayfire** / **labwc**).
+
+**Chromium kiosk** will use the rotated desktop; your **stub** should then report **1080 × 1920** (or close) for layout work.
 
 ---
 
-## 5. End-to-end “something on screen” test
+## 5. End-to-end “something on screen” test (stub Chromium)
 
-Confirms **Chromium + URL loading** without your final app.
+**What “stub Chromium” means:** a **minimal local HTML file** (no server required) opened with **`chromium --kiosk`**. It shows a short message and **live `innerWidth × innerHeight`** so you know the **real drawable area** in CSS pixels (critical for **portrait** and for later UI design). It is **not** the real mirror app — just a display/network smoke test.
 
-**Option A — Local stub page**
+**I can’t run this for you:** the AI environment has **no SSH access** to your Pi. One copy-paste path from your **Mac** (repo folder = magic-mirror):
 
 ```bash
-mkdir -p ~/mirror-stub && printf '%s\n' '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Mirror stub</title></head><body style="background:#111;color:#eee;font-family:sans-serif;text-align:center;padding:2rem;"><h1>Mirror Pi OK</h1><p id="r"></p><script>document.getElementById("r").textContent=innerWidth+" x "+innerHeight;</script></body></html>' > ~/mirror-stub/index.html
-chromium --kiosk "file:///home/YOUR_USER/mirror-stub/index.html"
+# Replace USER and HOST; from your Mac, in the magic-mirror repo:
+scp scripts/pi-mirror-stub.sh USER@HOST:~/pi-mirror-stub.sh
+ssh USER@HOST 'bash ~/pi-mirror-stub.sh --open'
 ```
 
-Replace **`YOUR_USER`**. You should see **full-screen** page and **innerWidth × innerHeight** (useful for verifying drawable pixels).
+That creates **`~/mirror-stub/index.html`** on the Pi and launches kiosk. **Exit kiosk:** **Alt+F4**, or from another SSH session: `pkill chromium` (or `pkill -f chromium`).
 
-Press **Alt+F4** to exit Chromium if stuck in kiosk (or SSH in and `pkill chromium`).
+**Option — run only on the Pi** (if you already copied the repo or the script):
+
+```bash
+bash ~/pi-mirror-stub.sh          # create files only; prints the chromium command
+bash ~/pi-mirror-stub.sh --open   # create + kiosk
+```
+
+If Chromium is missing: `sudo apt install -y chromium`
 
 **Option B — Reach HA in browser (read-only sanity)**
 

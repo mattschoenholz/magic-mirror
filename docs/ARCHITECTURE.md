@@ -66,7 +66,7 @@ flowchart LR
 |----------|---------|--------|
 | **UI platform** | Custom web + local backend vs MagicMirror² | **Chosen:** custom web + HA API |
 | **Voice (v1)** | Echo only vs Echo + AIY on Pi | **Chosen: Echo → HA only**; AIY **deferred** |
-| **Display mode** | 720p baseline | **1280×720** until TV native res known |
+| **Display mode** | Portrait FHD | **1080×1920** CSS viewport (1920×1080 panel rotated); confirm on device |
 | **Audio (v1)** | Pi vs Echo | **Echo + speakers** for TTS/music; Pi **HDMI display** primary |
 | OS | Pi OS Lite + kiosk vs desktop | TBD |
 | Remote access | SSH / Tailscale | TBD |

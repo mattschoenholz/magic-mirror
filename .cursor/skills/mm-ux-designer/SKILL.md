@@ -1,7 +1,7 @@
 ---
 name: mm-ux-designer
 description: >-
-  Mirror UI: glass contrast, 1280×720 layout, night mode (FR-007), voice
+  Mirror UI: glass contrast, 1080×1920 portrait layout, night mode (FR-007), voice
   affordances, optional SVG artifacts. Use for themes, zones, and UI review.
 ---
 
@@ -22,7 +22,7 @@ description: >-
 
 ## Outputs
 
-- Zone layout, type scale, token table, motion allow/deny; optional **1280×720** SVG + mapping table.
+- Zone layout, type scale, token table, motion allow/deny; optional **1080×1920** portrait SVG + mapping table.
 
 ## References
 

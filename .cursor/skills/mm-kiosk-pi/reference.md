@@ -6,7 +6,7 @@ Stack assumption: **custom web app** opened in **Chromium** (or equivalent) in *
 
 ## Display
 
-- **Planning resolution:** **1280×720** until Samsung TV native mode is confirmed (`tvservice` / `xrandr` / EDID — use current Pi OS docs).
+- **Planning resolution:** **1080×1920** portrait (1920×1080 panel rotated). Confirm with `xrandr` / **Screen Configuration** and the [pi-mirror-stub.sh](../../../scripts/pi-mirror-stub.sh) viewport readout.
 - Chromium flags commonly used for kiosks (verify for your package):
 
   ```text

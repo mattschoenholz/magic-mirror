@@ -23,7 +23,7 @@ Domain reference skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **
 | Topic | Value / status |
 |--------|----------------|
 | Mirror viewable area | **32.5 cm × 59 cm** |
-| Display planning resolution | **1280×720** until Samsung TV native resolution confirmed |
+| Display | **1920×1080** HDMI; **portrait** use → **1080×1920** viewport (verify with [PI_BRINGUP.md](PI_BRINGUP.md) stub) |
 | TV | Samsung (model TBD); **120 V**; HDMI wake **unknown** |
 | Pi | Raspberry Pi 4 Model B (2018); **RAM TBD** |
 | AIY Voice HAT | **Deferred** — not part of v1 install |
@@ -61,7 +61,7 @@ Full detail in `agents/planner.md`. Phases **0–5**:
 0. **Baseline** — Follow [PI_BRINGUP.md](PI_BRINGUP.md): HDMI/video mode, TV power behavior, Pi RAM, HA reachable from Pi.  
 1. **Requirements** — Lock v1 modules, voice whitelist shape, night mode rules.  
 2. **Architecture** — OS/kiosk, HA client, voice stack, audio output, secrets.  
-3. **UX** — Zones, type scale, tokens, optional 1280×720 layout artifact.  
+3. **UX** — Zones, type scale, tokens, **1080×1920 portrait** layout artifact.  
 4. **Implementation** — Vertical slices per FSD.  
 5. **Test & polish** — Tester exit criteria, glass + voice in room.
 
@@ -91,7 +91,7 @@ Full detail in `agents/planner.md`. Phases **0–5**:
 - Treat glass as **lower contrast** and **reflection-prone**; target **≥3:1** luminance contrast for body text where feasible  
 - **Night mode:** lower peak luminance, no decorative use of alarm reds/oranges  
 - **Voice:** always pair listening / success / error with **on-screen** state  
-- Layout safe area: account for bezel; design at **1280×720** until 1080p confirmed
+- Layout safe area: account for bezel; canvas **1080×1920** portrait (verify with [PI_BRINGUP.md](PI_BRINGUP.md) stub)
 
 ---
 

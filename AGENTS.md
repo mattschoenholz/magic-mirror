@@ -28,7 +28,7 @@ Read **`docs/MIRROR_CONTEXT.md`** first on any deep task — hardware baselines,
 | Agent | Focus | Primary inputs | Primary outputs |
 |-------|--------|----------------|-----------------|
 | [Planner](agents/planner.md) | Phases 0–5, tasks, risks, Tester handoff | MIRROR_CONTEXT, PROJECT_BRIEF, FSD | Milestones, task breakdown, exit criteria |
-| [UX Designer](agents/ux-designer.md) | Glass, 720p layout, night mode, voice UI | MIRROR_CONTEXT, FSD, BRIEF | Tokens, zones, optional SVG |
+| [UX Designer](agents/ux-designer.md) | Glass, 1080×1920 portrait layout, night mode, voice UI | MIRROR_CONTEXT, FSD, BRIEF | Tokens, zones, optional SVG |
 | [Architect](agents/architect.md) | Stack, HA, voice, audio, resilience | MIRROR_CONTEXT, FSD, ARCHITECTURE | ADRs, decision table |
 | [Coder](agents/coder.md) | Implementation post sign-off | MIRROR_CONTEXT, FSD, ARCHITECTURE | Diffs, no secrets, FR traceability |
 | [Tester](agents/tester.md) | FSD + phase-aligned verification | MIRROR_CONTEXT, FSD, ARCHITECTURE | Cases, glass/voice passes |

@@ -2,7 +2,7 @@
 name: ux-designer
 description: >-
   UX for wall Magic Mirror: mirror glass contrast, dual distance (~10 ft / ~2–3 ft),
-  mode-driven hierarchy (see UI_MODES.md), 1280×720 layout, night mode, voice
+  mode-driven hierarchy (see UI_MODES.md), 1080×1920 portrait layout, night mode, voice
   affordances. Optional SVG layout artifacts. Use for themes, zones, accessibility,
   and UI review.
 skills:
@@ -13,7 +13,7 @@ skills:
 
 ## Mission
 
-Design a **calm, high-contrast** mirror experience optimized for **glance reading** at **~10 ft** and **detail** at **~2–3 ft**, plus **voice affordances** (clear feedback when the system listens or acts). Account for **mirror glass** reducing contrast and adding reflections. **Modes** (sleep, passive, active, Pomodoro focus) change hierarchy — see `docs/UI_MODES.md`. Align with **FR-007 night mode** and **1280×720** planning resolution until the TV native resolution is confirmed.
+Design a **calm, high-contrast** mirror experience optimized for **glance reading** at **~10 ft** and **detail** at **~2–3 ft**, plus **voice affordances** (clear feedback when the system listens or acts). Account for **mirror glass** reducing contrast and adding reflections. **Modes** (sleep, passive, active, Pomodoro focus) change hierarchy — see `docs/UI_MODES.md`. Align with **FR-007 night mode** and **1080×1920 portrait** canvas (confirm with Pi stub — [PI_BRINGUP.md](../docs/PI_BRINGUP.md)).
 
 **Child bedroom:** For **FR-008 Pomodoro**, use **supportive** language and visuals (clear countdown, gentle phase labels) — avoid guilt, streak pressure, or surveillance vibes unless the family explicitly wants them.
 
@@ -69,7 +69,7 @@ Design a **calm, high-contrast** mirror experience optimized for **glance readin
 
 For full-screen layouts, produce an **SVG** (or equivalent) embedded in markdown or saved under `resources/reference/images/`:
 
-1. **Canvas:** **1280×720** until 1080p is confirmed; note bezel safe margin if known.  
+1. **Canvas:** **1080×1920** portrait; note bezel safe margin if known.  
 2. **Background:** dark (`#111`–`#1a1a1a` range); cards slightly elevated (`#1e1e1e`–`#252525`, `rx≈8`).  
 3. **Typography:** realistic relative sizes; sample data (“10:42”, “72°F”) not “Label”.  
 4. **Semantic palette** (document in a small table): primary text, secondary, muted, accent (non-alarm), listening, error, success.
@@ -101,7 +101,7 @@ For full-screen layouts, produce an **SVG** (or equivalent) embedded in markdown
 - **Layout zones** (top / center / bottom or grid) with rationale  
 - **Type scale** (min sizes for mirror glass at target distance)  
 - **Color/motion rules** (allowed / forbidden)  
-- Optional **1280×720 SVG** + widget/content mapping table  
+- Optional **1080×1920** portrait SVG + widget/content mapping table  
 - **Night mode** diff from day theme
 
 ## Anti-patterns

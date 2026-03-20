@@ -10,9 +10,9 @@ Use this as a **gate** so theme and layout work with the **UX Designer** agent (
 |-------|----------|
 | Module list (clock, weather, todo, calendar, Pomodoro, …) | [FSD.md](FSD.md) §7 |
 | **UI modes & dual distance** | [UI_MODES.md](UI_MODES.md) |
-| Constraints (glass **32.5×59 cm**, **720p** baseline, night mode, child bedroom) | [PROJECT_BRIEF.md](PROJECT_BRIEF.md), [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md) |
+| Constraints (glass **32.5×59 cm**, **1080×1920 portrait** viewport, night mode, child bedroom) | [PROJECT_BRIEF.md](PROJECT_BRIEF.md), [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md) |
 | UX rules (contrast, night mode, Pomodoro tone) | [agents/ux-designer.md](../agents/ux-designer.md) |
-| Canvas target for mockups | **1280×720** until TV native resolution is confirmed |
+| Canvas target for mockups | **1080×1920** (portrait FHD) — confirm with [PI_BRINGUP.md](PI_BRINGUP.md) stub on device |
 
 ---
 
@@ -22,7 +22,7 @@ Use this as a **gate** so theme and layout work with the **UX Designer** agent (
 
 - [x] **Viewing distances locked:** **~10 ft** (bed/desk) **and** **~2–3 ft** (at mirror); **far** sets minimum readable type for clock / today’s weather / Pomodoro — [UI_MODES.md](UI_MODES.md).
 - [ ] **Photo** of the mirror area in **day** and **dim** light (optional but helps reflection/contrast judgment).
-- [ ] Confirm **effective resolution** when possible (still OK to design at 720p first).
+- [x] **Effective resolution** — **1920×1080** panel, **portrait** → design at **1080×1920** unless stub shows otherwise.
 
 ### B. Content & priority (drives hierarchy on screen)
 
@@ -53,7 +53,7 @@ Place artifacts under **`docs/design/`** (created for this purpose):
 | Deliverable | Purpose |
 |-------------|---------|
 | **`tokens.md`** | Semantic colors, type scale (min sizes), spacing rhythm, night-mode deltas |
-| **`layout-1280x720.svg`** (or `.md` embedding SVG) | Single-screen wireframe with **realistic** sample data (time, timer, tasks, weather snippet) |
+| **`layout-1080x1920.svg`** (or `.md` embedding SVG) | Portrait wireframe with **realistic** sample data (time, timer, tasks, weather snippet) |
 | **`module-priority.md`** | Ordered list: what draws the eye first → second → third |
 
 Naming is flexible; keep everything **versioned in git** so Coder agent can implement against it later.

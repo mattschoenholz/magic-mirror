@@ -2,7 +2,7 @@
 
 **Project:** Wall Magic Mirror (Pi 4 display + Home Assistant + Echo Dot)  
 **Document type:** Living specification — update on every scope or behavior change.  
-**Version:** 0.9  
+**Version:** 0.10  
 **Last updated:** 2026-03-20
 
 ---
@@ -20,6 +20,7 @@
 | 0.7 | 2026-03-20 | — | **v1:** Pi = display + HA backend only; **Echo-only** voice; AIY deferred; **FR-009** tiles; todo/calendar/weather modules |
 | 0.8 | 2026-03-20 | — | [DESIGN_READINESS.md](DESIGN_READINESS.md); [design/](design/) for pre-code theme artifacts |
 | 0.9 | 2026-03-20 | — | Dual viewing distances; [UI_MODES.md](UI_MODES.md); weather today+forecast; [HA_DEV.md](HA_DEV.md) MCP/Pi5 |
+| 0.10 | 2026-03-20 | — | **1080×1920 portrait** display baseline; [PI_BRINGUP.md](PI_BRINGUP.md); [pi-mirror-stub.sh](../scripts/pi-mirror-stub.sh) |
 
 ---
 
@@ -83,7 +84,7 @@
 | FR-009 | Mirror shall show **HA-backed** **weather** (**today** primary layout; **next few days** smaller secondary), **school calendar**, and **visual todo** per agreed entity IDs | Should | Matches passive-mode hierarchy in [UI_MODES.md](UI_MODES.md) |
 | FR-010 | Mirror shall implement **fluid, mode-driven** presentation: **sleep_off**, **passive**, **active_engaged**, **pomodoro_focus** — hierarchy and visible modules change per mode; mode driven by **HA state** (entity or derived rule) | Should | [UI_MODES.md](UI_MODES.md); `input_select` or equivalent TBD |
 
-**Display planning assumption:** Design layouts for **1280×720** until Samsung TV **native resolution** is confirmed; scale to **1080p** if supported (viewable glass **32.5 cm × 59 cm**).
+**Display planning assumption:** **1920×1080** HDMI panel in **portrait** → **1080×1920** CSS viewport (verify on device — [PI_BRINGUP.md](PI_BRINGUP.md), stub script). Viewable glass **32.5 cm × 59 cm**.
 
 *Add rows as modules and voice intents are decided.*
 
@@ -157,3 +158,4 @@ For each FR/UC, add:
 - **0.7** — **v1 voice = Echo only**; Pi display-only; **FR-009**; **M-005** / **M-006**; **UC-7–9**; AIY out of scope v1.
 - **0.8** — Design gate: **DESIGN_READINESS** + **docs/design/** for UX outputs before implementation.
 - **0.9** — **UI_MODES** (4 modes, fluid hierarchy); dual viewing distances **FR-005** / **NFR-005**; weather today+forecast; **HA_DEV** (HA on Pi 5, MCP, tokens); **FR-010**, **M-007**.
+- **0.10** — Portrait **1080×1920** baseline; **PI_BRINGUP** + **pi-mirror-stub.sh** for viewport proof.
