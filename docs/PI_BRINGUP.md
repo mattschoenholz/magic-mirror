@@ -76,14 +76,35 @@ On the Pi **with desktop**:
 
 If the TV is mounted **vertically**, set rotation in software so text is upright (not “sideways landscape”).
 
-1. **GUI:** **Preferences → Screen Configuration** (right-click desktop or main menu). Select the HDMI output → **Orientation** → **90° Left** or **90° Right** until it matches the glass. **Apply** and, if offered, **save** so it survives reboot.
-2. **Terminal (X11):** run `xrandr` to see output names (e.g. `HDMI-1`, `HDMI-2`). Then try one of:
-   - `xrandr --output HDMI-1 --rotate left`
-   - `xrandr --output HDMI-1 --rotate right`
-   Replace `HDMI-1` with your line from `xrandr`. **Left** vs **right** is which way matches your “counter‑clockwise” mount.
-3. **Wayland / newer Pi OS:** prefer **Screen Configuration**; persistence is stored by the compositor — avoid hand-editing unless you know your session (Bookworm may use **wayfire** / **labwc**).
+**Success check:** reload the **stub** in Chromium. The readout should become **1080 × 1920** (tall portrait). If you still see **1920 × 1080**, the desktop is still **landscape** — rotation has not been applied (or Wayland is ignoring `xrandr`).
 
-**Chromium kiosk** will use the rotated desktop; your **stub** should then report **1080 × 1920** (or close) for layout work.
+1. **GUI:** **Preferences → Screen Configuration** — HDMI → **90° Left** / **90° Right** until upright; **Apply** and save if offered.
+2. **SSH + X11 (`xrandr`)** — same graphics session as Chromium (`DISPLAY=:0`). Use the helper script (copy via `scp` from [pi-display-rotate.sh](../scripts/pi-display-rotate.sh)):
+
+   ```bash
+   bash ~/pi-display-rotate.sh list
+   bash ~/pi-display-rotate.sh left      # 90° CCW from default landscape
+   bash ~/pi-display-rotate.sh right     # 90° CW from default landscape
+   ```
+
+   If the picture is wrong, run **`normal`** then try the **other** direction. To target a specific output from `list`:
+
+   `bash ~/pi-display-rotate.sh left HDMI-2`
+
+3. **Persist across reboot (firmware)** — after **`left`** or **`right`** looks correct, add **one** line under **`[all]`** in **`/boot/firmware/config.txt`** (then `sudo reboot`):
+
+   | Value | Effect |
+   |-------|--------|
+   | `display_hdmi_rotate=0` | No firmware rotation (default) |
+   | `display_hdmi_rotate=1` | 90° **clockwise** |
+   | `display_hdmi_rotate=2` | 180° |
+   | `display_hdmi_rotate=3` | 270° **clockwise** (= 90° **counter‑clockwise** from default landscape) |
+
+   Map by trial: **`xrandr` `left`** often lines up with **`display_hdmi_rotate=3`**, and **`xrandr` `right`** with **`=1`** — confirm on your TV before locking in.
+
+4. **Wayland-only session:** if **`xrandr`** errors or rotation does nothing, use **Screen Configuration** when you can attach input, or see Raspberry Pi docs for **labwc/wayfire** output rotation on Bookworm.
+
+**Chromium kiosk** follows the rotated desktop; the stub should read **1080 × 1920** when portrait is correct.
 
 ---
 

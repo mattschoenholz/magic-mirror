@@ -3,6 +3,7 @@
 | Script | Where it runs | Purpose |
 |--------|----------------|--------|
 | [pi-mirror-stub.sh](pi-mirror-stub.sh) | **Mirror Pi 4** | Create `~/mirror-stub/index.html` and optionally open **Chromium kiosk** to verify resolution (especially **portrait** viewport). |
+| [pi-display-rotate.sh](pi-display-rotate.sh) | **Mirror Pi 4** | **`xrandr`** over SSH: `list` / `left` / `right` / `normal` for portrait. See [PI_BRINGUP.md](../docs/PI_BRINGUP.md). |
 
 Copy to the Pi from your Mac (**from the magic-mirror repo root** so `scripts/` exists — `cd` there first). Examples use user **`pi`** and hostname **`mirror-pi4.local`**; swap in your Pi’s **IP** if `.local` fails.
 
