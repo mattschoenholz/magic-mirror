@@ -30,4 +30,4 @@ Use this file to decide **which role** to invoke in Cursor (paste the relevant `
 
 Project-local skills live under [`.cursor/skills/`](.cursor/skills/). They mirror these roles so the model loads concise instructions automatically when this folder is the **workspace root**.
 
-If you keep this repo inside a larger monorepo, copy or symlink skills to that repo’s `.cursor/skills/` or reference `agents/*.md` manually.
+This repo’s root is `~/Desktop/CurrentProjects/General/magic-mirror`. If you ever nest it inside a monorepo, copy or symlink `.cursor/skills/` or reference `agents/*.md` manually.

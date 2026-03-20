@@ -1,49 +1,63 @@
 # GitHub & version control
 
-## Recommended layout
+## Canonical location
 
-This project is designed as a **standalone repository**. The folder `magic-mirror/` can be:
+| | |
+|--|--|
+| **Local path** | `~/Desktop/CurrentProjects/General/magic-mirror` |
+| **Remote** | `git@github.com:mattschoenholz/magic-mirror.git` |
+| **Web** | [github.com/mattschoenholz/magic-mirror](https://github.com/mattschoenholz/magic-mirror) |
 
-1. **Moved** to its own directory (e.g. `~/Projects/magic-mirror`) and become the repo root, or  
-2. **Initialized as a git repo here** and later pushed to GitHub (works if you do not mind path `magic-mirror/` at repo root).
-
-Avoid mixing SailboatServer boat portal files with Magic Mirror history unless you intentionally want a monorepo.
-
----
-
-## Local Git identity (before pushing to GitHub)
-
-If this repo was bootstrapped with a placeholder email, set your real identity **in this repo** (or globally) before pushing:
-
-```bash
-cd magic-mirror   # or your moved repo root
-git config user.name "Your Name"
-git config user.email "you@users.noreply.github.com"
-```
-
-Amend the initial commit only if you care about author metadata on that first commit: `git commit --amend --reset-author --no-edit`.
+This project is **standalone** — it is not part of SailboatServer or other repos.
 
 ---
 
-## Initialize git (first time)
+## Git identity (before first push)
 
-*(Skip if `.git` already exists.)*
-
-From the directory you want as **repo root** (e.g. inside `magic-mirror/`):
+Set your real identity **in this repo** (or use global config):
 
 ```bash
-git init
-git add .
-git commit -m "docs: initial Magic Mirror planning (FSD, agents, skills)"
+cd ~/Desktop/CurrentProjects/General/magic-mirror
+git config user.name "Matt Schoenholz"
+git config user.email "YOUR_EMAIL or GitHub noreply"
 ```
 
-Create an **empty** repository on GitHub (no README/license if you already have local files), then:
+GitHub noreply format: `mattschoenholz@users.noreply.github.com` (if enabled in GitHub email settings).
+
+---
+
+## Clone & daily sync
 
 ```bash
-git remote add origin git@github.com:YOUR_USER/YOUR_REPO.git
+git clone git@github.com:mattschoenholz/magic-mirror.git
+cd magic-mirror
+# … edit …
+git add -A && git status
+git commit -m "type: short description"
+git pull --rebase origin main   # if collaborating
+git push origin main
+```
+
+---
+
+## Create remote (if you only have local)
+
+If the GitHub repo did not exist yet, create an **empty** repo named `magic-mirror` under `mattschoenholz`, then:
+
+```bash
+cd ~/Desktop/CurrentProjects/General/magic-mirror
+git remote add origin git@github.com:mattschoenholz/magic-mirror.git   # skip if already added
 git branch -M main
 git push -u origin main
 ```
+
+With [GitHub CLI](https://cli.github.com/) (`gh`), from the repo root:
+
+```bash
+gh repo create mattschoenholz/magic-mirror --public --source=. --remote=origin --push
+```
+
+*(Fails if `origin` already exists — use `git remote -v` and adjust.)*
 
 ---
 
@@ -52,7 +66,7 @@ git push -u origin main
 | Branch | Use |
 |--------|-----|
 | `main` | Stable docs + released software |
-| `develop` | Optional integration branch if multiple contributors |
+| `develop` | Optional integration branch |
 | `feature/*` | Short-lived features when coding starts |
 
 Tags: `docs-v0.1`, `v1.0.0-mirror` for milestones.
@@ -63,9 +77,7 @@ Tags: `docs-v0.1`, `v1.0.0-mirror` for milestones.
 
 - Home Assistant **long-lived tokens**, passwords, SSH private keys.
 - `.env` with real values.
-- Large mirror **binary assets** (videos, disk images) — use Git LFS or external storage if needed later.
-
-`.gitignore` in this folder seeds common patterns; extend when you add code.
+- Large **binary artifacts** (disk images, huge videos) — Git LFS or external storage if needed.
 
 ---
 
@@ -73,7 +85,7 @@ Tags: `docs-v0.1`, `v1.0.0-mirror` for milestones.
 
 - **Atomic commits:** one logical change per commit message.
 - **FSD first:** behavior change → update `docs/FSD.md` version table → commit with docs.
-- **PRs:** even solo — optional self-review checklist using `agents/tester.md`.
+- **PRs:** optional self-review using `agents/tester.md`.
 
 ---
 
@@ -81,4 +93,4 @@ Tags: `docs-v0.1`, `v1.0.0-mirror` for milestones.
 
 - **Issues** mapped to FSD FR IDs (e.g. `FR-003`).
 - **Projects** board: Backlog / In progress / Verifying / Done.
-- **Releases** attaching SD card image checksums (when you ship hardware images).
+- **Releases** with SD image checksums when you ship hardware images.

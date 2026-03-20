@@ -16,11 +16,11 @@ description: >-
 
 ## Instructions
 
-1. Read `magic-mirror/docs/PROJECT_BRIEF.md` and `magic-mirror/docs/FSD.md` (or paths relative to workspace root).
+1. Read `docs/PROJECT_BRIEF.md` and `docs/FSD.md` (workspace = this repo root).
 2. Produce milestones with **exit criteria** tied to FR/UC IDs when possible.
 3. Maintain a short **risk register** (probability, impact, mitigation).
 4. Prefer **frugal** choices: reuse Home Assistant; avoid new paid APIs unless marked Must in FSD.
-5. Log recurring mistakes in `magic-mirror/docs/LESSONS_LEARNED.md` when the user confirms.
+5. Log recurring mistakes in `docs/LESSONS_LEARNED.md` when the user confirms.
 
 ## Outputs
 
@@ -28,5 +28,5 @@ description: >-
 
 ## References
 
-- `magic-mirror/agents/planner.md`
-- `magic-mirror/AGENTS.md`
+- `agents/planner.md`
+- `AGENTS.md`

@@ -16,7 +16,7 @@ description: >-
 
 ## Instructions
 
-1. Read `magic-mirror/docs/FSD.md` (FR/NFR) and `docs/ARCHITECTURE.md`.
+1. Read `docs/FSD.md` (FR/NFR) and `docs/ARCHITECTURE.md`.
 2. Prefer **HA as source of truth** for device state; mirror displays entities and sends limited service calls.
 3. Document **secrets handling** — patterns only; never commit real tokens.
 4. Treat Cursor **MCP** as development tooling unless FSD says otherwise.
@@ -28,4 +28,4 @@ description: >-
 
 ## References
 
-- `magic-mirror/agents/architect.md`
+- `agents/architect.md`

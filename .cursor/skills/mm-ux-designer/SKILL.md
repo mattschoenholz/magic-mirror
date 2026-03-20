@@ -16,7 +16,7 @@ description: >-
 
 ## Instructions
 
-1. Read `magic-mirror/docs/FSD.md` UI module section and inventory constraints from `PROJECT_BRIEF.md`.
+1. Read `docs/FSD.md` UI module section and inventory constraints from `docs/PROJECT_BRIEF.md`.
 2. Assume **reduced contrast** through mirror glass; favor large type and high contrast.
 3. Limit motion; bedroom context = low distraction.
 4. Always pair voice states with **visual** feedback.
@@ -28,4 +28,4 @@ description: >-
 
 ## References
 
-- `magic-mirror/agents/ux-designer.md`
+- `agents/ux-designer.md`

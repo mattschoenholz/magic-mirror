@@ -15,7 +15,7 @@ description: >-
 
 ## Instructions
 
-1. Read `magic-mirror/docs/FSD.md` acceptance criteria and NFRs.
+1. Read `docs/FSD.md` acceptance criteria and NFRs.
 2. Each case references **FR/UC/NFR** IDs.
 3. Include **environment notes**: wall mount, mirror glass, lighting, mic behind glass.
 4. Log failures with repro steps; suggest owning agent (UX vs Architect vs Coder).
@@ -26,4 +26,4 @@ description: >-
 
 ## References
 
-- `magic-mirror/agents/tester.md`
+- `agents/tester.md`

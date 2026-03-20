@@ -2,7 +2,7 @@
 
 **Project:** Wall Magic Mirror (Pi 4 + AIY Voice Hat + Home Assistant)  
 **Document type:** Living specification — update on every scope or behavior change.  
-**Version:** 0.1  
+**Version:** 0.2  
 **Last updated:** 2026-03-20
 
 ---
@@ -12,6 +12,7 @@
 | Version | Date | Author | Summary of change |
 |---------|------|--------|-------------------|
 | 0.1 | 2026-03-20 | — | Initial skeleton + placeholder requirements |
+| 0.2 | 2026-03-20 | — | Hardware inventory; night mode FR; 720p planning assumption |
 
 ---
 
@@ -59,6 +60,9 @@
 | FR-004 | User shall trigger **TBD** HA actions by voice | Should | Map to HA services |
 | FR-005 | UI shall remain readable on mirror glass at **TBD** m viewing distance | Must | UX sign-off |
 | FR-006 | System shall not expose HA token in client-side bundle | Must | Server-side proxy or equivalent |
+| FR-007 | System shall provide **night mode** (reduced brightness/contrast of UI and restrained audio/TTS) | Must | SCHEDULE or manual toggle TBD; see PROJECT_BRIEF |
+
+**Display planning assumption:** Design layouts for **1280×720** until Samsung TV **native resolution** is confirmed; scale to **1080p** if supported (viewable glass **32.5 cm × 59 cm**).
 
 *Add rows as modules and voice intents are decided.*
 
@@ -113,3 +117,4 @@ For each FR/UC, add:
 ## 10. Change log (running)
 
 - **0.1** — Skeleton created; requirements to be refined after inventory and UX pass.
+- **0.2** — Inventory filled (glass, TV, Pi, AIY, Google cloud, audio options); FR-007 night mode; 720p baseline.

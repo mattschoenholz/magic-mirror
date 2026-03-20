@@ -15,7 +15,7 @@ description: >-
 
 ## Instructions
 
-1. Map work to `magic-mirror/docs/FSD.md` requirement IDs; bump FSD version if behavior changes.
+1. Map work to `docs/FSD.md` requirement IDs; bump FSD version if behavior changes.
 2. Add `.env.example` (no real secrets); document install in `README.md`.
 3. Match stack conventions once chosen (document in README).
 4. Never embed HA tokens in client-visible bundles.
@@ -26,4 +26,4 @@ description: >-
 
 ## References
 
-- `magic-mirror/agents/coder.md`
+- `agents/coder.md`
