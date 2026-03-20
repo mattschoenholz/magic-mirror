@@ -10,6 +10,32 @@
 
 This project is **standalone** — it is not part of SailboatServer or other repos.
 
+`origin` is preset to `git@github.com:mattschoenholz/magic-mirror.git`. Create the **empty** GitHub repository (same name, under your user), then push `main`.
+
+### Option A — GitHub website
+
+1. [Create new repository](https://github.com/new): name `magic-mirror`, **Public**, **no** README / .gitignore / license (repo must stay empty).
+2. From the project root:
+
+```bash
+cd ~/Desktop/CurrentProjects/General/magic-mirror
+git push -u origin main
+```
+
+### Option B — GitHub CLI (`gh`)
+
+Install if needed: `brew install gh`. Then:
+
+```bash
+gh auth login
+cd ~/Desktop/CurrentProjects/General/magic-mirror
+gh repo create mattschoenholz/magic-mirror --public \
+  --description "Wall magic mirror: Pi 4, AIY Voice HAT, Home Assistant"
+git push -u origin main
+```
+
+`origin` is already set, so do **not** pass `--remote=origin` to `gh repo create` (avoids “remote already exists” errors).
+
 ---
 
 ## Git identity (before first push)
