@@ -23,12 +23,12 @@ description: >-
 |-------|-----|
 | **`mm-home-assistant`** | Runtime HA REST/WebSocket, tokens, FR-006 proxy pattern |
 | **`mm-kiosk-pi`** | Chromium kiosk, systemd autostart, HDMI/audio on Pi |
-| **`mm-voice-aiy-google`** | AIY HAT, Google cloud voice, intent → HA whitelist |
+| **`mm-voice-aiy-google`** | **Future** — AIY on Pi only if scope returns |
 | **`mm-dev-mcp-ha`** | Cursor + HA MCP **only** (never Pi runtime) |
 
 ## Stack reminder
 
-**Custom web UI** (HTML/CSS/JS or light framework) + **local backend** for HA — **not** MagicMirror² (see `docs/ARCHITECTURE.md`).
+**Custom web UI** + **local backend** for HA — **not** MagicMirror². **v1:** **Echo** = all voice; Pi = **display only** (see `docs/ARCHITECTURE.md`).
 
 ## Outputs
 

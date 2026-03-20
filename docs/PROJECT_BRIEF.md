@@ -1,13 +1,15 @@
 # Project brief — Wall Magic Mirror
 
-**Version:** 0.5  
+**Version:** 0.6  
 **Last updated:** 2026-03-20
 
 ---
 
 ## 1. Problem statement
 
-You want a **wall-mounted mirror** that doubles as a **low-distraction information surface** and optionally supports **hands-free control**, using hardware you already favor (Pi 4, AIY Voice HAT, spare HDMI panel) and **deep integration with Home Assistant**.
+You want a **wall-mounted mirror** that doubles as a **low-distraction information surface** with **glanceable** content (time, **weather**, **school calendar**, **visual todo**, **Pomodoro timer**, etc.), powered by a **Raspberry Pi 4** and **deep integration with Home Assistant**.
+
+**v1 voice simplification:** **All voice** is through the **Echo Dot** (“**Echo**” wake word) → **Home Assistant**. The Pi focuses on **display + local HA API backend** only — **no AIY Voice HAT** on the mirror for the initial project (HAT remains optional hardware for a **later** phase). See [ARCHITECTURE.md](ARCHITECTURE.md).
 
 **Room & user context:** The mirror is installed in **your son’s bedroom**, alongside an **Echo Dot** he already uses with the **“Echo”** wake word (not “Alexa”). A key motivation is supporting **organization and time management**: he uses the **Pomodoro method**, and a **voice-driven Pomodoro** flow with a **large visual countdown** on the mirror may help more than phone-only timers.
 
@@ -18,8 +20,8 @@ You want a **wall-mounted mirror** that doubles as a **low-distraction informati
 | ID | Goal | How we’ll know (later) |
 |----|------|-------------------------|
 | G1 | Readable at ~2–3 m in typical bedroom lighting | Subjective review + contrast checks on mirror glass |
-| G2 | Reliable “at a glance” modules (time, weather, HA summary) | Uptime / refresh behavior documented in FSD |
-| G3 | Voice triggers common HA actions without pulling out a phone | Test cases in FSD + Tester agent checklist |
+| G2 | Reliable “at a glance” modules (time, **weather**, **todo**, **calendar**, HA-backed tiles) | Uptime / refresh behavior documented in FSD |
+| G3 | Voice (Echo → HA) supports common actions without a phone | Test cases in FSD + Tester; **no** mirror-mounted mic required for v1 |
 | G4 | Maintainable software (updates, backups, secrets) | Runbook in README / ARCHITECTURE |
 | G5 | **Pomodoro support:** voice (Echo → HA) + **visible countdown** on mirror during focus/break | FSD FR-008; Tester cases; son can complete a full cycle without phone |
 
@@ -30,16 +32,17 @@ You want a **wall-mounted mirror** that doubles as a **low-distraction informati
 ### In scope (candidate)
 
 - **Enclosure:** Mirror glass + Samsung TV are **already mounted in a wooden frame** — remaining work is cabling, Pi placement, service access, and any trim tweaks.
-- Pi OS image, **Chromium kiosk** hosting a **custom web UI** (not MagicMirror² for v1); auto-start UI + **local backend** for Home Assistant API (**FR-006**).
-- HA integration (entities, scenes, possibly calendar via HA).
-- Voice: **Google account / cloud** acceptable — AIY Voice HAT + Assistant-style flow (details in architecture phase).
-- **Night mode:** calmer UI and restrained audio/TTS for bedroom use.
+- Pi OS image, **Chromium kiosk** hosting a **custom web UI** (not MagicMirror² for v1); auto-start UI + **local backend** for Home Assistant API (**FR-006**). **Pi does not run voice recognition in v1.**
+- HA integration for **tiles**: weather (day/week), **school calendar** (via HA calendar / entity), **visual todo list** (e.g. `todo` integration, `shopping_list`, or `input_text` patterns — Architect picks), Pomodoro/timer entities, modes/scenes.
+- **Voice (v1):** **Echo Dot only** → HA (music, Pomodoro, routines, general Alexa). Mirror **displays** resulting HA state.
+- **Night mode:** calmer UI for bedroom (TTS/chimes primarily on **Echo** in v1).
 - **Child-bedroom UX:** calm, readable, **non-shaming** copy for focus/time tools; avoid surveillance framing (see risks).
 - **Pomodoro (target):** HA-backed timer state + mirror **countdown module**; **Echo** (“Echo” wake word) as primary voice surface for start/pause/skip where possible — details [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) §Pomodoro.
 - Documentation, FSD, version control.
 
 ### Out of scope for v1 (unless you promote them)
 
+- **AIY Voice HAT** on the mirror / **Google Assistant** as mirror-mounted voice (defer to **v2+**; hardware can stay in a drawer until then).
 - Facial recognition, camera inside mirror glass.
 - Heavy animations or video wallpaper.
 - Replacing HA as source of truth for complex logic.
@@ -57,16 +60,16 @@ Ideas, MoSCoW primer, Alexa/Echo-as-satellite, camera/LD4020/gesture concepts: *
 - **Mirror glass — viewable area:** **32.5 cm × 59 cm** (two-way glass; thickness TBD if needed for CAD).
 - **Display:** Older **Samsung TV** (model number and **native resolution not yet recorded**). **Planning assumption: 1280×720 (720p)** until confirmed; move UI/layout to **1080p** if the panel supports it.
 - **Power:** TV has **120 V plug on the back** — separate from Pi power; **HDMI wake behavior unknown** (test: does panel show Pi signal only when TV is “on”?).
-- **Compute:** **Raspberry Pi 4 Model B (2018)** — onboard RAM size TBD (`free -h` on device).
-- **Voice HAT:** Google **AIY Voice Kit** HAT (revision **not marked** on board — identify from photos / pinout vs Google docs when flashing).
-- **Audio:** **HAT speaker** available; **optional:** route output to **TV speakers** over HDMI (Architect: default output + switching rules in FSD).
+- **Compute:** **Raspberry Pi 4 Model B (2018)** — onboard RAM size TBD (`free -h` on device). **v1:** display + backend only (no mic/speaker required on Pi for voice).
+- **AIY Voice HAT:** **Optional / deferred** — on hand for a **later** phase if you add mirror-local voice.
+- **Audio (v1):** **Echo Dot** (+ connected speakers) for music and Alexa TTS; Pi may be **HDMI video only** unless you add local UI sounds later.
 - **Network:** Home LAN + Home Assistant reachable; prefer **no inbound exposure** from the internet to the Pi.
 
 ---
 
 ## 5. High-level architecture (one paragraph)
 
-The Pi runs **Chromium in kiosk mode** showing a **custom-built web mirror UI**. A **local backend** on the Pi holds the HA token and talks to Home Assistant via **REST/WebSocket**; the browser talks only to loopback (**FR-006**). **Voice** uses the AIY HAT with **Google cloud–backed** recognition/Assistant and maps **whitelisted** intents to HA (often via the same backend). **Cursor + HA MCP** are for **development on your PC only**, not part of the wall-mounted runtime.
+The Pi runs **Chromium in kiosk mode** showing a **custom-built web mirror UI**. A **local backend** on the Pi holds the HA token and talks to Home Assistant via **REST/WebSocket**; the browser talks only to loopback (**FR-006**). **Voice** is **Echo → Alexa cloud → HA**; the mirror **only displays** HA-backed state (timers, lists, calendar, weather, etc.). **Cursor + HA MCP** are for **development on your PC only**, not part of the wall-mounted runtime.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for diagrams and options.
 
@@ -78,12 +81,12 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for diagrams and options.
 |------|----------|--------|
 | **Mirror UI** | **Custom web + local HA backend** | Full control for glass, night mode, FR-006; more code than MagicMirror² |
 | **MagicMirror²** | **Deferred for v1** | Can revisit if maintenance cost of custom UI grows |
-| Voice | **AIY + Google Assistant / cloud** | Account + cloud dependency *(accepted for v1)* |
-| Voice (future) | Wake word + HA Assist | Fewer vendor ties; more integration later |
-| Calendar / weather | Prefer **HA entities** | Avoid extra paid APIs |
+| **Voice (v1)** | **Echo Dot → HA only** | Single wake word in room; music + Pomodoro + Alexa on Echo |
+| **Voice (future)** | **AIY HAT** + Google **or** HA Assist | Optional second phase on the Pi |
+| Calendar / weather / todo | **HA** (`calendar`, `weather`, `todo` / helpers) | School calendar + week forecast + list tiles on mirror |
 | Remote admin | SSH over LAN / Tailscale | Keys only, no password SSH |
 
-Reference skills in repo: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voice-aiy-google`**, **`mm-dev-mcp-ha`** (MCP dev-only).
+Reference skills: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-dev-mcp-ha`** (MCP dev-only). **`mm-voice-aiy-google`** = **future** (only if AIY returns to scope).
 
 ---
 
@@ -105,9 +108,9 @@ Reference skills in repo: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voic
 | TV power | **120 V** rear plug |
 | HDMI wake from Pi | **Unknown** — test when Pi image ready |
 | Raspberry Pi 4B (2018) | On hand; **RAM size TBD** |
-| AIY Voice HAT | On hand; **revision unmarked** — identify from docs |
-| Voice / cloud | **Google account + cloud OK** |
-| Audio | HAT speaker **and/or** TV speakers via HDMI — **TBD default** |
+| AIY Voice HAT | **Deferred (v2+)**; on hand if you add Google/mirror voice later |
+| Voice (v1) | **Echo Dot** → HA only |
+| Audio | **Echo + speakers** for v1 voice/music |
 | Night mode | **Required** (UI + audio behavior in FSD) |
 | **Echo Dot** | **Son’s bedroom**; wake word **“Echo”**; **Alexa Devices** in HA authenticated; **music**, **Pomodoro voice → HA**, **routines → HA** (see [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md)) |
 | **Camera** | USB or **Pi Camera v2.1** — presence / gesture ideation only until promoted to FSD |
@@ -117,7 +120,7 @@ Reference skills in repo: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voic
 
 - [ ] Samsung model + **confirmed resolution** (settings menu or label).
 - [ ] Pi RAM: run `free -h` or read silkscreen / order records.
-- [ ] AIY revision (v1 vs v2) from GPIO / audio codec / Google kit guide.
+- [ ] *(If AIY returns to scope)* revision (v1 vs v2) from GPIO / audio codec / Google kit guide.
 - [ ] HA URL (internal) + token storage path on Pi.
 - [ ] Wall / outlet / cable concealment notes (if relevant for install doc).
 
@@ -128,11 +131,11 @@ Reference skills in repo: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voic
 | Risk | Mitigation |
 |------|------------|
 | Mirror glass reduces contrast | High-contrast UI theme; limit small text; test fonts on actual glass |
-| Voice false triggers in bedroom | Push-to-talk fallback; strict intent whitelist; LED/visual feedback |
-| **Child bedroom — privacy & trust** | Camera/gesture **opt-in** and clear household rules; Pomodoro UI **supportive** language (no guilt copy); parents align with son on what appears on mirror |
-| **Dual voice (Echo vs mirror HAT)** | **Echo** = primary for Pomodoro + music in this room; document in FSD so expectations are clear |
+| Voice false triggers | **v1:** Echo-only; use HA + Alexa phrase design; optional mute hours on Echo for bedroom |
+| **Child bedroom — privacy & trust** | Camera/gesture **opt-in**; todo/calendar content agreed with family; Pomodoro UI **supportive** language |
+| **Dual voice (future)** | If AIY is added later, split **roles** (Echo vs mirror) in FSD to avoid two wake words doing the same job |
 | Heat in enclosed frame | Ventilation slots; Pi throttling; thermal test under load |
-| AIY / Google API churn | Pin documented image + API versions; evaluate local alternative early |
+| **Google / AIY (if reintroduced)** | API churn; pin images — **N/A for v1** |
 | TV always-on vs Pi-only | Clarify power workflow; HDMI-CEC or manual TV power if no wake-on-HDMI |
 
 ---
@@ -142,5 +145,5 @@ Reference skills in repo: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voic
 1. Confirm **display resolution** and **Pi RAM**; update FSD + UX type scale for **59 cm tall** viewable area.
 2. Lock **v1 module list** and **night mode** behavior in [FSD.md](FSD.md).
 3. UX Designer: layout zones + typography for **32.5×59 cm** at viewing distance.
-4. Architect: **custom web + backend** locked; next — **audio routing** (HAT vs HDMI) and voice stack details in ARCHITECTURE.md.
+4. Architect: **v1** Pi display + HA backend + **Echo-only voice** locked in ARCHITECTURE.md; define HA entities for **todo / school calendar / weather** tiles.
 5. Keep **GitHub** in sync with local (see [GITHUB.md](GITHUB.md)).

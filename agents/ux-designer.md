@@ -48,8 +48,9 @@ Design a **calm, high-contrast** mirror experience optimized for **glance readin
 
 ### 4. Voice UX
 
-- Pair every audible state with **visible** state: idle / listening / processing / success / error.
-- **Errors** must be understandable without audio (icon + short text).
+- **v1:** Voice is on **Echo**; mirror shows **HA-backed state** (timer, lists, mode) so the occupant never **depends** on audio to know what’s running.
+- If **AIY** is added later, pair listening / success / error with **on-screen** state.
+- **Errors** on the mirror (HA down, stale data) must be understandable without audio (icon + short text).
 
 ### 5. Motion & distraction (bedroom)
 

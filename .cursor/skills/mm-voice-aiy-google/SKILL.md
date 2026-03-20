@@ -1,17 +1,18 @@
 ---
 name: mm-voice-aiy-google
 description: >-
-  Google AIY Voice HAT + cloud-backed voice for Magic Mirror: audio path,
-  Assistant integration patterns, intent-to-HA mapping, credentials hygiene.
-  Use when designing or implementing voice on the Pi.
+  Google AIY Voice HAT + cloud voice (DEFERRED for v1 — Echo-only voice).
+  Use only if the project adds mirror-mounted AIY / Assistant back to scope.
 ---
 
 # Magic Mirror — AIY Voice + Google cloud
 
+> **v1 project status:** Voice is **Echo Dot → HA** only; the Pi does **not** use the AIY HAT initially. Skip this skill unless you **reopen** AIY scope.
+
 ## When to apply
 
-- Voice capture, wake, STT/TTS routing, or mapping phrases → Home Assistant services.
-- Choosing default audio output (HAT vs HDMI).
+- You are adding **mirror-local** capture, wake, STT/TTS, or mapping phrases → HA **on the Pi**.
+- Choosing HAT vs HDMI audio for **mirror** TTS.
 
 ## Instructions
 

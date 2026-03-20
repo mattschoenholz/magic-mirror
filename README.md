@@ -1,6 +1,6 @@
-# Wall Magic Mirror (Pi 4 + AIY Voice Hat)
+# Wall Magic Mirror (Pi 4 + Home Assistant + Echo)
 
-A **planning and documentation** home for a wall-mounted smart mirror: two-way glass over an HDMI display, driven by a **Raspberry Pi 4** with voice via the **Google AIY Voice Kit HAT**, integrated with **Home Assistant**. Voice may use **Google account / cloud** per project decision.
+A **planning and documentation** home for a wall-mounted smart mirror: two-way glass over an HDMI display, driven by a **Raspberry Pi 4** (**display + local HA backend**), with **voice through an Echo Dot** → **Home Assistant** for v1. **AIY Voice HAT** is **optional / later** — not part of the initial install.
 
 > **Status:** Ideation / specification — application code comes later.  
 > **GitHub:** [github.com/mattschoenholz/magic-mirror](https://github.com/mattschoenholz/magic-mirror)
@@ -19,15 +19,15 @@ Open this folder as the Cursor **workspace root** so `.cursor/skills/` load corr
 
 ## Purpose (draft)
 
-- **Primary:** Glanceable, calm “dashboard on the wall” for time, weather, calendar highlights, and home state — in a **child’s bedroom**, readable at a typical viewing distance.
-- **Focus / Pomodoro:** Support **time management** with a **voice-driven (Echo → HA) Pomodoro** flow and a **large on-mirror countdown** (**FR-008**).
-- **Secondary:** Hands-free commands for common actions (lights, scenes, climate) via voice, aligned with Home Assistant automations.
+- **Primary:** Glanceable “dashboard on the wall” — **weather** (day/week), **school calendar**, **visual todo**, time, home state, **Pomodoro countdown** — in a **child’s bedroom**, readable at a typical viewing distance.
+- **Voice (v1):** **Echo Dot** (“Echo”) → **HA** for music, Pomodoro, routines, and Alexa; the Pi **does not** run mirror-mounted voice in the first phase.
+- **Secondary:** HA automations and Echo for lights, scenes, climate, etc.
 - **Night mode:** Softer UI and restrained audio for overnight use.
 - **Non-goals (v1):** Full conversational assistant, heavy video, or replacing the phone for complex HA admin.
 
 Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md).
 
-**Implementation stack (v1):** **Custom web UI** in **Chromium kiosk** + **local backend** on the Pi for **Home Assistant REST/WebSocket** (token never in the browser — **FR-006**). **Not** MagicMirror². Reference Cursor skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-voice-aiy-google`, `mm-dev-mcp-ha` (MCP = dev PC only).
+**Implementation stack (v1):** **Custom web UI** in **Chromium kiosk** + **local backend** on the Pi for **Home Assistant REST/WebSocket** (**FR-006**). **Not** MagicMirror². Skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **`mm-voice-aiy-google`** only if AIY returns to scope later.
 
 ---
 

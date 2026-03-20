@@ -21,6 +21,8 @@ These are **directional** until promoted to the FSD with acceptance criteria.
 | **LD4020** | You have this device — treat as **additional presence sensing** alongside or instead of camera for some use cases (see §Hardware notes). |
 | **Occupant needs** | Son benefits from support for **organization and time management**; **Pomodoro** is already in use — mirror should reinforce with **glanceable** feedback, not nagging. |
 | **Pomodoro + voice** | **Echo** (wake word **“Echo”**) drives **HA** for start/pause/skip; mirror shows **large visual countdown** and phase (work / short break / long break). **Promoted** to [FSD.md](FSD.md) as **FR-008** (Should). |
+| **v1 hardware simplification** | **Raspberry Pi 4B** = **mirror display + local HA backend only**. **Echo Dot** = **all voice** (music, Pomodoro, Alexa, routines → HA). **AIY Voice HAT** **not** installed on the mirror for the **initial** project — optional **later** phase. |
+| **Glanceable tiles (target)** | **Weather** (day/week), **school calendar**, **visual todo**, Pomodoro/timer — all **HA-backed**, rendered on mirror (**FR-009**, **M-005**, **M-006**). |
 
 ---
 
@@ -83,11 +85,11 @@ These are **directional** until promoted to the FSD with acceptance criteria.
 - Timers, alarms, announcements, Drop In, skills, shopping list.
 - **HA automation** can still **trigger** announcements on Echo for rare events (e.g. leak sensor) while mirror shows a calm alert UI.
 
-**Voice overlap (mirror AIY vs Echo)**
+**Voice (v1) — Echo only on the mirror project**
 
-- In **this bedroom**, **Echo + “Echo” wake word** is the **primary voice surface** for **daily use** (music, Pomodoro via HA, general Alexa).
-- **Mirror AIY / Google path** can complement (e.g. glance-specific commands) but **avoid duplicating** the same Pomodoro start phrase on two devices unless you enjoy wake-word races.
-- **FSD** now includes **FR-008** (mirror shows Pomodoro); voice control path is **Echo → HA**, not Amazon’s generic timer unless you accept **no mirror sync**.
+- **Echo + “Echo” wake word** is the **only** planned voice input for v1 (music, Pomodoro via HA, routines, general Alexa).
+- **AIY Voice HAT** is **deferred** — no second wake word, simpler wiring, Pi focuses on **Chromium + backend**.
+- If **AIY** is added in a **future** phase, reintroduce “two voice surfaces” rules in FSD (split responsibilities so Pomodoro isn’t duplicated).
 
 **Reference**
 

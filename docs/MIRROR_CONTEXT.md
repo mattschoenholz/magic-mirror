@@ -10,10 +10,11 @@ Single reference for agents and skills. **Update this file** when hardware facts
 |-------|--------|
 | **Mirror UI** | **Custom web app** (vanilla or light framework) in **Chromium kiosk** on Pi |
 | **Home Assistant** | **REST + WebSocket** from a **local backend** on the Pi; token **never** in the browser bundle (**FR-006**) |
-| **Voice** | **AIY Voice HAT** + **Google cloud** (v1) |
-| **Not used** | **MagicMirror²** / Electron mirror frameworks for v1 (reduces lock-in; full control for glass + night mode) |
+| **Voice (v1)** | **Echo Dot** (“**Echo**”) → **Alexa** → **Home Assistant** — Pi has **no** mirror-mounted mic |
+| **Pi role (v1)** | **Display** (Chromium) + **local HA backend** only |
+| **Not used (v1)** | **MagicMirror²**; **AIY HAT** on mirror (optional **later**) |
 
-Domain reference skills (Cursor / Claude): `mm-home-assistant`, `mm-kiosk-pi`, `mm-voice-aiy-google`, `mm-dev-mcp-ha` (MCP = dev machine only).
+Domain reference skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **`mm-voice-aiy-google`** = if AIY returns to scope.
 
 ---
 
@@ -25,9 +26,9 @@ Domain reference skills (Cursor / Claude): `mm-home-assistant`, `mm-kiosk-pi`, `
 | Display planning resolution | **1280×720** until Samsung TV native resolution confirmed |
 | TV | Samsung (model TBD); **120 V**; HDMI wake **unknown** |
 | Pi | Raspberry Pi 4 Model B (2018); **RAM TBD** |
-| Voice HAT | Google AIY Voice Kit; revision **unmarked** |
-| Voice / cloud | **Google account + cloud OK** (v1) |
-| Audio | HAT speaker **and/or** HDMI → TV speakers — **default TBD** |
+| AIY Voice HAT | **Deferred** — not part of v1 install |
+| Voice (v1) | **Echo → HA** only |
+| Audio | **Echo + room speakers** for music / Alexa TTS |
 | Night mode | **FR-007** — softer UI + restrained audio (see FSD) |
 | **Room** | **Child’s bedroom** — supportive UX; see [PROJECT_BRIEF.md](PROJECT_BRIEF.md) |
 | **Echo Dot** | Wake word **“Echo”**; **Pomodoro** voice via **Echo → HA**; mirror shows **FR-008** countdown |

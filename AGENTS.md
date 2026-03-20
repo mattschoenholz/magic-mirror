@@ -16,7 +16,7 @@ Read **`docs/MIRROR_CONTEXT.md`** first on any deep task — hardware baselines,
 |-------|--------|
 | [`mm-home-assistant`](.cursor/skills/mm-home-assistant/SKILL.md) | HA REST/WebSocket, token hygiene, FR-006 |
 | [`mm-kiosk-pi`](.cursor/skills/mm-kiosk-pi/SKILL.md) | Chromium kiosk, systemd, Pi display/audio |
-| [`mm-voice-aiy-google`](.cursor/skills/mm-voice-aiy-google/SKILL.md) | AIY HAT + Google cloud voice |
+| [`mm-voice-aiy-google`](.cursor/skills/mm-voice-aiy-google/SKILL.md) | **Future** — AIY on Pi if scope returns (**v1 = Echo-only**) |
 | [`mm-dev-mcp-ha`](.cursor/skills/mm-dev-mcp-ha/SKILL.md) | HA MCP on **dev machine only** |
 
 **Claude Code:** [`.claude/agents/`](.claude/agents/) → symlinks to `agents/*.md`. [`.claude/skills/`](.claude/skills/) → symlinks to `.cursor/skills/*` (see `.claude/README.md`).

@@ -1,8 +1,8 @@
 # Functional Specification Document (FSD)
 
-**Project:** Wall Magic Mirror (Pi 4 + AIY Voice Hat + Home Assistant)  
+**Project:** Wall Magic Mirror (Pi 4 display + Home Assistant + Echo Dot)  
 **Document type:** Living specification — update on every scope or behavior change.  
-**Version:** 0.6  
+**Version:** 0.7  
 **Last updated:** 2026-03-20
 
 ---
@@ -17,6 +17,7 @@
 | 0.4 | 2026-03-20 | — | **Custom web UI + local HA backend** stack; reference skills `mm-home-assistant`, `mm-kiosk-pi`, `mm-voice-aiy-google`, `mm-dev-mcp-ha` |
 | 0.5 | 2026-03-20 | — | Link [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md); Alexa/Echo + camera ideas pending promotion |
 | 0.6 | 2026-03-20 | — | Child bedroom context; Echo wake word; **FR-008** Pomodoro countdown; personas + UC-6 |
+| 0.7 | 2026-03-20 | — | **v1:** Pi = display + HA backend only; **Echo-only** voice; AIY deferred; **FR-009** tiles; todo/calendar/weather modules |
 
 ---
 
@@ -57,6 +58,9 @@
 - UC-4: Invoke HA scene or device action by voice (whitelist TBD); **in this room, Echo → HA is primary** for daily voice (see [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md)).
 - UC-5: Recover from network loss without manual reboot (behavior TBD).
 - UC-6: **Pomodoro:** start/pause/skip via **Echo** voice to **HA**; see **live countdown and phase** (focus / break) on the mirror.
+- UC-7: View **weather** for the day or week (HA `weather` or equivalent entities).
+- UC-8: View **school calendar** (HA `calendar` / CalDAV-backed calendar exposed in HA).
+- UC-9: View a **todo / task list** driven by HA (`todo`, `shopping_list`, or agreed helper entities).
 
 ---
 
@@ -67,11 +71,12 @@
 | FR-001 | System shall show a full-screen **custom web** mirror UI after boot without manual login | Must | Chromium kiosk + autostart; see **`mm-kiosk-pi`** |
 | FR-002 | System shall display accurate local time | Must | NTP |
 | FR-003 | System shall reflect HA entity updates within **TBD** seconds | Must | WebSocket preferred |
-| FR-004 | User shall trigger **TBD** HA actions by voice | Should | Map to HA services |
+| FR-004 | **v1:** Occupant shall use **Echo** (“Echo” wake word) → **HA** for voice actions; mirror does **not** require on-device mic | Must | Phrases / exposed entities TBD; mirror **displays** HA state |
 | FR-005 | UI shall remain readable on mirror glass at **TBD** m viewing distance | Must | UX sign-off |
 | FR-006 | System shall not expose HA token in client-side bundle | Must | Server-side proxy or equivalent |
-| FR-007 | System shall provide **night mode** (reduced brightness/contrast of UI and restrained audio/TTS) | Must | SCHEDULE or manual toggle TBD; see PROJECT_BRIEF |
-| FR-008 | When HA reports an **active Pomodoro / focus timer** (or equivalent entity set), the mirror shall show a **large, readable countdown** and **phase** (e.g. focus vs short break) | Should | HA is source of truth; **Echo** drives voice → HA; implementation patterns [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) §Pomodoro; entity IDs TBD |
+| FR-007 | System shall provide **night mode** (reduced brightness/contrast of UI); **v1** audio/TTS is primarily on **Echo**, not the Pi | Must | SCHEDULE or manual toggle TBD; see PROJECT_BRIEF |
+| FR-008 | When HA reports an **active Pomodoro / focus timer** (or equivalent entity set), the mirror shall show a **large, readable countdown** and **phase** (e.g. focus vs short break) | Should | HA is source of truth; **Echo** drives voice → HA; [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) §Pomodoro; entity IDs TBD |
+| FR-009 | Mirror shall show **HA-backed** tiles for **weather** (day or week), **school calendar**, and **visual todo** list per agreed entity IDs | Should | Architect documents entities in ARCHITECTURE; family agrees what appears on mirror |
 
 **Display planning assumption:** Design layouts for **1280×720** until Samsung TV **native resolution** is confirmed; scale to **1080p** if supported (viewable glass **32.5 cm × 59 cm**).
 
@@ -85,18 +90,21 @@
 |----|-------------|--------|--------------|
 | NFR-001 | Availability (mirror UI) | **TBD** % monthly | Logs / HA ping |
 | NFR-002 | Power loss recovery | Auto-boot to UI | Tester checklist |
-| NFR-003 | Thermal stability | No sustained throttle under kiosk+voice idle | `vcgencmd` / stress notes |
+| NFR-003 | Thermal stability | No sustained throttle under **kiosk + backend** idle | `vcgencmd` / stress notes |
 | NFR-004 | Security | No secrets in repo; least-privilege HA token | Grep + HA audit |
 
 ---
 
 ## 6. Voice (functional subset)
 
-| Intent ID | Example utterance | HA action | Enabled (Y/N) |
-|-----------|-------------------|-----------|---------------|
-| VI-001 | *TBD* | *TBD* | |
+**v1:** Voice is **not** processed on the Pi. Document **Echo → HA** mappings (Alexa app / HA Alexa integration) here or in `docs/` runbook as you implement.
 
-*Security rule:* only whitelisted intents; reject unknown commands with harmless feedback.
+| Intent ID | Example (Echo) | HA action | Notes |
+|-----------|----------------|-----------|--------|
+| VI-001 | *TBD — e.g. start focus* | Start Pomodoro / `timer` / script | Must sync mirror **FR-008** |
+| VI-002 | *TBD* | *TBD* | |
+
+*Security / sanity:* Prefer HA-controlled scripts; avoid relying on **Alexa-only** timers for anything the mirror must display.
 
 ---
 
@@ -105,9 +113,11 @@
 | Module ID | Content | Data source | Owner (agent) |
 |-----------|---------|-------------|---------------|
 | M-001 | Clock | System / HA | UX |
-| M-002 | Weather | HA entity / API | Architect |
-| M-003 | HA summary | HA | Architect |
+| M-002 | **Weather** — day or week | HA `weather.*` or template | Architect |
+| M-003 | HA / home summary (optional) | HA | Architect |
 | M-004 | **Pomodoro** — countdown + phase | HA `timer` / `input_select` / scripts (TBD) | UX + Architect |
+| M-005 | **School calendar** | HA `calendar.*` | Architect + household (which calendar) |
+| M-006 | **Visual todo / tasks** | HA `todo`, `shopping_list`, or helpers | Architect |
 
 ---
 
@@ -116,6 +126,7 @@
 Duplicated from brief; keep in sync with [PROJECT_BRIEF.md](PROJECT_BRIEF.md).
 
 - **MagicMirror²** (or similar mirror frameworks) for **v1** — custom web UI only; may revisit later.
+- **AIY Voice HAT / mirror-mounted Google voice** for **v1** — deferred; see [PROJECT_BRIEF.md](PROJECT_BRIEF.md).
 
 ---
 
@@ -136,3 +147,4 @@ For each FR/UC, add:
 - **0.4** — Stack locked: custom web + local HA API backend; domain reference skills; MagicMirror² out of scope for v1.
 - **0.5** — [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md): Alexa satellite, routines, camera/LD4020/gesture ideation; MoSCoW definition.
 - **0.6** — Child bedroom + Echo wake word; **FR-008** / **M-004** Pomodoro; **UC-6**; personas.
+- **0.7** — **v1 voice = Echo only**; Pi display-only; **FR-009**; **M-005** / **M-006**; **UC-7–9**; AIY out of scope v1.
