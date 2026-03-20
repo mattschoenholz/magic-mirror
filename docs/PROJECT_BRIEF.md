@@ -1,6 +1,6 @@
 # Project brief — Wall Magic Mirror
 
-**Version:** 0.6  
+**Version:** 0.7  
 **Last updated:** 2026-03-20
 
 ---
@@ -19,7 +19,7 @@ You want a **wall-mounted mirror** that doubles as a **low-distraction informati
 
 | ID | Goal | How we’ll know (later) |
 |----|------|-------------------------|
-| G1 | Readable at ~2–3 m in typical bedroom lighting | Subjective review + contrast checks on mirror glass |
+| G1 | Readable at **~10 ft** (bed/desk) **and** at **~2–3 ft** (at mirror); **far** distance sets minimum type for hero content | Subjective review + [UI_MODES.md](UI_MODES.md) Tester notes |
 | G2 | Reliable “at a glance” modules (time, **weather**, **todo**, **calendar**, HA-backed tiles) | Uptime / refresh behavior documented in FSD |
 | G3 | Voice (Echo → HA) supports common actions without a phone | Test cases in FSD + Tester; **no** mirror-mounted mic required for v1 |
 | G4 | Maintainable software (updates, backups, secrets) | Runbook in README / ARCHITECTURE |
@@ -33,7 +33,7 @@ You want a **wall-mounted mirror** that doubles as a **low-distraction informati
 
 - **Enclosure:** Mirror glass + Samsung TV are **already mounted in a wooden frame** — remaining work is cabling, Pi placement, service access, and any trim tweaks.
 - Pi OS image, **Chromium kiosk** hosting a **custom web UI** (not MagicMirror² for v1); auto-start UI + **local backend** for Home Assistant API (**FR-006**). **Pi does not run voice recognition in v1.**
-- HA integration for **tiles**: weather (day/week), **school calendar** (via HA calendar / entity), **visual todo list** (e.g. `todo` integration, `shopping_list`, or `input_text` patterns — Architect picks), Pomodoro/timer entities, modes/scenes.
+- HA integration for **tiles**: **weather** (**today** primary, **multi-day** compact secondary — [UI_MODES.md](UI_MODES.md)), **school calendar** (via HA calendar / entity), **visual todo list** (e.g. `todo` integration, `shopping_list`, or `input_text` patterns — Architect picks), Pomodoro/timer entities, **fluid UI modes** (sleep, passive, active, Pomodoro focus — **FR-010**).
 - **Voice (v1):** **Echo Dot only** → HA (music, Pomodoro, routines, general Alexa). Mirror **displays** resulting HA state.
 - **Night mode:** calmer UI for bedroom (TTS/chimes primarily on **Echo** in v1).
 - **Child-bedroom UX:** calm, readable, **non-shaming** copy for focus/time tools; avoid surveillance framing (see risks).
@@ -64,6 +64,8 @@ Ideas, MoSCoW primer, Alexa/Echo-as-satellite, camera/LD4020/gesture concepts: *
 - **AIY Voice HAT:** **Optional / deferred** — on hand for a **later** phase if you add mirror-local voice.
 - **Audio (v1):** **Echo Dot** (+ connected speakers) for music and Alexa TTS; Pi may be **HDMI video only** unless you add local UI sounds later.
 - **Network:** Home LAN + Home Assistant reachable; prefer **no inbound exposure** from the internet to the Pi.
+- **Home Assistant host:** Runs on a **Raspberry Pi 5** on the LAN (separate from the **mirror Pi 4**). Mirror talks to HA over the network; see [ARCHITECTURE.md](ARCHITECTURE.md), [HA_DEV.md](HA_DEV.md).
+- **Mirror SD card:** **32 GB** (or larger) acceptable for the **display + backend** Pi image when flashed.
 
 ---
 
@@ -92,8 +94,8 @@ Reference skills: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-dev-mcp-ha`*
 
 ## 7. Home Assistant & MCP
 
-- **Runtime:** Mirror should use HA **REST + WebSocket** with a **long-lived token** stored in a root-only file or OS secret mechanism — **never** in git.
-- **MCP:** **Dev machine only** (Cursor). Skill **`mm-dev-mcp-ha`** — verify entities/services while editing; **never** paste tokens into chat. Not used on the Pi at runtime. Optional: document workflows in [GITHUB.md](GITHUB.md) or `docs/DEV_ENV.md`.
+- **Runtime:** Mirror Pi should use HA **REST + WebSocket** with a **long-lived token** stored in a root-only file or OS secret mechanism — **never** in git.
+- **MCP:** Can run against the **HA Pi 5** from your **dev machine** (Cursor) using a **separate** long-lived token — **never** commit tokens; see [HA_DEV.md](HA_DEV.md). Skill **`mm-dev-mcp-ha`**. MCP is **not** part of the wall-mounted mirror runtime unless you explicitly add it later.
 
 ---
 

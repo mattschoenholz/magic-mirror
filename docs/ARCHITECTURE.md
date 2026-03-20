@@ -1,6 +1,6 @@
 # Architecture — Wall Magic Mirror
 
-**Version:** 0.5 (draft)  
+**Version:** 0.6 (draft)  
 **Last updated:** 2026-03-20
 
 ---
@@ -20,7 +20,7 @@ flowchart LR
     ECHO[Echo Dot wake Echo]
   end
   subgraph home [Home LAN]
-    HA[Home Assistant]
+    HA[Home Assistant on Pi 5]
     AMZ[Amazon Alexa cloud]
   end
   MG --- DISP
@@ -53,10 +53,10 @@ flowchart LR
 
 ## 3. Integration boundaries
 
-- **Home Assistant:** Source of truth for **weather**, **calendar** (school), **todo/list** entities, **Pomodoro** timers, **mirror mode** helpers. Mirror **displays**; limited **write** only if FSD whitelists (e.g. future “complete task” from UI).
+- **Home Assistant (Pi 5):** Source of truth for **weather**, **calendar** (school), **todo/list** entities, **Pomodoro** timers, **mirror UI mode** (`input_select` or equivalent — see [UI_MODES.md](UI_MODES.md)). Mirror **displays**; limited **write** only if FSD whitelists (e.g. future “complete task” from UI).
 - **Echo Dot:** Wake word **“Echo”**. All **v1** voice paths end in **HA** for anything the mirror must show (use HA timers/scripts, not Alexa-only kitchen timers, for Pomodoro sync).
 - **GitHub:** Code + docs; no secrets.
-- **MCP (Cursor):** Dev PC only — **`mm-dev-mcp-ha`**.
+- **MCP (Cursor):** Dev PC → HA on Pi 5 — **`mm-dev-mcp-ha`**; see [HA_DEV.md](HA_DEV.md).
 
 ---
 

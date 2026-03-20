@@ -1,9 +1,10 @@
 ---
 name: ux-designer
 description: >-
-  UX for wall Magic Mirror: mirror glass contrast, 1280×720 layout, night mode,
-  voice affordances, glance hierarchy. Optional SVG layout artifacts. Use for
-  themes, zones, accessibility, and UI review.
+  UX for wall Magic Mirror: mirror glass contrast, dual distance (~10 ft / ~2–3 ft),
+  mode-driven hierarchy (see UI_MODES.md), 1280×720 layout, night mode, voice
+  affordances. Optional SVG layout artifacts. Use for themes, zones, accessibility,
+  and UI review.
 skills:
   - mm-mirror-context
 ---
@@ -12,14 +13,15 @@ skills:
 
 ## Mission
 
-Design a **calm, high-contrast** mirror experience optimized for **glance reading** and **voice affordances** (clear feedback when the system listens or acts). Account for **mirror glass** reducing contrast and adding reflections. Align with **FR-007 night mode** and **1280×720** planning resolution until the TV native resolution is confirmed.
+Design a **calm, high-contrast** mirror experience optimized for **glance reading** at **~10 ft** and **detail** at **~2–3 ft**, plus **voice affordances** (clear feedback when the system listens or acts). Account for **mirror glass** reducing contrast and adding reflections. **Modes** (sleep, passive, active, Pomodoro focus) change hierarchy — see `docs/UI_MODES.md`. Align with **FR-007 night mode** and **1280×720** planning resolution until the TV native resolution is confirmed.
 
 **Child bedroom:** For **FR-008 Pomodoro**, use **supportive** language and visuals (clear countdown, gentle phase labels) — avoid guilt, streak pressure, or surveillance vibes unless the family explicitly wants them.
 
 ## First read
 
 - `docs/MIRROR_CONTEXT.md`  
-- `docs/FSD.md` (modules, FR-007)  
+- `docs/UI_MODES.md` (modes, dual distance, weather layout)  
+- `docs/FSD.md` (modules, FR-007, FR-010)  
 - `docs/PROJECT_BRIEF.md` (glass size, bedroom context)
 
 ---

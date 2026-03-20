@@ -32,6 +32,8 @@ Domain reference skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **
 | Night mode | **FR-007** — softer UI + restrained audio (see FSD) |
 | **Room** | **Child’s bedroom** — supportive UX; see [PROJECT_BRIEF.md](PROJECT_BRIEF.md) |
 | **Echo Dot** | Wake word **“Echo”**; **Pomodoro** voice via **Echo → HA**; mirror shows **FR-008** countdown |
+| **Viewing distance** | **~10 ft** (bed/desk) + **~2–3 ft** (at mirror) — see [UI_MODES.md](UI_MODES.md) |
+| **Home Assistant** | **Pi 5** on LAN; mirror **Pi 4** is display + local HA API client only |
 
 ---
 
@@ -46,6 +48,8 @@ Domain reference skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **
 | [GITHUB.md](GITHUB.md) | Remotes, HTTPS workflow |
 | [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) | Future ideas, MoSCoW, Alexa/camera — before FSD promotion |
 | [DESIGN_READINESS.md](DESIGN_READINESS.md) | Checklist before UX theme; outputs in [design/](design/) |
+| [UI_MODES.md](UI_MODES.md) | Four UI modes, dual viewing distance, weather hierarchy |
+| [HA_DEV.md](HA_DEV.md) | HA on Pi 5 vs mirror Pi 4, MCP, token hygiene |
 
 ---
 

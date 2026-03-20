@@ -19,7 +19,7 @@ Open this folder as the Cursor **workspace root** so `.cursor/skills/` load corr
 
 ## Purpose (draft)
 
-- **Primary:** Glanceable “dashboard on the wall” — **weather** (day/week), **school calendar**, **visual todo**, time, home state, **Pomodoro countdown** — in a **child’s bedroom**, readable at a typical viewing distance.
+- **Primary:** Glanceable “dashboard on the wall” — **weather** (**today** + compact **multi-day**), **school calendar**, **visual todo**, time, home state, **Pomodoro countdown** — in a **child’s bedroom**, readable at **~10 ft** and **~2–3 ft** ([UI_MODES.md](docs/UI_MODES.md)).
 - **Voice (v1):** **Echo Dot** (“Echo”) → **HA** for music, Pomodoro, routines, and Alexa; the Pi **does not** run mirror-mounted voice in the first phase.
 - **Secondary:** HA automations and Echo for lights, scenes, climate, etc.
 - **Night mode:** Softer UI and restrained audio for overnight use.
@@ -43,6 +43,8 @@ Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT
 | [LESSONS_LEARNED.md](docs/LESSONS_LEARNED.md) | Mistakes and fixes |
 | [IDEATION_BACKLOG.md](docs/IDEATION_BACKLOG.md) | Ideas, MoSCoW, Alexa / camera / gesture (pre-FSD) |
 | [DESIGN_READINESS.md](docs/DESIGN_READINESS.md) | **Before theme work:** checklist + UX agent outputs (`docs/design/`) |
+| [UI_MODES.md](docs/UI_MODES.md) | Sleep / passive / active / Pomodoro modes; dual viewing distance; weather hierarchy |
+| [HA_DEV.md](docs/HA_DEV.md) | HA on Pi 5, mirror Pi 4, MCP + tokens (no secrets in git) |
 | [agents/](agents/README.md) | Planner, UX, Architect, Coder, Tester |
 | [resources/reference/](resources/reference/README.md) | Links and datasheets |
 
@@ -59,8 +61,8 @@ Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT
 
 ## Home Assistant & MCP
 
-- **HA:** Primary integration for sensors, scenes, and voice-routed actions.
-- **MCP (Cursor):** **Development-time** tooling — not a runtime dependency on the mirror unless you add that explicitly later.
+- **HA:** Runs on a **Pi 5** on the LAN; mirror **Pi 4** displays state via local backend (**FR-006**). Details: [HA_DEV.md](docs/HA_DEV.md).
+- **MCP (Cursor):** **Development-time** tooling pointed at HA — **never** commit tokens; not a mirror runtime dependency unless you add it explicitly later.
 
 ---
 
