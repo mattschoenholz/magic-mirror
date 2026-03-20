@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-# Run ON THE PI (SSH ok). Sets DISPLAY=:0 and rotates the primary connected output.
+# Run ON THE PI. Uses xrandr — often FAILS on Raspberry Pi OS Bookworm + Wayland
+# (BadMatch / RRSetScreenSize). If so, use display_hdmi_rotate in /boot/firmware/config.txt
+# or wlr-randr — see docs/PI_BRINGUP.md
+#
 # Usage:
 #   ./pi-display-rotate.sh list              # show outputs + modes
 #   ./pi-display-rotate.sh left|right|normal # rotate first "connected" output

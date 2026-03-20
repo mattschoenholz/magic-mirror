@@ -74,37 +74,61 @@ On the Pi **with desktop**:
 
 ### Portrait orientation (match physical mount)
 
-If the TV is mounted **vertically**, set rotation in software so text is upright (not “sideways landscape”).
+If the TV is mounted **vertically**, set rotation so text is upright (not “sideways landscape”).
 
-**Success check:** reload the **stub** in Chromium. The readout should become **1080 × 1920** (tall portrait). If you still see **1920 × 1080**, the desktop is still **landscape** — rotation has not been applied (or Wayland is ignoring `xrandr`).
+**Success check:** reload the **stub** in Chromium. The readout should become **1080 × 1920** (tall portrait). **1920 × 1080** means the framebuffer is still landscape.
 
-1. **GUI:** **Preferences → Screen Configuration** — HDMI → **90° Left** / **90° Right** until upright; **Apply** and save if offered.
-2. **SSH + X11 (`xrandr`)** — same graphics session as Chromium (`DISPLAY=:0`). Use the helper script (copy via `scp` from [pi-display-rotate.sh](../scripts/pi-display-rotate.sh)):
+#### If `xrandr` fails: `BadMatch` / `RRSetScreenSize` on `HDMI-A-1`
 
-   ```bash
-   bash ~/pi-display-rotate.sh list
-   bash ~/pi-display-rotate.sh left      # 90° CCW from default landscape
-   bash ~/pi-display-rotate.sh right     # 90° CW from default landscape
-   ```
+On **Raspberry Pi OS Bookworm** the desktop often uses **Wayland** (**labwc**). **`xrandr`** only talks to **X11/XWayland** and **cannot rotate the real HDMI output**, so you get **RANDR BadMatch**. This is expected — do **not** rely on `xrandr` for rotation on that setup.
 
-   If the picture is wrong, run **`normal`** then try the **other** direction. To target a specific output from `list`:
+**Preferred fix (works over SSH, survives reboot): firmware rotation**
 
-   `bash ~/pi-display-rotate.sh left HDMI-2`
+Edit **`/boot/firmware/config.txt`** and under the **`[all]`** section add **exactly one** line (remove any older `display_hdmi_rotate` line first to avoid stacking):
 
-3. **Persist across reboot (firmware)** — after **`left`** or **`right`** looks correct, add **one** line under **`[all]`** in **`/boot/firmware/config.txt`** (then `sudo reboot`):
+| Line | Effect |
+|------|--------|
+| `display_hdmi_rotate=0` | Default (landscape, no firmware rotate) |
+| `display_hdmi_rotate=1` | 90° **clockwise** |
+| `display_hdmi_rotate=2` | 180° |
+| `display_hdmi_rotate=3` | 270° **clockwise** (= **90° counter‑clockwise** from default landscape) |
 
-   | Value | Effect |
-   |-------|--------|
-   | `display_hdmi_rotate=0` | No firmware rotation (default) |
-   | `display_hdmi_rotate=1` | 90° **clockwise** |
-   | `display_hdmi_rotate=2` | 180° |
-   | `display_hdmi_rotate=3` | 270° **clockwise** (= 90° **counter‑clockwise** from default landscape) |
+Example (try **portrait = 90° CCW** first — common for vertical glass):
 
-   Map by trial: **`xrandr` `left`** often lines up with **`display_hdmi_rotate=3`**, and **`xrandr` `right`** with **`=1`** — confirm on your TV before locking in.
+```bash
+sudo sed -n '1,120p' /boot/firmware/config.txt   # inspect; find [all]
+sudo nano /boot/firmware/config.txt
+# under [all], add:   display_hdmi_rotate=3
+sudo reboot
+```
 
-4. **Wayland-only session:** if **`xrandr`** errors or rotation does nothing, use **Screen Configuration** when you can attach input, or see Raspberry Pi docs for **labwc/wayfire** output rotation on Bookworm.
+If the image is upside down or wrong, change to **`=1`** or **`=2`** and reboot again until the stub reads **1080 × 1920** and looks correct on the wall.
 
-**Chromium kiosk** follows the rotated desktop; the stub should read **1080 × 1920** when portrait is correct.
+**Alternative A — Wayland (`wlr-randr`), no reboot**
+
+```bash
+sudo apt install -y wlr-randr
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}"
+wlr-randr   # list outputs
+# 90° CCW from landscape ≈ rotate-270; 90° CW ≈ rotate-90
+wlr-randr --output HDMI-A-1 --transform rotate-270
+```
+
+If `wayland-0` is wrong, run `ls "$XDG_RUNTIME_DIR" | grep wayland` and set **`WAYLAND_DISPLAY`** to that socket name.
+
+**Alternative B — use X11 for the whole desktop**
+
+Then **`xrandr`** can work: **`sudo raspi-config`** → **Advanced Options** → **Wayland** → choose **X11** (wording may vary by image), **Finish**, **reboot**. After that, [pi-display-rotate.sh](../scripts/pi-display-rotate.sh) / **`xrandr --output HDMI-A-1 --rotate left`** may succeed.
+
+---
+
+#### Other paths (keyboard attached, or after X11)
+
+1. **GUI:** **Preferences → Screen Configuration** — HDMI → **90° Left** / **90° Right**; **Apply** and save.
+2. **SSH + X11 only:** helper [pi-display-rotate.sh](../scripts/pi-display-rotate.sh): `bash ~/pi-display-rotate.sh list` then `left` or `right`. Use **`HDMI-A-1`** if that is your connected output: `bash ~/pi-display-rotate.sh left HDMI-A-1`.
+
+**Chromium kiosk** follows the rotated framebuffer; the stub should read **1080 × 1920** when portrait is correct.
 
 ---
 
