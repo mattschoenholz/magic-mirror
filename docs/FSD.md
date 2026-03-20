@@ -2,7 +2,7 @@
 
 **Project:** Wall Magic Mirror (Pi 4 + AIY Voice Hat + Home Assistant)  
 **Document type:** Living specification — update on every scope or behavior change.  
-**Version:** 0.2  
+**Version:** 0.3  
 **Last updated:** 2026-03-20
 
 ---
@@ -13,6 +13,7 @@
 |---------|------|--------|-------------------|
 | 0.1 | 2026-03-20 | — | Initial skeleton + placeholder requirements |
 | 0.2 | 2026-03-20 | — | Hardware inventory; night mode FR; 720p planning assumption |
+| 0.3 | 2026-03-20 | — | Agent/skill refresh; see [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md) for shared baselines |
 
 ---
 
@@ -20,7 +21,7 @@
 
 **Purpose:** Define *what* the system must do for users and *how* success is verified — without prescribing final implementation.
 
-**Scope:** See [PROJECT_BRIEF.md](PROJECT_BRIEF.md). This FSD tracks **functional** and **non-functional** requirements and traceability to tests.
+**Scope:** See [PROJECT_BRIEF.md](PROJECT_BRIEF.md). Shared hardware/checklist context: [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md). This FSD tracks **functional** and **non-functional** requirements and traceability to tests.
 
 ---
 
@@ -118,3 +119,4 @@ For each FR/UC, add:
 
 - **0.1** — Skeleton created; requirements to be refined after inventory and UX pass.
 - **0.2** — Inventory filled (glass, TV, Pi, AIY, Google cloud, audio options); FR-007 night mode; 720p baseline.
+- **0.3** — Planner phases + task template; UX/architect/coder/tester rigor; [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md); `.claude` symlinks.

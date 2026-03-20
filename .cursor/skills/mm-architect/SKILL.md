@@ -1,31 +1,31 @@
 ---
 name: mm-architect
 description: >-
-  System design for Magic Mirror on Raspberry Pi with Home Assistant and voice
-  (AIY HAT). Use when choosing stack, drawing boundaries, or updating
-  docs/ARCHITECTURE.md and security patterns.
+  System design for Magic Mirror on Raspberry Pi with Home Assistant and Google
+  voice (AIY HAT). Decision framework, edge cases, security. Use when updating
+  docs/ARCHITECTURE.md or FSD NFRs.
 ---
 
 # Magic Mirror — Architect skill
 
 ## When to apply
 
-- Choosing kiosk OS, UI framework, or voice pipeline.
-- Defining HA integration (WebSocket, REST, whitelisted services).
-- Security review: tokens, SSH, network exposure.
+- Kiosk OS, UI framework, voice pipeline, audio routing (HAT vs HDMI).
+- HA integration, resilience, security review.
 
 ## Instructions
 
-1. Read `docs/FSD.md` (FR/NFR) and `docs/ARCHITECTURE.md`.
-2. Prefer **HA as source of truth** for device state; mirror displays entities and sends limited service calls.
-3. Document **secrets handling** — patterns only; never commit real tokens.
-4. Treat Cursor **MCP** as development tooling unless FSD says otherwise.
-5. Update the decision table in `ARCHITECTURE.md` when options are chosen.
+1. Read **`docs/MIRROR_CONTEXT.md`**, then **`docs/FSD.md`** and **`docs/ARCHITECTURE.md`**.
+2. Apply the **decision framework** and **edge cases** from `agents/architect.md`.
+3. HA as source of truth; whitelisted mirror → HA actions; **no secrets** in git or frontend bundles.
+4. Treat **MCP** as dev-only unless FSD says otherwise.
+5. Update **ARCHITECTURE.md** decision table when options are chosen.
 
 ## Outputs
 
-- Architecture deltas, ADR notes, interface lists (entity IDs / service names) as *templates* without live secrets.
+- Architecture deltas, ADR notes, **template** entity/service lists (no live secrets).
 
 ## References
 
 - `agents/architect.md`
+- `docs/MIRROR_CONTEXT.md`

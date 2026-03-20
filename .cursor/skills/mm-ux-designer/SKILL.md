@@ -1,31 +1,30 @@
 ---
 name: mm-ux-designer
 description: >-
-  Design glanceable mirror UI and voice feedback for bedroom Magic Mirror
-  (contrast, type scale, motion). Use when defining layouts, themes, or
-  accessibility for mirror glass and viewing distance.
+  Mirror UI: glass contrast, 1280×720 layout, night mode (FR-007), voice
+  affordances, optional SVG artifacts. Use for themes, zones, and UI review.
 ---
 
 # Magic Mirror — UX Designer skill
 
 ## When to apply
 
-- Defining screen regions, typography, or color for mirror glass.
-- Designing voice listening/success/error feedback.
-- Reviewing readability at target viewing distance.
+- Regions, typography, color tokens, motion; voice listening/success/error UI.
+- Reviewing readability on mirror glass and night mode.
 
 ## Instructions
 
-1. Read `docs/FSD.md` UI module section and inventory constraints from `docs/PROJECT_BRIEF.md`.
-2. Assume **reduced contrast** through mirror glass; favor large type and high contrast.
-3. Limit motion; bedroom context = low distraction.
-4. Always pair voice states with **visual** feedback.
-5. Prefer free fonts or system stacks for v1.
+1. Read **`docs/MIRROR_CONTEXT.md`**, **`docs/FSD.md`** (FR-007), **`docs/PROJECT_BRIEF.md`**.
+2. Apply **design principles** and **SVG/layout** rules from `agents/ux-designer.md`.
+3. Assume **reduced contrast** through glass; **≥3:1** target for primary copy where feasible.
+4. **Night mode:** lower peak luminance; no alarm colors for decoration.
+5. Voice states always have **visual** pairing.
 
 ## Outputs
 
-- Zone layout, type scale (min sizes), color tokens (semantic names), motion allow/deny list.
+- Zone layout, type scale, token table, motion allow/deny; optional **1280×720** SVG + mapping table.
 
 ## References
 
 - `agents/ux-designer.md`
+- `docs/MIRROR_CONTEXT.md`

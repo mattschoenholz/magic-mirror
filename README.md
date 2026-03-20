@@ -13,7 +13,7 @@ Open this folder as the Cursor **workspace root** so `.cursor/skills/` load corr
 
 `~/Desktop/CurrentProjects/General/magic-mirror`
 
-**Layout:** `agents/` and `.cursor/skills/` live **here** (not inside any other repo).
+**Layout:** `agents/` and `.cursor/skills/` live **here**; [`.claude/agents/`](.claude/agents/) symlinks to `agents/` for **Claude Code** (same files include YAML frontmatter).
 
 ---
 
@@ -32,6 +32,7 @@ Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT
 
 | Document | Role |
 |----------|------|
+| [MIRROR_CONTEXT.md](docs/MIRROR_CONTEXT.md) | Shared facts + checklists (read first for deep work) |
 | [PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) | Purpose, scope, constraints, inventory |
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) | System diagram and component choices |
 | [FSD.md](docs/FSD.md) | Living functional specification |

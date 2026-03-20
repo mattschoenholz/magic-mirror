@@ -1,29 +1,29 @@
 ---
 name: mm-tester
 description: >-
-  Verify Magic Mirror against FSD with traceable tests; include mirror-glass
-  readability and voice-in-room checks. Use when defining acceptance tests or
-  validating a milestone.
+  Verify Magic Mirror against FSD with traceable tests; mirror glass, in-room
+  voice, Planner phase exit criteria. Use for acceptance and regression.
 ---
 
 # Magic Mirror — Tester skill
 
 ## When to apply
 
-- Milestone exit, regression pass, or bug verification.
-- Defining Given/When/Then cases for new FRs.
+- Milestone exit, regression, bug verification.
+- Defining Given/When/Then for new FRs.
 
 ## Instructions
 
-1. Read `docs/FSD.md` acceptance criteria and NFRs.
-2. Each case references **FR/UC/NFR** IDs.
-3. Include **environment notes**: wall mount, mirror glass, lighting, mic behind glass.
-4. Log failures with repro steps; suggest owning agent (UX vs Architect vs Coder).
+1. Read **`docs/MIRROR_CONTEXT.md`**, then **`docs/FSD.md`** and **`docs/ARCHITECTURE.md`**.
+2. Each case references **FR/UC/NFR**; use **phase bundles** from `agents/tester.md` where helpful.
+3. Environment: wall mount, **mirror glass**, lighting, mic, **HAT vs TV audio**.
+4. Failures: repro, owner hint (UX / Architect / Coder).
 
 ## Outputs
 
-- Test tables, exploratory notes, regression checklist updates.
+- Test tables; exploratory notes; regression checklist updates.
 
 ## References
 
 - `agents/tester.md`
+- `docs/MIRROR_CONTEXT.md`
