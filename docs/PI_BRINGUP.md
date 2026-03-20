@@ -222,13 +222,31 @@ Expect **200** or **302** (redirect to login) — not timeout. If **`homeassista
 
 ---
 
-## 7. Optional: static IP or DHCP reservation
+## 7. HDMI-CEC (Samsung **Anynet+**)
+
+**Yes, it can be useful** — not required for the mirror web UI, but handy for **integration**:
+
+| Use | Notes |
+|-----|--------|
+| **Power / input** | The Pi can sometimes **wake** the TV, select the Pi’s HDMI input, or signal **standby** over the cable (depends on TV firmware and menu options). |
+| **Scenes / bedtime** | Later: **Home Assistant** or a script on the Pi using **`cec-client`** (Debian package **`cec-utils`**) can align “mirror off” with TV power. |
+| **TV remote → Pi** | CEC can carry **some** key events; often inconsistent — don’t rely on it for v1. |
+
+**Samsung TV:** turn on **Anynet+ (HDMI-CEC)** in settings. Review **Device Auto Power** / **HDMI CEC** so the TV doesn’t power-cycle unexpectedly when the Pi reboots.
+
+**Raspberry Pi 4:** Prefer the HDMI port **closest to USB-C** (**HDMI0**) for CEC. The device is often **`/dev/cec0`**. Test with e.g. **`cec-client`** from **`cec-utils`**; treat results as TV-specific.
+
+**v1:** Optional polish after kiosk + backend; record any working commands in [ARCHITECTURE.md](ARCHITECTURE.md) or a private runbook when you standardize behavior.
+
+---
+
+## 8. Optional: static IP or DHCP reservation
 
 For stable URLs and firewall rules, reserve **DHCP** on your router for the Pi’s MAC, or set a static IPv4 on the Pi (match your LAN scheme). Document the chosen address in your personal runbook (not in git with secrets).
 
 ---
 
-## 8. What’s *not* in this doc yet
+## 9. What’s *not* in this doc yet
 
 - **systemd** kiosk unit and **magic-mirror-backend** (comes with app implementation).
 - **HA long-lived token** on the Pi — only after backend exists; file perms **600**, never in git ([MIRROR_CONTEXT.md](MIRROR_CONTEXT.md)).
