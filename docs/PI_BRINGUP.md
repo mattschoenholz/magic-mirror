@@ -94,9 +94,13 @@ If the TV is mounted **vertically**, set rotation in software so text is upright
 **I can’t run this for you:** the AI environment has **no SSH access** to your Pi. One copy-paste path from your **Mac** (repo folder = magic-mirror):
 
 ```bash
-# Replace USER and HOST; from your Mac, in the magic-mirror repo:
-scp scripts/pi-mirror-stub.sh USER@HOST:~/pi-mirror-stub.sh
-ssh USER@HOST 'bash ~/pi-mirror-stub.sh --open'
+# On your Mac: cd into the magic-mirror repo first (so scripts/ exists).
+# Replace YOUR_PI_USER and YOUR_PI_HOST — real Linux username and hostname OR IP (not the words USER/HOST).
+
+cd ~/Desktop/CurrentProjects/General/magic-mirror
+
+scp scripts/pi-mirror-stub.sh YOUR_PI_USER@YOUR_PI_HOST:~/pi-mirror-stub.sh
+ssh YOUR_PI_USER@YOUR_PI_HOST 'bash ~/pi-mirror-stub.sh --open'
 ```
 
 That creates **`~/mirror-stub/index.html`** on the Pi and launches kiosk. **Exit kiosk:** **Alt+F4**, or from another SSH session: `pkill chromium` (or `pkill -f chromium`).
