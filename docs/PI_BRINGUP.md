@@ -78,11 +78,24 @@ If the TV is mounted **vertically**, set rotation so text is upright (not “sid
 
 **Success check:** reload the **stub** in Chromium. The readout should become **1080 × 1920** (tall portrait). **1920 × 1080** means the framebuffer is still landscape.
 
+#### Recommended on Bookworm + Wayland: **Screen Configuration** (mouse)
+
+On current **Raspberry Pi OS**, the most reliable fix is often the **on-screen display tool** (not `xrandr`):
+
+1. Plug in a **USB mouse** (keyboard optional).
+2. **Preferences → Screen Configuration** (or right-click desktop → **Display Settings** / **Screen Configuration**, depending on image).
+3. Select **HDMI** → **Orientation** → **90° Left** or **90° Right** until the picture matches the glass.
+4. **Apply** and, if the UI offers it, **save** / **make permanent** so it survives logout.
+
+**After it looks right:** reboot once (`sudo reboot` or power cycle) and confirm orientation **and** stub readout **1080 × 1920** still hold. If a reboot loses the setting, use **firmware** `display_hdmi_rotate` below or re-open Screen Configuration and save again.
+
+---
+
 #### If `xrandr` fails: `BadMatch` / `RRSetScreenSize` on `HDMI-A-1`
 
 On **Raspberry Pi OS Bookworm** the desktop often uses **Wayland** (**labwc**). **`xrandr`** only talks to **X11/XWayland** and **cannot rotate the real HDMI output**, so you get **RANDR BadMatch**. This is expected — do **not** rely on `xrandr` for rotation on that setup.
 
-**Preferred fix (works over SSH, survives reboot): firmware rotation**
+**Firmware rotation** (works over SSH, survives reboot; trial if you prefer not to use the GUI or need a guaranteed boot-time orientation)
 
 Edit **`/boot/firmware/config.txt`** and under the **`[all]`** section add **exactly one** line (remove any older `display_hdmi_rotate` line first to avoid stacking):
 
@@ -123,10 +136,9 @@ Then **`xrandr`** can work: **`sudo raspi-config`** → **Advanced Options** →
 
 ---
 
-#### Other paths (keyboard attached, or after X11)
+#### Other paths
 
-1. **GUI:** **Preferences → Screen Configuration** — HDMI → **90° Left** / **90° Right**; **Apply** and save.
-2. **SSH + X11 only:** helper [pi-display-rotate.sh](../scripts/pi-display-rotate.sh): `bash ~/pi-display-rotate.sh list` then `left` or `right`. Use **`HDMI-A-1`** if that is your connected output: `bash ~/pi-display-rotate.sh left HDMI-A-1`.
+- **SSH + X11 desktop** (after switching to X11 in `raspi-config`): [pi-display-rotate.sh](../scripts/pi-display-rotate.sh) or `xrandr --output HDMI-A-1 --rotate left|right`.
 
 **Chromium kiosk** follows the rotated framebuffer; the stub should read **1080 × 1920** when portrait is correct.
 
@@ -227,9 +239,10 @@ For stable URLs and firewall rules, reserve **DHCP** on your router for the Pi�
 
 - [ ] Imager: **64-bit Desktop**, SSH, user, hostname
 - [ ] HDMI picture on Samsung; overscan acceptable
+- [ ] **Portrait:** **Screen Configuration** (or firmware / X11 fallbacks in this doc); stub shows **1080 × 1920**
 - [ ] Resolution + **innerWidth/height** from stub recorded
 - [ ] **PROJECT_BRIEF** updated: TV model, res, Pi RAM
 - [ ] **ping/curl** to HA Pi 5 succeeds
-- [ ] Reboot test: Pi comes back with display OK
+- [ ] Reboot test: Pi comes back with display OK **and** orientation unchanged
 
 When this is green, **Phase 0 (baseline)** in [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md) is essentially done and you can proceed to design + backend slices with confidence.
