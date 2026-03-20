@@ -12,6 +12,12 @@ This project is **standalone** — it is not part of SailboatServer or other rep
 
 **Multi-machine workflow:** Use **HTTPS** for `origin` so each laptop/desktop can authenticate with the same pattern (browser login or token via Git Credential Manager / `gh`), without copying SSH private keys.
 
+If an older clone still uses SSH, switch it once:
+
+```bash
+git remote set-url origin https://github.com/mattschoenholz/magic-mirror.git
+```
+
 ---
 
 ## HTTPS + GitHub CLI (`gh`) — recommended on each machine
