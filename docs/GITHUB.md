@@ -11,7 +11,23 @@ Avoid mixing SailboatServer boat portal files with Magic Mirror history unless y
 
 ---
 
+## Local Git identity (before pushing to GitHub)
+
+If this repo was bootstrapped with a placeholder email, set your real identity **in this repo** (or globally) before pushing:
+
+```bash
+cd magic-mirror   # or your moved repo root
+git config user.name "Your Name"
+git config user.email "you@users.noreply.github.com"
+```
+
+Amend the initial commit only if you care about author metadata on that first commit: `git commit --amend --reset-author --no-edit`.
+
+---
+
 ## Initialize git (first time)
+
+*(Skip if `.git` already exists.)*
 
 From the directory you want as **repo root** (e.g. inside `magic-mirror/`):
 
