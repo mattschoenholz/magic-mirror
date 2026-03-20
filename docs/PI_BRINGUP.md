@@ -103,7 +103,15 @@ scp scripts/pi-mirror-stub.sh pi@mirror-pi4.local:~/pi-mirror-stub.sh
 ssh pi@mirror-pi4.local 'bash ~/pi-mirror-stub.sh --open'
 ```
 
-That creates **`~/mirror-stub/index.html`** on the Pi and launches kiosk. **Exit kiosk:** **Alt+F4**, or from another SSH session: `pkill chromium` (or `pkill -f chromium`).
+That creates **`~/mirror-stub/index.html`** on the Pi and launches kiosk. The script sets **`DISPLAY=:0`** when you use SSH so Chromium targets the **HDMI desktop** (remote shells have no display by default).
+
+**If you still see “Missing X server or $DISPLAY”:** open **Terminal on the Pi** (keyboard/mouse on the mirror) and run:
+
+`chromium --kiosk "file:///home/pi/mirror-stub/index.html"`
+
+Or from SSH explicitly: `DISPLAY=:0 chromium --kiosk "file:///home/pi/mirror-stub/index.html"`
+
+**Exit kiosk:** **Alt+F4**, or SSH: `pkill chromium` (or `pkill -f chromium`).
 
 **Option — run only on the Pi** (if you already copied the repo or the script):
 

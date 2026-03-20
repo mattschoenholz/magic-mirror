@@ -69,8 +69,17 @@ fi
 
 FILE_URL="file://${STUB_DIR}/index.html"
 echo "Stub written: ${STUB_DIR}/index.html"
-echo "Open manually:  ${CHROME} --kiosk \"${FILE_URL}\""
+echo "On the Pi desktop (Terminal app):  ${CHROME} --kiosk \"${FILE_URL}\""
+echo "From SSH (show on HDMI):           DISPLAY=:0 ${CHROME} --kiosk \"${FILE_URL}\""
 
 if [[ "${1:-}" == "--open" ]]; then
+  # SSH sessions have no $DISPLAY; attach to the local X session on HDMI.
+  if [[ -z "${DISPLAY:-}" ]]; then
+    export DISPLAY=:0
+    if [[ -z "${XAUTHORITY:-}" && -f "${HOME}/.Xauthority" ]]; then
+      export XAUTHORITY="${HOME}/.Xauthority"
+    fi
+    echo "DISPLAY was unset — using DISPLAY=:0 (local screen). If Chromium still fails, open Terminal on the Pi and run the command printed above." >&2
+  fi
   exec "$CHROME" --kiosk --noerrdialogs --disable-infobars "$FILE_URL"
 fi
