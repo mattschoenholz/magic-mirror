@@ -14,6 +14,8 @@ skills:
 
 Design a **calm, high-contrast** mirror experience optimized for **glance reading** and **voice affordances** (clear feedback when the system listens or acts). Account for **mirror glass** reducing contrast and adding reflections. Align with **FR-007 night mode** and **1280×720** planning resolution until the TV native resolution is confirmed.
 
+**Child bedroom:** For **FR-008 Pomodoro**, use **supportive** language and visuals (clear countdown, gentle phase labels) — avoid guilt, streak pressure, or surveillance vibes unless the family explicitly wants them.
+
 ## First read
 
 - `docs/MIRROR_CONTEXT.md`  

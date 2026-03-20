@@ -1,6 +1,6 @@
 # Project brief — Wall Magic Mirror
 
-**Version:** 0.4  
+**Version:** 0.5  
 **Last updated:** 2026-03-20
 
 ---
@@ -8,6 +8,8 @@
 ## 1. Problem statement
 
 You want a **wall-mounted mirror** that doubles as a **low-distraction information surface** and optionally supports **hands-free control**, using hardware you already favor (Pi 4, AIY Voice HAT, spare HDMI panel) and **deep integration with Home Assistant**.
+
+**Room & user context:** The mirror is installed in **your son’s bedroom**, alongside an **Echo Dot** he already uses with the **“Echo”** wake word (not “Alexa”). A key motivation is supporting **organization and time management**: he uses the **Pomodoro method**, and a **voice-driven Pomodoro** flow with a **large visual countdown** on the mirror may help more than phone-only timers.
 
 ---
 
@@ -19,6 +21,7 @@ You want a **wall-mounted mirror** that doubles as a **low-distraction informati
 | G2 | Reliable “at a glance” modules (time, weather, HA summary) | Uptime / refresh behavior documented in FSD |
 | G3 | Voice triggers common HA actions without pulling out a phone | Test cases in FSD + Tester agent checklist |
 | G4 | Maintainable software (updates, backups, secrets) | Runbook in README / ARCHITECTURE |
+| G5 | **Pomodoro support:** voice (Echo → HA) + **visible countdown** on mirror during focus/break | FSD FR-008; Tester cases; son can complete a full cycle without phone |
 
 ---
 
@@ -31,6 +34,8 @@ You want a **wall-mounted mirror** that doubles as a **low-distraction informati
 - HA integration (entities, scenes, possibly calendar via HA).
 - Voice: **Google account / cloud** acceptable — AIY Voice HAT + Assistant-style flow (details in architecture phase).
 - **Night mode:** calmer UI and restrained audio/TTS for bedroom use.
+- **Child-bedroom UX:** calm, readable, **non-shaming** copy for focus/time tools; avoid surveillance framing (see risks).
+- **Pomodoro (target):** HA-backed timer state + mirror **countdown module**; **Echo** (“Echo” wake word) as primary voice surface for start/pause/skip where possible — details [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) §Pomodoro.
 - Documentation, FSD, version control.
 
 ### Out of scope for v1 (unless you promote them)
@@ -43,7 +48,7 @@ You want a **wall-mounted mirror** that doubles as a **low-distraction informati
 
 Ideas, MoSCoW primer, Alexa/Echo-as-satellite, camera/LD4020/gesture concepts: **[IDEATION_BACKLOG.md](IDEATION_BACKLOG.md)**. Promote items to [FSD.md](FSD.md) when ready to build and test.
 
-**Home:** **Alexa Devices** integration is set up in HA with discovered devices. Echo Dot is the preferred **music** output and **Alexa-only** features; **routines** should drive HA entities/scenes that the mirror reflects (e.g. good morning / good night modes).
+**Home:** **Alexa Devices** integration is set up in HA with discovered devices. In the **son’s room**, the Echo Dot uses the **“Echo”** wake word. The Dot is the preferred **music** output, **Pomodoro-related voice** (via HA, not generic Alexa-only kitchen timers if mirror must stay in sync), and other **Alexa-only** features; **routines** drive HA entities/scenes the mirror reflects (e.g. good morning / good night modes).
 
 ---
 
@@ -104,7 +109,7 @@ Reference skills in repo: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voic
 | Voice / cloud | **Google account + cloud OK** |
 | Audio | HAT speaker **and/or** TV speakers via HDMI — **TBD default** |
 | Night mode | **Required** (UI + audio behavior in FSD) |
-| **Echo Dot** | In-room; **Alexa Devices** in HA authenticated; use as **music + Alexa-only** + **routines → HA** (see [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md)) |
+| **Echo Dot** | **Son’s bedroom**; wake word **“Echo”**; **Alexa Devices** in HA authenticated; **music**, **Pomodoro voice → HA**, **routines → HA** (see [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md)) |
 | **Camera** | USB or **Pi Camera v2.1** — presence / gesture ideation only until promoted to FSD |
 | **LD4020** | Presence sensor (confirm exact model / HA integration path; often mmWave-class — see ideation doc) |
 
@@ -124,6 +129,8 @@ Reference skills in repo: **`mm-home-assistant`**, **`mm-kiosk-pi`**, **`mm-voic
 |------|------------|
 | Mirror glass reduces contrast | High-contrast UI theme; limit small text; test fonts on actual glass |
 | Voice false triggers in bedroom | Push-to-talk fallback; strict intent whitelist; LED/visual feedback |
+| **Child bedroom — privacy & trust** | Camera/gesture **opt-in** and clear household rules; Pomodoro UI **supportive** language (no guilt copy); parents align with son on what appears on mirror |
+| **Dual voice (Echo vs mirror HAT)** | **Echo** = primary for Pomodoro + music in this room; document in FSD so expectations are clear |
 | Heat in enclosed frame | Ventilation slots; Pi throttling; thermal test under load |
 | AIY / Google API churn | Pin documented image + API versions; evaluate local alternative early |
 | TV always-on vs Pi-only | Clarify power workflow; HDMI-CEC or manual TV power if no wake-on-HDMI |

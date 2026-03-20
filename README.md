@@ -19,7 +19,8 @@ Open this folder as the Cursor **workspace root** so `.cursor/skills/` load corr
 
 ## Purpose (draft)
 
-- **Primary:** Glanceable, calm “dashboard on the wall” for time, weather, calendar highlights, and home state — readable at arm’s length in a bedroom.
+- **Primary:** Glanceable, calm “dashboard on the wall” for time, weather, calendar highlights, and home state — in a **child’s bedroom**, readable at a typical viewing distance.
+- **Focus / Pomodoro:** Support **time management** with a **voice-driven (Echo → HA) Pomodoro** flow and a **large on-mirror countdown** (**FR-008**).
 - **Secondary:** Hands-free commands for common actions (lights, scenes, climate) via voice, aligned with Home Assistant automations.
 - **Night mode:** Softer UI and restrained audio for overnight use.
 - **Non-goals (v1):** Full conversational assistant, heavy video, or replacing the phone for complex HA admin.

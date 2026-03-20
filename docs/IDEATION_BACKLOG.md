@@ -1,7 +1,9 @@
 # Ideation backlog — Magic Mirror
 
 **Purpose:** Capture product ideas, integration patterns, and prioritization **before** they become formal requirements in [FSD.md](FSD.md).  
-**Last updated:** 2026-03-20
+**Last updated:** 2026-03-20  
+
+**Room context:** Mirror lives in **child’s bedroom** with an Echo Dot using the **“Echo”** wake word — see [PROJECT_BRIEF.md](PROJECT_BRIEF.md) §1.
 
 ---
 
@@ -17,6 +19,8 @@ These are **directional** until promoted to the FSD with acceptance criteria.
 | **Alexa-only features** | Lean on Alexa for **music, timers, shopping list, intercom, alarms**, and other skills where the mirror UI is unnecessary. |
 | **Camera (USB or Pi Camera v2.1)** | Interest in **presence detection**; optional path toward **gesture** (e.g. point + voice “click”) to compensate for **no touchscreen**. |
 | **LD4020** | You have this device — treat as **additional presence sensing** alongside or instead of camera for some use cases (see §Hardware notes). |
+| **Occupant needs** | Son benefits from support for **organization and time management**; **Pomodoro** is already in use — mirror should reinforce with **glanceable** feedback, not nagging. |
+| **Pomodoro + voice** | **Echo** (wake word **“Echo”**) drives **HA** for start/pause/skip; mirror shows **large visual countdown** and phase (work / short break / long break). **Promoted** to [FSD.md](FSD.md) as **FR-008** (Should). |
 
 ---
 
@@ -81,12 +85,51 @@ These are **directional** until promoted to the FSD with acceptance criteria.
 
 **Voice overlap (mirror AIY vs Echo)**
 
-- Keep **roles split**: e.g. **mirror** = glance + tight HA controls + custom UI feedback; **Echo** = music + general Alexa + some HA scenes.
-- Document in FSD later: which **intents** are mirror-only vs Echo-only to reduce “two bosses in one room.”
+- In **this bedroom**, **Echo + “Echo” wake word** is the **primary voice surface** for **daily use** (music, Pomodoro via HA, general Alexa).
+- **Mirror AIY / Google path** can complement (e.g. glance-specific commands) but **avoid duplicating** the same Pomodoro start phrase on two devices unless you enjoy wake-word races.
+- **FSD** now includes **FR-008** (mirror shows Pomodoro); voice control path is **Echo → HA**, not Amazon’s generic timer unless you accept **no mirror sync**.
 
 **Reference**
 
 - [Home Assistant — Alexa integration](https://www.home-assistant.io/integrations/alexa/) (cloud + smart home options vary by setup).
+
+---
+
+## Pomodoro timer — voice + mirror countdown
+
+**Goal:** Support the **Pomodoro method** with **voice** (son already uses Echo) and a **clear, calm countdown** on the mirror (no phone unlock).
+
+### Principles
+
+- **Home Assistant = source of truth** for “is a focus session running?” and **remaining time** (or derivable state). The mirror **only renders** HA state (same stack as other tiles).
+- **Echo** handles **voice**; phrases should trigger **HA scripts/services** (via Alexa → HA integration), **not** only the built-in Alexa kitchen timer — otherwise the mirror cannot subscribe to that timer.
+- **UX:** Large digits, high contrast on glass, **supportive** labels (“Focus”, “Short break”) — avoid shaming or streak pressure unless the family wants it.
+
+### HA implementation patterns (pick one family; refine in implementation)
+
+1. **`timer` entities** — e.g. `timer.pomodoro_focus` (25 min), `timer.pomodoro_short_break` (5 min). Services: `timer.start`, `timer.pause`, `timer.cancel`, `timer.finish`. While **active**, the `timer` exposes a **`remaining`** attribute ideal for WebSocket-driven countdown UIs.
+2. **`input_select`** for **phase** (`idle` | `focus` | `short_break` | `long_break`) + automations to start the correct timer and chain cycles (optional long break every N focus rounds via `input_number`).
+3. **Scripts** `script.pomodoro_start`, `script.pomodoro_pause`, etc., exposed to **Alexa** as **scenes** or **entities** per your HA Alexa config.
+
+### Voice phrases (examples — map in HA/Alexa)
+
+- “Echo, start focus” → start 25 min focus timer + set phase.  
+- “Echo, pause focus” / “Echo, skip break” → call matching HA services.  
+Exact utterances depend on [Alexa Smart Home](https://www.home-assistant.io/integrations/alexa/) entity names and routines.
+
+### Mirror module
+
+- Subscribe to `timer.*` and/or `input_select.pomodoro_phase` (names TBD).  
+- When the focus/break **timer is active** (or paused with `remaining` available), render **MM:SS** from attributes; show **phase label**; optional subtle progress ring (Could).
+
+### MoSCoW (this slice)
+
+| Piece | MoSCoW | FSD |
+|-------|--------|-----|
+| Visible countdown + phase from HA | **Should** | **FR-008** |
+| Echo voice → HA for Pomodoro | **Should** | tied to FR-004 / FR-008 + HA config |
+| Long-break cadence, per-task labels | **Could** | later rows |
+| Streaks / parental reporting | **Won’t** (unless family asks) | privacy/trust |
 
 ---
 
@@ -136,12 +179,17 @@ These are **directional** until promoted to the FSD with acceptance criteria.
 | IB-05 | **Gesture** region select + voice confirm | Could |
 | IB-06 | **Point-to-module** activation | Could (high effort) |
 | IB-07 | Camera-based **ambient / glare** hint for auto-contrast | Won’t (v1) unless promoted |
+| IB-08 | **Pomodoro** HA timers + mirror countdown | **Should** → **FR-008** |
+| IB-09 | Echo phrases / routines for Pomodoro control | **Should** |
+| IB-10 | Pomodoro **chime** on Echo at phase end (optional) | **Could** |
 
 ---
 
 ## Next steps (process)
 
-1. Pick **one** Alexa + HA slice: e.g. **IB-01** as **Should** — implement helpers + routines, then **promote** to FSD with FR IDs.  
-2. Decide **LD4020** exact integration path in HA; add to [PROJECT_BRIEF.md](PROJECT_BRIEF.md) inventory when confirmed.  
-3. Defer **gesture** until kiosk + HA + modes are stable (Planner **Phase 4+**).  
-4. Update this doc when ideas change; **FSD** remains the contract for what’s actually built.
+1. Implement **HA** `timer` + `input_select` (or equivalent) + scripts; expose to **Echo**; validate with son’s phrasing.  
+2. Mirror UI: **FR-008** module subscribing to those entities.  
+3. Pick **one** Alexa + HA slice for **modes** if not done: **IB-01** — helpers + routines.  
+4. Decide **LD4020** exact integration path in HA; add to [PROJECT_BRIEF.md](PROJECT_BRIEF.md) inventory when confirmed.  
+5. Defer **gesture** until kiosk + HA + modes are stable (Planner **Phase 4+**).  
+6. Update this doc when ideas change; **FSD** remains the contract for what’s actually built.

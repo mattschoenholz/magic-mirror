@@ -2,7 +2,7 @@
 
 **Project:** Wall Magic Mirror (Pi 4 + AIY Voice Hat + Home Assistant)  
 **Document type:** Living specification — update on every scope or behavior change.  
-**Version:** 0.5  
+**Version:** 0.6  
 **Last updated:** 2026-03-20
 
 ---
@@ -16,6 +16,7 @@
 | 0.3 | 2026-03-20 | — | Agent/skill refresh; see [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md) for shared baselines |
 | 0.4 | 2026-03-20 | — | **Custom web UI + local HA backend** stack; reference skills `mm-home-assistant`, `mm-kiosk-pi`, `mm-voice-aiy-google`, `mm-dev-mcp-ha` |
 | 0.5 | 2026-03-20 | — | Link [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md); Alexa/Echo + camera ideas pending promotion |
+| 0.6 | 2026-03-20 | — | Child bedroom context; Echo wake word; **FR-008** Pomodoro countdown; personas + UC-6 |
 
 ---
 
@@ -37,6 +38,7 @@
 | **Intent** | A voice-mapped action resolved to a Home Assistant service call. |
 | **Kiosk mode** | Full-screen display with no casual OS chrome visible. |
 | **MoSCoW** | **Must / Should / Could / Won’t** — priority labels in §4–§5; explained in [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md). |
+| **Pomodoro session** | A timed **focus** or **break** interval driven by **Home Assistant** (`timer` / `input_select` / scripts — see [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) §Pomodoro). |
 
 ---
 
@@ -44,15 +46,17 @@
 
 | Persona | Goal |
 |---------|------|
-| **Occupant** | Glance at time, weather, and home state; optionally speak a short command. |
+| **Student (occupant)** | Use the mirror for **time, focus, and calm cues** in the bedroom; rely on **Echo** (“Echo” wake word) for voice; benefit from **Pomodoro** visibility without a phone. |
+| **Parent / household** | Maintain privacy boundaries, night mode, and HA automations that support (not nag) the occupant. |
 
 **Use cases (draft — expand with IDs):**
 
 - UC-1: View current local time and date.
 - UC-2: View weather summary (source via HA or approved API — TBD).
 - UC-3: View selected HA entity states (list TBD).
-- UC-4: Invoke HA scene or device action by voice (whitelist TBD).
+- UC-4: Invoke HA scene or device action by voice (whitelist TBD); **in this room, Echo → HA is primary** for daily voice (see [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md)).
 - UC-5: Recover from network loss without manual reboot (behavior TBD).
+- UC-6: **Pomodoro:** start/pause/skip via **Echo** voice to **HA**; see **live countdown and phase** (focus / break) on the mirror.
 
 ---
 
@@ -67,6 +71,7 @@
 | FR-005 | UI shall remain readable on mirror glass at **TBD** m viewing distance | Must | UX sign-off |
 | FR-006 | System shall not expose HA token in client-side bundle | Must | Server-side proxy or equivalent |
 | FR-007 | System shall provide **night mode** (reduced brightness/contrast of UI and restrained audio/TTS) | Must | SCHEDULE or manual toggle TBD; see PROJECT_BRIEF |
+| FR-008 | When HA reports an **active Pomodoro / focus timer** (or equivalent entity set), the mirror shall show a **large, readable countdown** and **phase** (e.g. focus vs short break) | Should | HA is source of truth; **Echo** drives voice → HA; implementation patterns [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) §Pomodoro; entity IDs TBD |
 
 **Display planning assumption:** Design layouts for **1280×720** until Samsung TV **native resolution** is confirmed; scale to **1080p** if supported (viewable glass **32.5 cm × 59 cm**).
 
@@ -102,6 +107,7 @@
 | M-001 | Clock | System / HA | UX |
 | M-002 | Weather | HA entity / API | Architect |
 | M-003 | HA summary | HA | Architect |
+| M-004 | **Pomodoro** — countdown + phase | HA `timer` / `input_select` / scripts (TBD) | UX + Architect |
 
 ---
 
@@ -129,3 +135,4 @@ For each FR/UC, add:
 - **0.3** — Planner phases + task template; UX/architect/coder/tester rigor; [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md); `.claude` symlinks.
 - **0.4** — Stack locked: custom web + local HA API backend; domain reference skills; MagicMirror² out of scope for v1.
 - **0.5** — [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md): Alexa satellite, routines, camera/LD4020/gesture ideation; MoSCoW definition.
+- **0.6** — Child bedroom + Echo wake word; **FR-008** / **M-004** Pomodoro; **UC-6**; personas.

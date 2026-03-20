@@ -1,6 +1,6 @@
 # Architecture — Wall Magic Mirror
 
-**Version:** 0.3 (draft)  
+**Version:** 0.4 (draft)  
 **Last updated:** 2026-03-20
 
 ---
@@ -15,13 +15,15 @@ flowchart LR
     API[Local backend API]
     HAT[AIY Voice HAT]
   end
-  subgraph room [Bedroom wall]
+  subgraph room [Child bedroom wall]
     MG[Mirror glass 32.5x59cm]
     DISP[Samsung TV HDMI]
+    ECHO[Echo Dot wake Echo]
   end
   subgraph home [Home LAN]
     HA[Home Assistant]
     GC[Google cloud voice]
+    AMZ[Amazon Alexa cloud]
   end
   MG --- DISP
   DISP --- CH
@@ -30,9 +32,11 @@ flowchart LR
   API <-->|REST / WebSocket| HA
   HAT <-->|Assistant / STT| GC
   HAT --> API
+  ECHO <-->|voice music Pomodoro| AMZ
+  AMZ <--> HA
 ```
 
-**Runtime data path:** Browser loads **only** the custom UI from **loopback**; **HA long-lived token** stays in the **local backend** (never shipped to Chromium). Voice may call HA **via the same backend** after intent classification (exact wiring TBD in implementation).
+**Runtime data path:** Browser loads **only** the custom UI from **loopback**; **HA long-lived token** stays in the **local backend** (never shipped to Chromium). **Echo Dot** (“**Echo**” wake word) is the occupant’s primary voice path for **music** and **Pomodoro** control **via HA** (Alexa ↔ HA integration); mirror **displays** HA state (e.g. **FR-008** countdown). Mirror **AIY** voice remains optional for mirror-specific commands.
 
 ---
 
@@ -41,7 +45,7 @@ flowchart LR
 | Component | Responsibility | Notes |
 |-----------|----------------|-------|
 | **Chromium kiosk** | Full-screen shell, autostart | See skill **`mm-kiosk-pi`** |
-| **Mirror app (frontend)** | Layout, modules, theming, **night mode** | Custom web (HTML/CSS/JS or light framework); **not** MagicMirror² |
+| **Mirror app (frontend)** | Layout, modules, theming, **night mode**, **Pomodoro tile (FR-008)** | Custom web (HTML/CSS/JS or light framework); **not** MagicMirror² |
 | **Local backend** | HA REST/WebSocket proxy, optional voice bridge | Holds token; exposes minimal JSON to UI — **FR-006** |
 | **HA client** (in backend) | Subscribe to entities, call services | Token auth; reconnect logic — skill **`mm-home-assistant`** |
 | **Voice stack** | Capture, cloud recognition, intent → HA | AIY + Google cloud — skill **`mm-voice-aiy-google`** |
@@ -52,7 +56,8 @@ flowchart LR
 
 ## 3. Integration boundaries
 
-- **Home Assistant:** Single source of truth for device state and most automations. Mirror sends **limited** service calls (whitelist in FSD). Runtime uses **official REST/WebSocket APIs** only.
+- **Home Assistant:** Single source of truth for device state and most automations. Mirror sends **limited** service calls (whitelist in FSD). Runtime uses **official REST/WebSocket APIs** only. **Pomodoro** timers / phase helpers live in HA; mirror **subscribes** for **FR-008** display.
+- **Echo Dot:** **Child bedroom**; wake word **“Echo”**. Voice → **Amazon Alexa** → **Home Assistant** (configured integration) for scenes, scripts, or exposed entities — used for **Pomodoro** control so the mirror stays in sync with HA.
 - **Google cloud:** Voice recognition / Assistant; align with AIY kit software path when implementation starts.
 - **GitHub:** Source for application code and docs; **excludes** secrets (see `.gitignore`).
 - **MCP (Cursor):** **Developer tooling only** on your PC — see skill **`mm-dev-mcp-ha`**. **Not** installed on the Pi for mirror operation.

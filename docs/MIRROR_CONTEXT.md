@@ -29,6 +29,8 @@ Domain reference skills (Cursor / Claude): `mm-home-assistant`, `mm-kiosk-pi`, `
 | Voice / cloud | **Google account + cloud OK** (v1) |
 | Audio | HAT speaker **and/or** HDMI → TV speakers — **default TBD** |
 | Night mode | **FR-007** — softer UI + restrained audio (see FSD) |
+| **Room** | **Child’s bedroom** — supportive UX; see [PROJECT_BRIEF.md](PROJECT_BRIEF.md) |
+| **Echo Dot** | Wake word **“Echo”**; **Pomodoro** voice via **Echo → HA**; mirror shows **FR-008** countdown |
 
 ---
 
