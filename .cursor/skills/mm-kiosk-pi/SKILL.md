@@ -14,9 +14,10 @@ description: >-
 
 ## Instructions
 
-1. Read **`docs/MIRROR_CONTEXT.md`** (720p planning baseline until TV native res known).
-2. Follow **[reference.md](reference.md)**; adapt commands to **Raspberry Pi OS** version you install.
-3. Mirror **app** is **custom web UI** + local backend for HA (see `docs/ARCHITECTURE.md`) — not MagicMirror².
+1. First-time display/OS path: **`docs/PI_BRINGUP.md`**.
+2. Read **`docs/MIRROR_CONTEXT.md`** (720p planning baseline until TV native res known).
+3. Follow **[reference.md](reference.md)**; adapt commands to **Raspberry Pi OS** version you install.
+4. Mirror **app** is **custom web UI** + local backend for HA (see `docs/ARCHITECTURE.md`) — not MagicMirror².
 
 ## Outputs
 

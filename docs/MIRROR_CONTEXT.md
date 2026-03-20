@@ -50,6 +50,7 @@ Domain reference skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **
 | [DESIGN_READINESS.md](DESIGN_READINESS.md) | Checklist before UX theme; outputs in [design/](design/) |
 | [UI_MODES.md](UI_MODES.md) | Four UI modes, dual viewing distance, weather hierarchy |
 | [HA_DEV.md](HA_DEV.md) | HA on Pi 5 vs mirror Pi 4, MCP, token hygiene |
+| [PI_BRINGUP.md](PI_BRINGUP.md) | Mirror Pi 4 OS + display + network baseline |
 
 ---
 
@@ -57,7 +58,7 @@ Domain reference skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **
 
 Full detail in `agents/planner.md`. Phases **0–5**:
 
-0. **Baseline** — Confirm HDMI/video mode, TV power behavior, Pi RAM.  
+0. **Baseline** — Follow [PI_BRINGUP.md](PI_BRINGUP.md): HDMI/video mode, TV power behavior, Pi RAM, HA reachable from Pi.  
 1. **Requirements** — Lock v1 modules, voice whitelist shape, night mode rules.  
 2. **Architecture** — OS/kiosk, HA client, voice stack, audio output, secrets.  
 3. **UX** — Zones, type scale, tokens, optional 1280×720 layout artifact.  

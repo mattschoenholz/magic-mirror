@@ -45,6 +45,7 @@ Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT
 | [DESIGN_READINESS.md](docs/DESIGN_READINESS.md) | **Before theme work:** checklist + UX agent outputs (`docs/design/`) |
 | [UI_MODES.md](docs/UI_MODES.md) | Sleep / passive / active / Pomodoro modes; dual viewing distance; weather hierarchy |
 | [HA_DEV.md](docs/HA_DEV.md) | HA on Pi 5, mirror Pi 4, MCP + tokens (no secrets in git) |
+| [PI_BRINGUP.md](docs/PI_BRINGUP.md) | **Pi 4:** flash OS, HDMI, resolution, SSH, HA reachability |
 | [agents/](agents/README.md) | Planner, UX, Architect, Coder, Tester |
 | [resources/reference/](resources/reference/README.md) | Links and datasheets |
 
