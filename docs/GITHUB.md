@@ -5,12 +5,40 @@
 | | |
 |--|--|
 | **Local path** | `~/Desktop/CurrentProjects/General/magic-mirror` |
-| **Remote** | `git@github.com:mattschoenholz/magic-mirror.git` |
+| **Remote (`origin`)** | `https://github.com/mattschoenholz/magic-mirror.git` |
 | **Web** | [github.com/mattschoenholz/magic-mirror](https://github.com/mattschoenholz/magic-mirror) |
 
 This project is **standalone** — it is not part of SailboatServer or other repos.
 
-`origin` is preset to `git@github.com:mattschoenholz/magic-mirror.git`. Create the **empty** GitHub repository (same name, under your user), then push `main`.
+**Multi-machine workflow:** Use **HTTPS** for `origin` so each laptop/desktop can authenticate with the same pattern (browser login or token via Git Credential Manager / `gh`), without copying SSH private keys.
+
+---
+
+## HTTPS + GitHub CLI (`gh`) — recommended on each machine
+
+1. Install [GitHub CLI](https://cli.github.com/) (`brew install gh` on macOS).
+
+2. Log in and choose **HTTPS** when prompted:
+
+```bash
+gh auth login
+```
+
+Select: **GitHub.com** → **HTTPS** → authenticate via **web browser** (or token if you prefer).
+
+3. Optional but convenient — let Git use `gh` as the HTTPS credential helper (per machine):
+
+```bash
+gh auth setup-git
+```
+
+After that, `git push` / `git pull` to `https://github.com/...` reuse the same login.
+
+---
+
+## First push (repo empty on GitHub)
+
+`origin` is preset to the HTTPS URL above. Create the **empty** GitHub repository (same name, under your user), then push `main`.
 
 ### Option A — GitHub website
 
@@ -22,12 +50,10 @@ cd ~/Desktop/CurrentProjects/General/magic-mirror
 git push -u origin main
 ```
 
-### Option B — GitHub CLI (`gh`)
-
-Install if needed: `brew install gh`. Then:
+### Option B — GitHub CLI
 
 ```bash
-gh auth login
+gh auth login    # HTTPS
 cd ~/Desktop/CurrentProjects/General/magic-mirror
 gh repo create mattschoenholz/magic-mirror --public \
   --description "Wall magic mirror: Pi 4, AIY Voice HAT, Home Assistant"
@@ -38,29 +64,29 @@ git push -u origin main
 
 ---
 
-## Git identity (before first push)
-
-Set your real identity **in this repo** (or use global config):
+## Git identity (per clone or global)
 
 ```bash
-cd ~/Desktop/CurrentProjects/General/magic-mirror
+cd ~/path/to/magic-mirror
 git config user.name "Matt Schoenholz"
-git config user.email "YOUR_EMAIL or GitHub noreply"
+git config user.email "mattschoenholz@users.noreply.github.com"
 ```
 
-GitHub noreply format: `mattschoenholz@users.noreply.github.com` (if enabled in GitHub email settings).
+Use global `git config --global ...` if you want the same identity on that machine for all repos.
 
 ---
 
-## Clone & daily sync
+## Clone & daily sync (any machine)
 
 ```bash
-git clone git@github.com:mattschoenholz/magic-mirror.git
+git clone https://github.com/mattschoenholz/magic-mirror.git
 cd magic-mirror
+gh auth login          # once per machine, HTTPS
+gh auth setup-git      # optional; wires credential helper
 # … edit …
 git add -A && git status
 git commit -m "type: short description"
-git pull --rebase origin main   # if collaborating
+git pull --rebase origin main
 git push origin main
 ```
 
@@ -68,22 +94,13 @@ git push origin main
 
 ## Create remote (if you only have local)
 
-If the GitHub repo did not exist yet, create an **empty** repo named `magic-mirror` under `mattschoenholz`, then:
+If you initialized git locally and have **no** `origin` yet:
 
 ```bash
-cd ~/Desktop/CurrentProjects/General/magic-mirror
-git remote add origin git@github.com:mattschoenholz/magic-mirror.git   # skip if already added
+git remote add origin https://github.com/mattschoenholz/magic-mirror.git
 git branch -M main
 git push -u origin main
 ```
-
-With [GitHub CLI](https://cli.github.com/) (`gh`), from the repo root:
-
-```bash
-gh repo create mattschoenholz/magic-mirror --public --source=. --remote=origin --push
-```
-
-*(Fails if `origin` already exists — use `git remote -v` and adjust.)*
 
 ---
 
