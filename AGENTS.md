@@ -38,9 +38,10 @@ Read **`docs/MIRROR_CONTEXT.md`** first on any deep task — hardware baselines,
 ## Suggested order
 
 1. **Planner** — phases and tasks.  
-2. **UX** + **Architect** in parallel when Phase 2–3 overlap.  
-3. **Coder** after FSD/Architecture sign-off for the slice.  
-4. **Tester** through Phase 5; **Planner** closes milestones only with Tester exit criteria met or waived.
+2. **Design gate** — complete [docs/DESIGN_READINESS.md](docs/DESIGN_READINESS.md); **UX Designer** produces `docs/design/*` (theme before code).  
+3. **Architect** — HA entities match layout; can overlap late UX tweaks.  
+4. **Coder** after FSD + design tokens are stable enough for the slice.  
+5. **Tester** through Phase 5; **Planner** closes milestones only with Tester exit criteria met or waived.
 
 ---
 

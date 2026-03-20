@@ -2,7 +2,7 @@
 
 **Project:** Wall Magic Mirror (Pi 4 display + Home Assistant + Echo Dot)  
 **Document type:** Living specification — update on every scope or behavior change.  
-**Version:** 0.7  
+**Version:** 0.8  
 **Last updated:** 2026-03-20
 
 ---
@@ -18,6 +18,7 @@
 | 0.5 | 2026-03-20 | — | Link [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md); Alexa/Echo + camera ideas pending promotion |
 | 0.6 | 2026-03-20 | — | Child bedroom context; Echo wake word; **FR-008** Pomodoro countdown; personas + UC-6 |
 | 0.7 | 2026-03-20 | — | **v1:** Pi = display + HA backend only; **Echo-only** voice; AIY deferred; **FR-009** tiles; todo/calendar/weather modules |
+| 0.8 | 2026-03-20 | — | [DESIGN_READINESS.md](DESIGN_READINESS.md); [design/](design/) for pre-code theme artifacts |
 
 ---
 
@@ -25,7 +26,7 @@
 
 **Purpose:** Define *what* the system must do for users and *how* success is verified — without prescribing final implementation.
 
-**Scope:** See [PROJECT_BRIEF.md](PROJECT_BRIEF.md). Shared hardware/checklist context: [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md). **Ideas not yet specified:** [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) (MoSCoW + Alexa/camera/gesture notes — promote here when binding). This FSD tracks **functional** and **non-functional** requirements and traceability to tests.
+**Scope:** See [PROJECT_BRIEF.md](PROJECT_BRIEF.md). Shared hardware/checklist context: [MIRROR_CONTEXT.md](MIRROR_CONTEXT.md). **Ideas not yet specified:** [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) (MoSCoW + Alexa/camera/gesture notes — promote here when binding). **Visual theme before code:** [DESIGN_READINESS.md](DESIGN_READINESS.md) → artifacts in [design/](design/). This FSD tracks **functional** and **non-functional** requirements and traceability to tests.
 
 ---
 
@@ -148,3 +149,4 @@ For each FR/UC, add:
 - **0.5** — [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md): Alexa satellite, routines, camera/LD4020/gesture ideation; MoSCoW definition.
 - **0.6** — Child bedroom + Echo wake word; **FR-008** / **M-004** Pomodoro; **UC-6**; personas.
 - **0.7** — **v1 voice = Echo only**; Pi display-only; **FR-009**; **M-005** / **M-006**; **UC-7–9**; AIY out of scope v1.
+- **0.8** — Design gate: **DESIGN_READINESS** + **docs/design/** for UX outputs before implementation.

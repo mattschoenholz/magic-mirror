@@ -42,6 +42,7 @@ Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT
 | [GITHUB.md](docs/GITHUB.md) | Remotes, branching, sync habits |
 | [LESSONS_LEARNED.md](docs/LESSONS_LEARNED.md) | Mistakes and fixes |
 | [IDEATION_BACKLOG.md](docs/IDEATION_BACKLOG.md) | Ideas, MoSCoW, Alexa / camera / gesture (pre-FSD) |
+| [DESIGN_READINESS.md](docs/DESIGN_READINESS.md) | **Before theme work:** checklist + UX agent outputs (`docs/design/`) |
 | [agents/](agents/README.md) | Planner, UX, Architect, Coder, Tester |
 | [resources/reference/](resources/reference/README.md) | Links and datasheets |
 

@@ -45,6 +45,7 @@ Domain reference skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **
 | [LESSONS_LEARNED.md](LESSONS_LEARNED.md) | Postmortems |
 | [GITHUB.md](GITHUB.md) | Remotes, HTTPS workflow |
 | [IDEATION_BACKLOG.md](IDEATION_BACKLOG.md) | Future ideas, MoSCoW, Alexa/camera — before FSD promotion |
+| [DESIGN_READINESS.md](DESIGN_READINESS.md) | Checklist before UX theme; outputs in [design/](design/) |
 
 ---
 
