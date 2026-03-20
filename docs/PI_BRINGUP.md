@@ -19,7 +19,7 @@ Use **Raspberry Pi Imager** (Mac): select **Pi 4**, OS above, your **32 GB** car
 
 - **Hostname** — e.g. `mirror-pi4` (or your convention).
 - **SSH** — enable; **public key** preferred (paste your Mac `~/.ssh/id_ed25519.pub`).
-- **User** — not the legacy `pi` user; pick a normal username + strong password (or key-only if you prefer).
+- **User** — whatever you set in Imager (yours is **`pi`**). Use a strong password (or SSH keys).
 - **Wi‑Fi** — only if the mirror will use wireless; **Ethernet is preferable** for a wall-mounted display if you can run a cable.
 
 Write the image, eject safely, install SD in the Pi.
@@ -46,7 +46,7 @@ Write the image, eject safely, install SD in the Pi.
 ## 3. First login
 
 - If **keyboard + mouse** are connected: complete wizard (locale, updates prompt, etc.).
-- If **headless**: wait ~1–2 minutes, then **`ssh youruser@mirror-pi4.local`** (or hostname you set). Use the **same LAN** as the Pi.
+- If **headless**: wait ~1–2 minutes, then **`ssh pi@mirror-pi4.local`** (or `pi@<ip>` — use your hostname if different). Same LAN as the Pi.
 
 Update the system:
 
@@ -95,12 +95,12 @@ If the TV is mounted **vertically**, set rotation in software so text is upright
 
 ```bash
 # On your Mac: cd into the magic-mirror repo first (so scripts/ exists).
-# Replace YOUR_PI_USER and YOUR_PI_HOST — real Linux username and hostname OR IP (not the words USER/HOST).
+# User is **pi**; replace **mirror-pi4.local** with your Pi hostname or IP if different.
 
 cd ~/Desktop/CurrentProjects/General/magic-mirror
 
-scp scripts/pi-mirror-stub.sh YOUR_PI_USER@YOUR_PI_HOST:~/pi-mirror-stub.sh
-ssh YOUR_PI_USER@YOUR_PI_HOST 'bash ~/pi-mirror-stub.sh --open'
+scp scripts/pi-mirror-stub.sh pi@mirror-pi4.local:~/pi-mirror-stub.sh
+ssh pi@mirror-pi4.local 'bash ~/pi-mirror-stub.sh --open'
 ```
 
 That creates **`~/mirror-stub/index.html`** on the Pi and launches kiosk. **Exit kiosk:** **Alt+F4**, or from another SSH session: `pkill chromium` (or `pkill -f chromium`).
