@@ -1,0 +1,26 @@
+# Secrets and local config
+.env
+.env.*
+!.env.example
+*.pem
+id_rsa*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Future common stacks (uncomment when used)
+# node_modules/
+# dist/
+# build/
+# __pycache__/
+# *.pyc
+# .venv/
+
+# Large artifacts (prefer LFS or do not commit)
+*.img
+*.iso
+*.zip
