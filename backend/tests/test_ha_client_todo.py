@@ -26,6 +26,16 @@ from mirror_backend.ha_client import _extract_todo_items
         ),
         (
             {
+                "service_response": {
+                    "todo.elliot": {
+                        "items": [{"summary": "From wrapper", "status": "needs_action"}]
+                    }
+                }
+            },
+            ["From wrapper"],
+        ),
+        (
+            {
                 "other_list": {
                     "items": [{"title": "Fallback", "status": "needs_action"}]
                 }

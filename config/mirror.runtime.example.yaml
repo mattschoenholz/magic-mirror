@@ -12,10 +12,22 @@ home_assistant:
   # token_file: /etc/mirror/ha_token
 
 entities:
-  # Primary + fallbacks (first with a valid state wins for “today”; forecasts tried per entity).
-  weather: weather.pirateweather
-  weather_entities:
+  # Large “now” tile: first usable state wins (default tries Pirate Weather first — better day/night vs some Open-Meteo states).
+  # Falls back to `weather_entities` if none of these exist or are usable.
+  weather_now_entities:
     - weather.pirateweather
+    - weather.home
+    - weather.forecast_home
+  # Legacy chain for fallback “now” and default hourly source when forecast list omitted.
+  weather: weather.home
+  weather_entities:
+    - weather.home
+    - weather.pirateweather
+    - weather.forecast_home
+  # Hourly strip (6 slots, next full periods after *now*): try in order; default = same as weather_entities.
+  forecast_weather_entities:
+    - weather.pirateweather
+    - weather.home
     - weather.forecast_home
   # HA UI friendly name (e.g. "Local To-do") is not the entity_id — use Settings → Entities or dev tools.
   todo_list: todo.elliot

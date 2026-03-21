@@ -10,10 +10,12 @@ Stack assumption: **custom web app** opened in **Chromium** (or equivalent) in *
 - Chromium flags commonly used for kiosks (verify for your package):
 
   ```text
-  chromium-browser --kiosk --noerrdialogs --disable-infobars \
+  chromium-browser --password-store=basic --kiosk --noerrdialogs --disable-infobars \
     --autoplay-policy=no-user-gesture-required \
     http://127.0.0.1:PORT/
   ```
+
+- **`--password-store=basic`** avoids **GNOME Keyring** “unlock / new keyring” prompts on headless or no-keyboard setups (mirror Pi). Kiosk-only tradeoff: not for machines where you rely on OS-level saved passwords.
 
 - **Overscan:** disable in `raspi-config` if the UI is cropped on the TV.
 
@@ -38,7 +40,7 @@ Wants=network-online.target
 Type=simple
 User=pi
 Environment=DISPLAY=:0
-ExecStart=/usr/bin/chromium-browser --kiosk http://127.0.0.1:8080/
+ExecStart=/usr/bin/chromium-browser --password-store=basic --kiosk http://127.0.0.1:8080/
 Restart=on-failure
 RestartSec=5
 

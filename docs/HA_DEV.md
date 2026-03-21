@@ -41,6 +41,12 @@ After saving, **restart Cursor** or reload MCP so the new token is picked up.
 
 ---
 
+## Mirror Pi runtime (entity IDs & ICS)
+
+Do not guess IDs in code: see **[MIRROR_RUNTIME.md](MIRROR_RUNTIME.md)** and [config/mirror.runtime.example.yaml](../config/mirror.runtime.example.yaml) for **`weather.pirateweather`**, **`todo.elliot`**, school ICS URLs, and token file layout on the **mirror Pi 4**.
+
+---
+
 ## Tokens (two contexts)
 
 | Context | Where token lives | Purpose |

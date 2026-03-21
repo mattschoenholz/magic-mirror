@@ -6,7 +6,7 @@ Use this file to decide **which role** to invoke in Cursor (paste the relevant `
 
 ## Shared context (all agents)
 
-Read **`docs/MIRROR_CONTEXT.md`** first on any deep task — hardware baselines, doc map, HA/voice checklists.
+Read **`docs/MIRROR_CONTEXT.md`** first on any deep task — hardware baselines, doc map, HA/voice checklists. For **locked entity IDs, ICS URLs, secrets layout**, read **`docs/MIRROR_RUNTIME.md`** (and `config/mirror.runtime.example.yaml`).
 
 **Cursor skill:** [`mm-mirror-context`](.cursor/skills/mm-mirror-context/SKILL.md) — loads the same intent.
 

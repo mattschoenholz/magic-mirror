@@ -52,6 +52,7 @@ Domain reference skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **
 | [HA_DEV.md](HA_DEV.md) | HA on Pi 5 vs mirror Pi 4, MCP, token hygiene |
 | [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) | **Locked** HA entity IDs, ICS URLs, timezone, secrets layout, Spotify/YouTube policy |
 | [BACKEND_HA_INTEGRATION_2026-03.md](BACKEND_HA_INTEGRATION_2026-03.md) | **Snapshot / HA handoff:** weather-now vs hourly, todos overflow, API shapes, code map, new-machine checklist |
+| [POMODORO_TIMER_PLAN.md](POMODORO_TIMER_PLAN.md) | **Planner handoff:** focused Pomodoro UI (overlay vs route), links FR-008 / FR-010 / UC-6, design SVGs |
 | [PI_BRINGUP.md](PI_BRINGUP.md) | Mirror Pi 4 OS + display + network baseline |
 | [MAC_VS_PI_COMMANDS.md](MAC_VS_PI_COMMANDS.md) | **Copy-paste**: Mac Terminal vs SSH (no keyboard on Pi) |
 

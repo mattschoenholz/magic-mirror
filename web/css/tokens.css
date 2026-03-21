@@ -1,0 +1,49 @@
+/**
+ * Mirror UI tokens — from docs/design/tokens.md + inspiration-dashboard-ui.md
+ * FR-005 glance sizes; wood-frame safe inset; weather icon palette.
+ */
+:root {
+  --mm-bg: #0f0f10;
+  --mm-bg-elevated: #16161c;
+  --mm-text-primary: #f2f2f4;
+  --mm-text-secondary: #a8a8b0;
+  --mm-text-muted: #6e6e78;
+  --mm-accent: #7eb8ff;
+  --mm-accent-teal: #2dd4bf;
+  --mm-accent-teal-soft: rgba(45, 212, 191, 0.22);
+  --mm-surface-soft: #16161c;
+  --mm-radius-md: 14px;
+  --mm-radius-pill: 9999px;
+  --mm-frame-inset: 36px;
+  --mm-space-sm: 16px;
+  --mm-space-md: 24px;
+  --mm-space-lg: 40px;
+  --mm-space-xl: 64px;
+
+  /* Display type — ~10 ft minimums (tokens.md) */
+  --mm-clock-size: 112px;
+  --mm-weather-value-size: 72px;
+  --mm-weather-condition-size: 40px;
+  --mm-forecast-row-size: 28px;
+  --mm-list-line-size: 30px;
+  --mm-module-label-size: 24px;
+
+  /* Weather icon paints (symbols use var(--wx-*)) */
+  --wx-sun: #fbbf24;
+  --wx-sun-ray: #fcd34d;
+  --wx-cloud: #94a3b8;
+  --wx-cloud-dark: #64748b;
+  --wx-rain: #38bdf8;
+  --wx-snow: #e0f2fe;
+  --wx-bolt: #facc15;
+  --wx-fog: #a8a29e;
+  --wx-wind: #7dd3fc;
+  --wx-muted: #6b7280;
+}
+
+:root.mirror--night {
+  --mm-bg: #0a0a0c;
+  --mm-text-primary: #d8d8dc;
+  --mm-text-secondary: #94949c;
+  --mm-accent-teal: #26b8a5;
+}

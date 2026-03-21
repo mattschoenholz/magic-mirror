@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run ON THE MIRROR PI (after copy: scp scripts/pi-mirror-stub.sh user@mirror-pi4.local:~/ )
+# Run ON THE MIRROR PI (after copy: scp scripts/pi-mirror-stub.sh pi@mirror-pi4.local:~/ )
 # Creates a tiny local HTML page and optionally opens it in Chromium kiosk mode.
 # Purpose: verify resolution, portrait viewport (innerWidth x innerHeight), and Chromium.
 
@@ -69,7 +69,7 @@ fi
 
 FILE_URL="file://${STUB_DIR}/index.html"
 echo "Stub written: ${STUB_DIR}/index.html"
-echo "On the Pi desktop (Terminal app):  ${CHROME} --kiosk \"${FILE_URL}\""
+echo "On the Pi desktop (Terminal app):  ${CHROME} --password-store=basic --disable-logging --kiosk \"${FILE_URL}\""
 echo "From SSH: see PI_BRINGUP.md — needs DISPLAY, XAUTHORITY, runtime dir, and extra Chromium flags."
 
 if [[ "${1:-}" == "--open" ]]; then
@@ -86,6 +86,13 @@ if [[ "${1:-}" == "--open" ]]; then
     export XDG_RUNTIME_DIR="/run/user/$(id -u)"
   fi
 
+  # Kiosk-only: keyring, less sync/GCM stderr noise (see PI_BRINGUP.md).
+  common_flags=(
+    --password-store=basic
+    --kiosk --noerrdialogs --disable-infobars
+    --no-first-run --disable-sync --disable-background-networking
+    --disable-logging
+  )
   ssh_chromium_flags=()
   if [[ -n "${SSH_CONNECTION:-}" ]]; then
     ssh_chromium_flags+=(--no-sandbox --disable-dev-shm-usage)
@@ -94,6 +101,6 @@ if [[ "${1:-}" == "--open" ]]; then
 
   exec "$CHROME" \
     "${ssh_chromium_flags[@]}" \
-    --kiosk --noerrdialogs --disable-infobars \
+    "${common_flags[@]}" \
     "$FILE_URL"
 fi

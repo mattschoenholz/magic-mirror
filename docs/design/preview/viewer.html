@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design preview — fullscreen</title>
+  <link rel="stylesheet" href="preview-dock.css" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #0a0a0c;
+      overflow: hidden;
+    }
+    .viewer-stage {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: calc(88px + var(--preview-frame-inset));
+      /* Stacking context for tap layer over <object> (SVG often eats clicks). */
+    }
+    .viewer-stage object,
+    .viewer-stage img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      position: relative;
+      z-index: 0;
+    }
+    /* Full-area hit target: kiosk + wood frame often hide the bottom dock. */
+    .viewer-tap-gallery {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      cursor: pointer;
+      text-decoration: none;
+      color: transparent;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .viewer-tap-hint {
+      position: absolute;
+      top: max(12px, var(--preview-frame-inset));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      pointer-events: none;
+      font-size: 13px;
+      color: rgba(160, 160, 170, 0.75);
+      font-family: system-ui, sans-serif;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .err {
+      color: #ccc;
+      font-family: system-ui, sans-serif;
+      padding: 2rem;
+      max-width: 40rem;
+    }
+    .err code { background: #222; padding: 0.15em 0.35em; }
+  </style>
+</head>
+<body>
+  <div class="viewer-stage" id="viewer-stage">
+    <object id="svg" type="image/svg+xml" data="" aria-label="SVG preview">
+      <div class="err">SVG failed to load. Open from <code>preview/index.html</code> or check the <code>?src=</code> path.</div>
+    </object>
+    <a href="index.html" class="viewer-tap-gallery" id="viewer-tap-gallery" aria-label="Back to gallery — tap anywhere on the preview"></a>
+    <div class="viewer-tap-hint" id="viewer-tap-hint" aria-hidden="true">Tap anywhere for gallery</div>
+  </div>
+
+  <footer class="preview-dock" id="preview-dock" aria-label="Preview controls">
+    <div class="preview-dock-row">
+      <div class="preview-dock-row-main">
+        <a href="index.html" class="preview-dock-btn" id="dock-gallery" hidden>← Gallery</a>
+        <button type="button" class="preview-dock-btn secondary" id="exit-help-btn">Exit kiosk…</button>
+      </div>
+    </div>
+    <div id="exit-panel" hidden>
+      <p>Web pages cannot close Chromium in <strong>kiosk</strong> mode. Use one of:</p>
+      <p><strong>From your Mac</strong> (copy command):</p>
+      <pre><code>ssh pi@mirror-pi4.local 'pkill -f chromium || pkill -f chromium-browser || true'</code></pre>
+      <p><strong>USB keyboard</strong> on the Pi: <strong>Alt+F4</strong> (may vary by desktop).</p>
+      <p><strong>Windowed preview</strong> (browser chrome):</p>
+      <pre><code>PREVIEW_WINDOWED=1 ./scripts/sync-design-preview-to-pi.sh --open</code></pre>
+      <p><strong>Wood frame</strong> ~20–30px overlap — <strong>tap anywhere on the SVG preview</strong> to return to the gallery, or use <strong>← Gallery</strong> in the dock when visible.</p>
+    </div>
+  </footer>
+
+  <script src="preview-dock.js"></script>
+  <script>
+    (function () {
+      var q = new URLSearchParams(location.search);
+      var src = q.get("src");
+      var el = document.getElementById("svg");
+      var stage = document.getElementById("viewer-stage");
+      if (!src) {
+        stage.innerHTML = '<p class="err">Missing <code>?src=../relative/path.svg</code>. <a href="index.html" style="color:#7eb8ff">Back to gallery</a></p>';
+        return;
+      }
+      el.setAttribute("data", src);
+      document.title = decodeURIComponent(src.split("/").pop() || "Preview");
+    })();
+  </script>
+</body>
+</html>

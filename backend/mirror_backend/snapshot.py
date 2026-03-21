@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 from zoneinfo import ZoneInfo
 
@@ -13,6 +13,23 @@ from mirror_backend.settings import read_ha_token
 logger = logging.getLogger(__name__)
 
 LA = ZoneInfo("America/Los_Angeles")
+
+
+def _parse_forecast_dt(row: dict[str, Any]) -> datetime | None:
+    raw_dt = row.get("datetime")
+    if not raw_dt:
+        return None
+    try:
+        if isinstance(raw_dt, datetime):
+            dt = raw_dt
+        else:
+            s = str(raw_dt).replace("Z", "+00:00")
+            dt = datetime.fromisoformat(s)
+    except ValueError:
+        return None
+    if dt.tzinfo is None:
+        return dt.replace(tzinfo=LA)
+    return dt.astimezone(LA)
 
 
 def _row_temp_f(row: dict[str, Any], entity_temp_unit: str | None) -> int | None:
@@ -31,44 +48,58 @@ def _row_temp_f(row: dict[str, Any], entity_temp_unit: str | None) -> int | None
     return round(t)
 
 
-def _hourly_slots_from_forecast(
+def _hourly_strip_next_six(
     forecast: list[dict[str, Any]],
     temp_unit_hint: str | None,
+    *,
+    count: int = 6,
 ) -> list[dict[str, Any]]:
-    """Map HA hourly forecast entries → { hourLabel, tempF, icon }."""
+    """Six hourly slots after *now* — big card is “now”; strip starts at next forecast period (no ‘Now’ label)."""
     now = datetime.now(LA)
-    today = now.date()
     slots: list[dict[str, Any]] = []
-    for row in forecast[:36]:
-        raw_dt = row.get("datetime")
-        if not raw_dt:
+    for row in forecast[:72]:
+        dt = _parse_forecast_dt(row)
+        if dt is None:
             continue
-        try:
-            if isinstance(raw_dt, datetime):
-                dt = raw_dt
-            else:
-                s = str(raw_dt).replace("Z", "+00:00")
-                dt = datetime.fromisoformat(s)
-        except ValueError:
+        if dt <= now:
             continue
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=LA)
-        else:
-            dt = dt.astimezone(LA)
-        if dt.date() != today:
-            continue
-        cond = row.get("condition") or row.get("weather") or "cloudy"
-        icon = weather_map.condition_icon_key(str(cond))
         temp_f = _row_temp_f(row, temp_unit_hint)
         if temp_f is None:
             continue
-        if not slots:
-            label = "Now"
-        else:
-            h12 = dt.hour % 12 or 12
-            label = f"{h12}:{dt.minute:02d} {'PM' if dt.hour >= 12 else 'AM'}"
+        cond = row.get("condition") or row.get("weather") or "cloudy"
+        icon = weather_map.condition_icon_key(str(cond))
+        h12 = dt.hour % 12 or 12
+        label = f"{h12}:{dt.minute:02d} {'PM' if dt.hour >= 12 else 'AM'}"
         slots.append({"hourLabel": label, "tempF": temp_f, "icon": icon})
-        if len(slots) >= 6:
+        if len(slots) >= count:
+            break
+    return slots
+
+
+def _hourly_strip_relaxed(
+    forecast: list[dict[str, Any]],
+    temp_unit_hint: str | None,
+    *,
+    count: int = 6,
+) -> list[dict[str, Any]]:
+    """Fallback: next periods from ~1h ago (clock skew), still no ‘Now’ label."""
+    now = datetime.now(LA)
+    slots: list[dict[str, Any]] = []
+    for row in forecast[:72]:
+        dt = _parse_forecast_dt(row)
+        if dt is None:
+            continue
+        if dt < now - timedelta(hours=1):
+            continue
+        temp_f = _row_temp_f(row, temp_unit_hint)
+        if temp_f is None:
+            continue
+        cond = row.get("condition") or row.get("weather") or "cloudy"
+        icon = weather_map.condition_icon_key(str(cond))
+        h12 = dt.hour % 12 or 12
+        label = f"{h12}:{dt.minute:02d} {'PM' if dt.hour >= 12 else 'AM'}"
+        slots.append({"hourLabel": label, "tempF": temp_f, "icon": icon})
+        if len(slots) >= count:
             break
     return slots
 
@@ -80,6 +111,36 @@ def _weather_entity_chain(cfg: dict[str, Any]) -> list[str]:
         return [str(x) for x in chain if x]
     primary = ent.get("weather") or "weather.pirateweather"
     return [str(primary)]
+
+
+def _forecast_entity_chain(cfg: dict[str, Any]) -> list[str]:
+    """Entities to try for `weather.get_forecasts` (hourly). Explicit list wins; else `weather_entities` with Pirate first if present."""
+    ent = cfg.get("entities") or {}
+    chain = ent.get("forecast_weather_entities")
+    if isinstance(chain, list) and chain:
+        out = [str(x).strip() for x in chain if x and str(x).strip()]
+        if out:
+            return out
+    base = _weather_entity_chain(cfg)
+    if "weather.pirateweather" in base:
+        others = [x for x in base if x != "weather.pirateweather"]
+        return ["weather.pirateweather", *others]
+    return base
+
+
+def _weather_now_entity_chain(cfg: dict[str, Any]) -> list[str]:
+    """Large ‘current conditions’ tile — try in order (default: Pirate Weather first for accurate *now*)."""
+    ent = cfg.get("entities") or {}
+    chain = ent.get("weather_now_entities")
+    if isinstance(chain, list) and chain:
+        out = [str(x).strip() for x in chain if x and str(x).strip()]
+        if out:
+            return out
+    return [
+        "weather.pirateweather",
+        "weather.home",
+        "weather.forecast_home",
+    ]
 
 
 def _todo_entity_chain(cfg: dict[str, Any]) -> list[str]:
@@ -103,6 +164,8 @@ def build_snapshot(cfg: dict[str, Any]) -> dict[str, Any]:
     ent = cfg.get("entities") or {}
     todo_entity_ids = _todo_entity_chain(cfg)
     weather_ids = _weather_entity_chain(cfg)
+    now_weather_ids = _weather_now_entity_chain(cfg)
+    forecast_ids = _forecast_entity_chain(cfg)
 
     errors: list[str] = []
     weather_today: dict[str, Any] = {
@@ -128,17 +191,30 @@ def build_snapshot(cfg: dict[str, Any]) -> dict[str, Any]:
     else:
         chosen_state: dict[str, Any] | None = None
         chosen_eid: str | None = None
-        for eid in weather_ids:
+        for eid in now_weather_ids:
             st = ha_client.ha_get_state(base_url, token, eid)
             if not st:
-                errors.append(f"ha:weather_missing:{eid}")
+                errors.append(f"ha:weather_now_missing:{eid}")
                 continue
             state = st.get("state")
             if weather_map.weather_state_usable(state):
                 chosen_state = st
                 chosen_eid = eid
                 break
-            logger.info("Skipping weather entity %s state=%r", eid, state)
+            logger.info("Skipping weather_now entity %s state=%r", eid, state)
+
+        if not chosen_state:
+            for eid in weather_ids:
+                st = ha_client.ha_get_state(base_url, token, eid)
+                if not st:
+                    errors.append(f"ha:weather_missing:{eid}")
+                    continue
+                state = st.get("state")
+                if weather_map.weather_state_usable(state):
+                    chosen_state = st
+                    chosen_eid = eid
+                    break
+                logger.info("Skipping weather entity %s state=%r", eid, state)
 
         if chosen_state and chosen_eid:
             attrs = chosen_state.get("attributes") or {}
@@ -151,13 +227,31 @@ def build_snapshot(cfg: dict[str, Any]) -> dict[str, Any]:
             )
 
             fc: list[dict[str, Any]] = []
-            for eid in weather_ids:
+            forecast_eid: str | None = None
+            for eid in forecast_ids:
                 fc = ha_client.ha_get_forecasts(base_url, token, eid)
                 if fc:
+                    forecast_eid = eid
                     break
-            hourly_today = _hourly_slots_from_forecast(fc, attrs.get("temperature_unit"))
+            if not fc:
+                errors.append("ha:forecast_hourly_empty")
+            fc_state = (
+                ha_client.ha_get_state(base_url, token, forecast_eid)
+                if forecast_eid
+                else None
+            )
+            fc_attrs = (fc_state.get("attributes") or {}) if fc_state else {}
+            temp_hint = fc_attrs.get("temperature_unit") or attrs.get("temperature_unit")
+            hourly_today = _hourly_strip_next_six(fc, temp_hint, count=6)
+            if fc and not hourly_today:
+                hourly_today = _hourly_strip_relaxed(fc, temp_hint, count=6)
             for row in fc[:24]:
-                for key in ("precipitation_probability", "precipitation", "native_precipitation"):
+                for key in (
+                    "precipitation_probability",
+                    "precipitation",
+                    "native_precipitation",
+                    "native_precipitation_intensity",
+                ):
                     p = row.get(key)
                     if p is not None:
                         try:
@@ -201,18 +295,10 @@ def build_snapshot(cfg: dict[str, Any]) -> dict[str, Any]:
             if len(todo_items) >= todo_cap:
                 break
 
-    if not hourly_today and weather_today.get("feelsLikeF") is not None:
-        hourly_today = [
-            {
-                "hourLabel": "Now",
-                "tempF": weather_today["feelsLikeF"],
-                "icon": weather_today["icon"],
-            }
-        ]
-    elif not hourly_today:
-        hourly_today = [
-            {"hourLabel": "Now", "tempF": None, "icon": weather_today["icon"]},
-        ]
+        if len(todo_items) > 6:
+            todo_items = [t for t in todo_items if not t["done"]][:6]
+
+    # Hourly strip: six slots after *now*; empty list lets the UI show a friendly message.
 
     return {
         "source": "live" if token else "degraded",

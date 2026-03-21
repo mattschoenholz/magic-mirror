@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-labelledby="title desc">
+  <title id="title">Exploration: passive editorial left rail</title>
+  <desc id="desc">Left-aligned column; micro-labels in letterspaced caps; no panels.</desc>
+  <rect width="1080" height="1920" fill="#0f0f10"/>
+  <text x="80" y="168" text-anchor="start" fill="#7a7a85" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="24" font-weight="500" letter-spacing="0.16em">TIME</text>
+  <text x="80" y="288" text-anchor="start" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="112" font-weight="700" font-variant-numeric="tabular-nums">10:42</text>
+  <text x="80" y="352" text-anchor="start" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="34" font-weight="400">Friday, March 20</text>
+  <text x="80" y="520" text-anchor="start" fill="#7a7a85" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="24" font-weight="500" letter-spacing="0.16em">WEATHER</text>
+  <text x="80" y="612" text-anchor="start" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="72" font-weight="600">72&#176;</text>
+  <text x="80" y="684" text-anchor="start" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="40" font-weight="500">Partly cloudy</text>
+  <text x="80" y="744" text-anchor="start" fill="#6e6e78" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="400">Wed 68&#176;  &#183;  Thu 71&#176;  &#183;  Fri 69&#176;</text>
+  <text x="80" y="904" text-anchor="start" fill="#7a7a85" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="24" font-weight="500" letter-spacing="0.16em">SCHOOL</text>
+  <text x="80" y="964" text-anchor="start" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" font-weight="400">calendar.school</text>
+  <text x="80" y="1028" text-anchor="start" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="400">3:00 PM - Science fair setup</text>
+  <text x="80" y="1088" text-anchor="start" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="400">Thu - Band concert, 7:00 PM</text>
+  <text x="80" y="1248" text-anchor="start" fill="#7a7a85" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="24" font-weight="500" letter-spacing="0.16em">TASKS</text>
+  <text x="80" y="1308" text-anchor="start" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" font-weight="400">todo.kid_chores</text>
+  <text x="80" y="1372" text-anchor="start" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="400">[ ] Finish math worksheet</text>
+  <text x="80" y="1432" text-anchor="start" fill="#6e6e78" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="30" font-weight="400">[ ] Pack gym clothes</text>
+  <text x="80" y="1840" text-anchor="start" fill="#3a3a40" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="20" font-weight="400">exploration / passive / editorial</text>
+</svg>

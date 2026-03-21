@@ -5,7 +5,7 @@
 [Desktop Entry]
 Type=Application
 Name=Mirror stub (kiosk test)
-Exec=chromium --kiosk --noerrdialogs --disable-infobars --disable-dev-shm-usage file:///home/pi/mirror-stub/index.html
+Exec=chromium --password-store=basic --kiosk --noerrdialogs --disable-infobars --disable-dev-shm-usage --no-first-run --disable-sync --disable-background-networking --disable-logging file:///home/pi/mirror-stub/index.html
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true

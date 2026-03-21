@@ -1,0 +1,115 @@
+/* Shared chrome for Pi design preview (kiosk-safe: in-page nav + exit help). */
+:root {
+  /* Wood frame overlaps ~20–30px of the LCD; keep controls inside this inset. */
+  --preview-frame-inset: 36px;
+  --preview-dock-bg: rgba(14, 14, 18, 0.92);
+  --preview-dock-border: #2a2a32;
+  /* Teal-leaning accent — aligns with docs/design/inspiration-dashboard-ui.md (dashboard reference) */
+  --preview-accent: #5eead4;
+  --preview-muted: #8a8a94;
+}
+
+.preview-dock {
+  position: fixed;
+  z-index: 9999;
+  left: var(--preview-frame-inset);
+  right: var(--preview-frame-inset);
+  bottom: var(--preview-frame-inset);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px 12px;
+  background: var(--preview-dock-bg);
+  border: 1px solid var(--preview-dock-border);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+  color: #e8e8ec;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.35);
+}
+
+.preview-dock-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.preview-dock-row-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.preview-dock-btn {
+  appearance: none;
+  border: 1px solid var(--preview-dock-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--preview-accent);
+  padding: 12px 16px;
+  min-height: 48px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+a.preview-dock-btn { color: var(--preview-accent); }
+
+.preview-dock-btn:hover,
+.preview-dock-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #4a4a58;
+  outline: none;
+}
+
+.preview-dock-btn.secondary {
+  color: var(--preview-muted);
+}
+
+#exit-panel {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--preview-dock-border);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--preview-muted);
+}
+
+#exit-panel[hidden] {
+  display: none !important;
+}
+
+#exit-panel code,
+#exit-panel pre {
+  font-size: 12px;
+  background: #1a1a1f;
+  border: 1px solid #2a2a32;
+  border-radius: 6px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  display: block;
+  margin: 8px 0 0;
+  color: #d0d0d8;
+  user-select: all;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+#exit-panel p {
+  margin: 0 0 6px;
+}
+
+#exit-panel p + p {
+  margin-top: 10px;
+}
+
+body.preview-has-dock {
+  padding-bottom: calc(120px + var(--preview-frame-inset));
+}

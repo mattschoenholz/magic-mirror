@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-labelledby="title desc">
+  <title id="title">Magic Mirror - pomodoro_focus wireframe (1080 x 1920)</title>
+  <desc id="desc">Dark background; large countdown, phase label, subtle voice hints. No buttons or panels.</desc>
+  <rect width="1080" height="1920" fill="#0f0f10"/>
+  <!-- M-004 Pomodoro - min 128px digits -->
+  <text x="540" y="720" text-anchor="middle" fill="#7eb8ff" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="36" font-weight="500">Focus</text>
+  <text x="540" y="900" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="128" font-weight="700" font-variant-numeric="tabular-nums">24:37</text>
+  <text x="540" y="980" text-anchor="middle" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="30" font-weight="400">25-minute session</text>
+  <!-- Voice hints (Echo to HA); visual only, v1 no touch chrome -->
+  <text x="540" y="1120" text-anchor="middle" fill="#6e6e78" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="400">Say: pause timer &#183; resume &#183; start break</text>
+  <text x="540" y="1168" text-anchor="middle" fill="#4a4a52" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="24" font-weight="400">(Phrases TBD with HA / Alexa mapping)</text>
+  <!-- Optional dim corner time - smaller than passive -->
+  <text x="540" y="200" text-anchor="middle" fill="#3a3a44" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="500" font-variant-numeric="tabular-nums">10:42</text>
+  <text x="540" y="1840" text-anchor="middle" fill="#3a3a40" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="22" font-weight="400">1080 x 1920 &#183; pomodoro_focus</text>
+</svg>

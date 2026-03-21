@@ -123,7 +123,7 @@
 | M-002 | **Weather** — **today** prominent; **multi-day** compact secondary | HA `weather.*` / forecast entities | Architect |
 | M-003 | HA / home summary (optional) | HA | Architect |
 | M-004 | **Pomodoro** — countdown + phase | HA `timer` / `input_select` / scripts (TBD) | UX + Architect |
-| M-005 | **School calendar** | HA `calendar.*` | Architect + household (which calendar) |
+| M-005 | **School calendar** | Mirror **backend** merges **five ICS feeds** ([MIRROR_RUNTIME.md](MIRROR_RUNTIME.md)); **not** HA `calendar` for v1 | Architect |
 | M-006 | **Visual todo / tasks** | HA `todo`, `shopping_list`, or helpers | Architect |
 | M-007 | **Mode shell** (layout / which regions visible) | HA `input_select` / automations for UI mode | Architect + UX |
 

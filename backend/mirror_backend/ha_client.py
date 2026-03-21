@@ -69,8 +69,13 @@ def ha_ws_call_service(
     *,
     target_entity_id: str | None = None,
     service_data: dict[str, Any] | None = None,
+    return_response: bool = False,
 ) -> dict[str, Any] | None:
-    """Run a single service call over HA WebSocket; return `result` payload or None."""
+    """Run a single service call over HA WebSocket; return `result` payload or None.
+
+    Set ``return_response=True`` for services that return data (e.g. ``weather.get_forecasts``,
+    ``todo.get_items``). Without it, HA omits ``service_response`` and forecast/todo lists stay empty.
+    """
     ws_url = _ws_url(base_url)
     ws: websocket.WebSocket | None = None
     try:
@@ -99,6 +104,8 @@ def ha_ws_call_service(
             payload["target"] = {"entity_id": target_entity_id}
         if service_data:
             payload["service_data"] = service_data
+        if return_response:
+            payload["return_response"] = True
         ws.send(json.dumps(payload))
         while True:
             raw = ws.recv()
@@ -122,14 +129,31 @@ def ha_ws_call_service(
     return None
 
 
+def _unwrap_service_response(res: Any) -> Any:
+    """HA 2024+ puts response-returning service data under `service_response`."""
+    if isinstance(res, dict) and "service_response" in res:
+        inner = res.get("service_response")
+        if inner is not None:
+            return inner
+    return res
+
+
 def _extract_forecast_list(res: Any, entity_id: str) -> list[dict[str, Any]]:
     """Normalize get_forecasts service response → list of forecast dicts."""
     if not res:
         return []
+    # WebSocket call_service + return_response → { context, response: { weather.x: { forecast } } }
+    if isinstance(res, dict) and "response" in res:
+        return _extract_forecast_list(res.get("response"), entity_id)
+    res = _unwrap_service_response(res)
     if isinstance(res, list):
         return [x for x in res if isinstance(x, dict)]
     if not isinstance(res, dict):
         return []
+    top_fc = res.get("forecast")
+    if isinstance(top_fc, list) and top_fc and isinstance(top_fc[0], dict):
+        if "datetime" in top_fc[0] or "temperature" in top_fc[0]:
+            return [x for x in top_fc if isinstance(x, dict)]
     block = res.get(entity_id)
     if isinstance(block, dict):
         for key in ("forecast", "native_forecast", "hourly"):
@@ -146,14 +170,28 @@ def _extract_forecast_list(res: Any, entity_id: str) -> list[dict[str, Any]]:
 
 
 def ha_get_forecasts(base_url: str, token: str, entity_id: str) -> list[dict[str, Any]]:
+    # HA services.yaml: target = weather entity; fields = { type } only — not entity_id in service_data.
     res = ha_ws_call_service(
         base_url,
         token,
         "weather",
         "get_forecasts",
-        service_data={"entity_id": entity_id, "type": "hourly"},
+        target_entity_id=entity_id,
+        service_data={"type": "hourly"},
+        return_response=True,
     )
     rows = _extract_forecast_list(res, entity_id)
+    if rows:
+        return rows
+    res_legacy = ha_ws_call_service(
+        base_url,
+        token,
+        "weather",
+        "get_forecasts",
+        service_data={"entity_id": entity_id, "type": "hourly"},
+        return_response=True,
+    )
+    rows = _extract_forecast_list(res_legacy, entity_id)
     if rows:
         return rows
     rest = ha_post_service(
@@ -170,6 +208,8 @@ def _extract_todo_items(res: Any, entity_id: str) -> list[dict[str, Any]]:
     """Normalize get_items response (shape varies by HA version)."""
     if not res:
         return []
+    if isinstance(res, dict) and "service_response" in res:
+        return _extract_todo_items(res.get("service_response"), entity_id)
     if isinstance(res, dict) and "response" in res:
         return _extract_todo_items(res.get("response"), entity_id)
     if isinstance(res, list):
@@ -199,6 +239,7 @@ def ha_get_todo_items(base_url: str, token: str, entity_id: str) -> list[dict[st
         "todo",
         "get_items",
         target_entity_id=entity_id,
+        return_response=True,
     )
     items = _extract_todo_items(res, entity_id)
     if items:
@@ -209,6 +250,7 @@ def ha_get_todo_items(base_url: str, token: str, entity_id: str) -> list[dict[st
         "todo",
         "get_items",
         service_data={"entity_id": entity_id},
+        return_response=True,
     )
     items = _extract_todo_items(res2, entity_id)
     if items:

@@ -28,8 +28,8 @@ Use this as a **gate** so theme and layout work with the **UX Designer** agent (
 
 - [x] **Mode-driven hierarchy:** **sleep_off**, **passive**, **active_engaged**, **pomodoro_focus** — [UI_MODES.md](UI_MODES.md), **FR-010** / **M-007** in [FSD.md](FSD.md). UX should produce **per-mode** or **annotated** layouts where hierarchy differs materially.
 - [ ] **Passive “hero”** emphasis with family (e.g. clock + **today** weather vs clock + next calendar — still fine-tune within passive mode).
-- [ ] **School calendar:** which HA `calendar` entity name(s) will feed **M-005** (can be “TBD” in design if you use placeholder labels in mockups).
-- [ ] **Todo source:** e.g. HA `todo`, `shopping_list`, or helpers — **pattern** agreed with Architect (placeholders OK for SVG).
+- [x] **School calendar (M-005):** **ICS via mirror backend** — five feeds + rules in [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md); example list in [config/mirror.runtime.example.yaml](../config/mirror.runtime.example.yaml). Design mockups may still use generic labels; implementation must follow runtime doc.
+- [x] **Todo source (M-006):** HA **`todo.elliot`** — [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md). (Placeholders in old SVGs optional to refresh.)
 - [x] **Weather:** **Today** primary; **next few days** smaller secondary — locked in [UI_MODES.md](UI_MODES.md) / **FR-009**.
 
 ### C. Household / brand (drives color and tone)

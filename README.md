@@ -2,7 +2,7 @@
 
 A **planning and documentation** home for a wall-mounted smart mirror: two-way glass over an HDMI display, driven by a **Raspberry Pi 4** (**display + local HA backend**), with **voice through an Echo Dot** → **Home Assistant** for v1. **AIY Voice HAT** is **optional / later** — not part of the initial install.
 
-> **Status:** Ideation / specification — application code comes later.  
+> **Status:** Spec + design + **web UI shell** ([`web/`](web/)) — HA-backed runtime still to wire (**FR-006**).  
 > **GitHub:** [github.com/mattschoenholz/magic-mirror](https://github.com/mattschoenholz/magic-mirror)
 
 ---
@@ -43,6 +43,7 @@ Hardware notes (glass size, TV, Pi, audio): [docs/PROJECT_BRIEF.md](docs/PROJECT
 | [LESSONS_LEARNED.md](docs/LESSONS_LEARNED.md) | Mistakes and fixes |
 | [IDEATION_BACKLOG.md](docs/IDEATION_BACKLOG.md) | Ideas, MoSCoW, Alexa / camera / gesture (pre-FSD) |
 | [DESIGN_READINESS.md](docs/DESIGN_READINESS.md) | **Before theme work:** checklist + UX agent outputs (`docs/design/`) |
+| [web/README.md](web/README.md) | **Mirror UI shell:** passive layout, weather + 5-day icons, calendar + todo (demo data) |
 | [UI_MODES.md](docs/UI_MODES.md) | Sleep / passive / active / Pomodoro modes; dual viewing distance; weather hierarchy |
 | [HA_DEV.md](docs/HA_DEV.md) | HA on Pi 5, mirror Pi 4, MCP + tokens (no secrets in git) |
 | [PI_BRINGUP.md](docs/PI_BRINGUP.md) | **Pi 4:** flash OS, HDMI, resolution, SSH, HA reachability |

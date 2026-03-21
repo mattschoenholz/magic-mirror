@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-labelledby="title desc">
+  <title id="title">Exploration: passive airy centered</title>
+  <desc id="desc">Cooler background, extra vertical space between modules.</desc>
+  <rect width="1080" height="1920" fill="#0a0b0f"/>
+  <text x="540" y="220" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="112" font-weight="700" font-variant-numeric="tabular-nums">10:42</text>
+  <text x="540" y="292" text-anchor="middle" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="36" font-weight="400" letter-spacing="0.04em">Friday, March 20</text>
+  <text x="540" y="520" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="72" font-weight="600">72&#176;</text>
+  <text x="540" y="596" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="40" font-weight="500">Partly cloudy</text>
+  <text x="540" y="664" text-anchor="middle" fill="#6e6e78" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="400">Wed 68&#176;   &#183;   Thu 71&#176;   &#183;   Fri 69&#176;</text>
+  <text x="540" y="920" text-anchor="middle" fill="#7a7a85" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="24" font-weight="500" letter-spacing="0.2em">SCHOOL</text>
+  <text x="540" y="972" text-anchor="middle" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" font-weight="400">calendar.school</text>
+  <text x="540" y="1040" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="400">3:00 PM - Science fair setup</text>
+  <text x="540" y="1104" text-anchor="middle" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="400">Thu - Band concert, 7:00 PM</text>
+  <text x="540" y="1320" text-anchor="middle" fill="#7a7a85" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="24" font-weight="500" letter-spacing="0.2em">TASKS</text>
+  <text x="540" y="1372" text-anchor="middle" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" font-weight="400">todo.kid_chores</text>
+  <text x="540" y="1440" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="400">[ ] Finish math worksheet</text>
+  <text x="540" y="1504" text-anchor="middle" fill="#6e6e78" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="30" font-weight="400">[ ] Pack gym clothes</text>
+  <text x="540" y="1840" text-anchor="middle" fill="#2e3038" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="20" font-weight="400">exploration / passive / airy</text>
+</svg>

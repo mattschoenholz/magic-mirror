@@ -16,8 +16,9 @@ description: >-
 ## Instructions
 
 1. Read **`docs/MIRROR_CONTEXT.md`** end-to-end.
-2. Then open the role-specific doc (`docs/FSD.md`, `docs/ARCHITECTURE.md`, etc.) as needed.
-3. Load **domain reference skills** when work touches that layer:
+2. For **entity IDs, ICS URLs, secrets paths, Spotify/YouTube policy**, read **`docs/MIRROR_RUNTIME.md`** (and `config/mirror.runtime.example.yaml`).
+3. Then open the role-specific doc (`docs/FSD.md`, `docs/ARCHITECTURE.md`, etc.) as needed.
+4. Load **domain reference skills** when work touches that layer:
 
 | Skill | Use |
 |-------|-----|

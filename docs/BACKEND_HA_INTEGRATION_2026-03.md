@@ -36,6 +36,7 @@
 
 | Decision | Rule |
 |----------|------|
+| **Merge cap (implementation)** | While merging lists, the backend stops after **24** items (`todo_cap` in `snapshot.py`) to bound HA work; dedupe runs during this pass. |
 | **≤ 6 items (after merge/dedupe)** | Show **all** (completed + incomplete) as returned. |
 | **> 6 items** | Show **only incomplete** (`done: false`), **capped at 6**. Reduces clutter when the HA list is long and mostly historical completes. |
 
@@ -70,7 +71,7 @@
 
 | Area | File | Notes |
 |------|------|--------|
-| Snapshot assembly | `backend/mirror_backend/snapshot.py` | `build_snapshot`, `_weather_now_entity_chain`, `_forecast_entity_chain`, `_hourly_strip_next_six`, `_hourly_strip_relaxed`, todo filter |
+| Snapshot assembly | `backend/mirror_backend/snapshot.py` | `build_snapshot`, `_weather_now_entity_chain`, `_forecast_entity_chain`, `_hourly_strip_next_six`, `_hourly_strip_relaxed`, todo merge/dedupe/display filter; “now” tile uses `weather_map.weather_state_usable` |
 | HA calls | `backend/mirror_backend/ha_client.py` | `ha_get_forecasts`, `ha_get_todo_items`, `ha_ws_call_service`, unwrappers |
 | Weather labels/icons | `backend/mirror_backend/weather_map.py` | Condition → UI icon key / label |
 | Build stamp | `backend/mirror_backend/main.py` | `MIRROR_BACKEND_BUILD` — bump when shipping behavior users must verify |
@@ -82,7 +83,7 @@
 ## 5. Operations & caching
 
 - **`GET /api/health`** returns **`mirror_backend_build`**. After deploy, if it **does not** match `main.py`, the Pi is not running the new code (rsync path, no restart, wrong host).
-- **Static UI:** Middleware and/or query strings on assets may send **no-store** / version bumps so Chromium picks up new JS/CSS after deploy (see repo history around kiosk cache issues).
+- **Static UI:** `main.py` registers **`_NoCacheStaticMiddleware`**: non-`/api/` responses get **`Cache-Control: no-store`** (and `Pragma: no-cache`) so Chromium reloads HTML/JS/CSS after deploy; extra query-string bumps in assets are optional.
 - **Secrets:** Token only on disk on Pi/Mac; **FR-006** — browser never holds HA tokens.
 
 ---

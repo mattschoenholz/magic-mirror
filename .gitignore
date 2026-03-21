@@ -29,3 +29,6 @@ __pycache__/
 *.img
 *.iso
 *.zip
+
+# Local Cursor exports (optional; large)
+resources/cursor_design_documentation_for_mirror.md

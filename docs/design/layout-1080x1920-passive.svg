@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-labelledby="title desc">
+  <title id="title">Magic Mirror - passive mode wireframe (1080 x 1920)</title>
+  <desc id="desc">Dark background; centered type for clock, weather, placeholder school calendar and tasks. No decorative panels.</desc>
+  <rect width="1080" height="1920" fill="#0f0f10"/>
+  <!-- M-001 Clock - min 112px equivalent -->
+  <text x="540" y="200" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="112" font-weight="700">10:42</text>
+  <text x="540" y="268" text-anchor="middle" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="36" font-weight="500">Friday, Mar 20</text>
+  <!-- M-002 Today - min 72deg / 40 condition -->
+  <text x="540" y="420" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="72" font-weight="600">72&#176;</text>
+  <text x="540" y="486" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="40" font-weight="500">Partly cloudy</text>
+  <text x="540" y="548" text-anchor="middle" fill="#6e6e78" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="400">Wed 68&#176;   &#183;   Thu 71&#176;   &#183;   Fri 69&#176;</text>
+  <!-- M-005 calendar.school placeholder -->
+  <text x="540" y="668" text-anchor="middle" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="30" font-weight="500" letter-spacing="0.12em">SCHOOL - calendar.school</text>
+  <text x="540" y="722" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="400">3:00 PM - Science fair setup</text>
+  <text x="540" y="774" text-anchor="middle" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="400">Thu - Band concert, 7:00 PM</text>
+  <!-- M-006 todo.kid_chores placeholder -->
+  <text x="540" y="904" text-anchor="middle" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="30" font-weight="500" letter-spacing="0.12em">TASKS - todo.kid_chores</text>
+  <text x="540" y="958" text-anchor="middle" fill="#f2f2f4" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="400">[ ] Finish math worksheet</text>
+  <text x="540" y="1010" text-anchor="middle" fill="#a8a8b0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="400">[ ] Pack gym clothes</text>
+  <text x="540" y="1062" text-anchor="middle" fill="#6e6e78" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="400">[ ] Reading 20 min</text>
+  <!-- Safe area note (muted, design-only) -->
+  <text x="540" y="1840" text-anchor="middle" fill="#3a3a40" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="22" font-weight="400">1080 x 1920 &#183; passive &#183; typography only</text>
+</svg>

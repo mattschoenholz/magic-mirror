@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magic Mirror — design previews</title>
+  <link rel="stylesheet" href="preview-dock.css" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0a0a0c;
+      color: #e8e8ec;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.45;
+      padding: clamp(1rem, 3vw, 2rem);
+      padding-left: max(clamp(1rem, 3vw, 2rem), var(--preview-frame-inset));
+      padding-right: max(clamp(1rem, 3vw, 2rem), var(--preview-frame-inset));
+      padding-top: max(clamp(1rem, 3vw, 2rem), var(--preview-frame-inset));
+    }
+    h1 {
+      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.35rem;
+    }
+    .sub {
+      color: #8a8a94;
+      font-size: 0.95rem;
+      max-width: 42rem;
+      margin: 0 0 2rem;
+    }
+    .sub a { color: #9ad8ff; }
+    section {
+      margin-bottom: 2.75rem;
+    }
+    section h2 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #6e6e78;
+      margin: 0 0 1rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    article {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .frame {
+      aspect-ratio: 1080 / 1920;
+      width: 100%;
+      max-height: min(72vh, 920px);
+      margin: 0 auto;
+      background: #000;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+    }
+    .frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      vertical-align: top;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.5rem 0.75rem;
+    }
+    .meta strong {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .actions a {
+      font-size: 0.8rem;
+      color: #9ad8ff;
+      text-decoration: none;
+      padding: 0.35em 0.65em;
+      border: 1px solid #2a2a32;
+      border-radius: 4px;
+    }
+    .actions a:hover {
+      border-color: #4a4a58;
+      background: rgba(255,255,255,0.04);
+    }
+    .actions a.secondary { color: #a8a8b0; }
+  </style>
+</head>
+<body class="preview-has-dock">
+  <h1>Magic Mirror — design previews</h1>
+  <p class="sub">
+    1080×1920 portrait wireframes. <strong>Fullscreen</strong> opens the SVG fit to the display (use in <strong>kiosk</strong> on the Pi — no browser bars). <strong>Tap anywhere on the preview</strong> to return here.
+    Sync: <code style="background:#222;padding:0.15em 0.4em;border-radius:4px;font-size:0.85em">./scripts/sync-design-preview-to-pi.sh --open</code>
+    · Windowed (debug): <code style="background:#222;padding:0.15em 0.4em;border-radius:4px;font-size:0.85em">PREVIEW_WINDOWED=1 ./scripts/sync-design-preview-to-pi.sh --open</code>
+    · <a href="README.md">preview/README.md</a>
+  </p>
+
+  <section>
+    <h2>Baseline</h2>
+    <div class="grid">
+      <article>
+        <div class="frame"><img src="../layout-1080x1920-passive.svg" alt="Passive baseline" width="1080" height="1920" loading="lazy" /></div>
+        <div class="meta"><strong>Passive</strong></div>
+        <div class="actions">
+          <a href="viewer.html?src=../layout-1080x1920-passive.svg">Fullscreen</a>
+          <a class="secondary" href="../layout-1080x1920-passive.svg" target="_blank" rel="noopener">Raw SVG</a>
+        </div>
+      </article>
+      <article>
+        <div class="frame"><img src="../layout-1080x1920-pomodoro.svg" alt="Pomodoro baseline" width="1080" height="1920" loading="lazy" /></div>
+        <div class="meta"><strong>Pomodoro focus</strong></div>
+        <div class="actions">
+          <a href="viewer.html?src=../layout-1080x1920-pomodoro.svg">Fullscreen</a>
+          <a class="secondary" href="../layout-1080x1920-pomodoro.svg" target="_blank" rel="noopener">Raw SVG</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Explorations</h2>
+    <div class="grid">
+      <article>
+        <div class="frame"><img src="../exploration-passive-editorial.svg" alt="Editorial rail" width="1080" height="1920" loading="lazy" /></div>
+        <div class="meta"><strong>Editorial rail</strong></div>
+        <div class="actions">
+          <a href="viewer.html?src=../exploration-passive-editorial.svg">Fullscreen</a>
+          <a class="secondary" href="../exploration-passive-editorial.svg" target="_blank" rel="noopener">Raw SVG</a>
+        </div>
+      </article>
+      <article>
+        <div class="frame"><img src="../exploration-passive-airy.svg" alt="Airy center" width="1080" height="1920" loading="lazy" /></div>
+        <div class="meta"><strong>Airy center</strong></div>
+        <div class="actions">
+          <a href="viewer.html?src=../exploration-passive-airy.svg">Fullscreen</a>
+          <a class="secondary" href="../exploration-passive-airy.svg" target="_blank" rel="noopener">Raw SVG</a>
+        </div>
+      </article>
+      <article>
+        <div class="frame"><img src="../exploration-passive-swiss.svg" alt="Swiss compact" width="1080" height="1920" loading="lazy" /></div>
+        <div class="meta"><strong>Swiss / compact</strong></div>
+        <div class="actions">
+          <a href="viewer.html?src=../exploration-passive-swiss.svg">Fullscreen</a>
+          <a class="secondary" href="../exploration-passive-swiss.svg" target="_blank" rel="noopener">Raw SVG</a>
+        </div>
+      </article>
+      <article>
+        <div class="frame"><img src="../exploration-pomodoro-stark.svg" alt="Pomodoro stark" width="1080" height="1920" loading="lazy" /></div>
+        <div class="meta"><strong>Pomodoro stark</strong></div>
+        <div class="actions">
+          <a href="viewer.html?src=../exploration-pomodoro-stark.svg">Fullscreen</a>
+          <a class="secondary" href="../exploration-pomodoro-stark.svg" target="_blank" rel="noopener">Raw SVG</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="preview-dock" id="preview-dock" aria-label="Preview controls">
+    <div class="preview-dock-row">
+      <span style="color:var(--preview-muted);font-size:13px">Design gallery</span>
+      <button type="button" class="preview-dock-btn secondary" id="exit-help-btn">Exit kiosk…</button>
+    </div>
+    <div id="exit-panel" hidden>
+      <p>Web pages cannot close Chromium in <strong>kiosk</strong> mode. Use one of:</p>
+      <p><strong>From your Mac</strong> (copy command):</p>
+      <pre><code>ssh pi@mirror-pi4.local 'pkill -f chromium || pkill -f chromium-browser || true'</code></pre>
+      <p><strong>USB keyboard</strong> on the Pi: <strong>Alt+F4</strong> (may vary by desktop).</p>
+      <p><strong>Windowed preview</strong> (browser chrome back):</p>
+      <pre><code>PREVIEW_WINDOWED=1 ./scripts/sync-design-preview-to-pi.sh --open</code></pre>
+      <p><strong>Wood frame</strong> overlaps ~20–30px of the LCD — keep tappable controls inside the inset dock (see <code>preview-dock.css</code> / <code>tokens.md</code>).</p>
+    </div>
+  </footer>
+  <script src="preview-dock.js"></script>
+</body>
+</html>

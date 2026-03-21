@@ -17,7 +17,7 @@ Use **Raspberry Pi Imager** (Mac): select **Pi 4**, OS above, your **32 GB** car
 
 **Imager OS customization (gear icon)** — set before write:
 
-- **Hostname** — e.g. `mirror-pi4` (or your convention).
+- **Hostname** — e.g. `mirror-pi4` (mDNS on LAN: **`mirror-pi4.local`** — matches deploy/sync scripts in this repo).
 - **SSH** — enable; **public key** preferred (paste your Mac `~/.ssh/id_ed25519.pub`).
 - **User** — whatever you set in Imager (yours is **`pi`**). Use a strong password (or SSH keys).
 - **Wi‑Fi** — only if the mirror will use wireless; **Ethernet is preferable** for a wall-mounted display if you can run a cable.
@@ -46,7 +46,7 @@ Write the image, eject safely, install SD in the Pi.
 ## 3. First login
 
 - If **keyboard + mouse** are connected: complete wizard (locale, updates prompt, etc.).
-- If **headless**: wait ~1–2 minutes, then **`ssh pi@mirror-pi4.local`** (or `pi@<ip>` — use your hostname if different). Same LAN as the Pi.
+- If **headless**: wait ~1–2 minutes, then **`ssh pi@mirror-pi4.local`** (or `pi@<ip>` if mDNS does not resolve). Same LAN as the Pi.
 
 Update the system:
 
@@ -71,6 +71,8 @@ On the Pi **with desktop**:
 3. **Write these into** [PROJECT_BRIEF.md](PROJECT_BRIEF.md) inventory / “still to fill”: **Samsung model**, **native / negotiated resolution**, **Pi RAM** (`free -h`).
 
 **Confirmed example (your rig):** panel negotiates **1920×1080**; mirror is **portrait** — after rotation, the browser **viewport** is typically **1080×1920** CSS pixels (short side horizontal, long side vertical). Use the **stub** below to read the exact numbers.
+
+**Wood / picture frame overlap:** a built-in frame can cover **~20–30 px** of the LCD at the edges. Treat that as **extra bezel** for layout: keep **touch targets** and **important UI** inside a larger inset ([design/tokens.md](design/tokens.md), [design/preview/preview-dock.css](design/preview/preview-dock.css) for the preview harness).
 
 ### Portrait orientation (match physical mount)
 
@@ -152,7 +154,7 @@ Then **`xrandr`** can work: **`sudo raspi-config`** → **Advanced Options** →
 
 ```bash
 # On your Mac: cd into the magic-mirror repo first (so scripts/ exists).
-# User is **pi**; replace **mirror-pi4.local** with your Pi hostname or IP if different.
+# User is **pi**; host **mirror-pi4.local** (use `pi@<ip>` if mDNS fails).
 
 cd ~/Desktop/CurrentProjects/General/magic-mirror
 
@@ -161,6 +163,10 @@ ssh pi@mirror-pi4.local 'bash ~/pi-mirror-stub.sh --open'
 ```
 
 That creates **`~/mirror-stub/index.html`** on the Pi and launches kiosk. The script sets **`DISPLAY=:0`** when you use SSH so Chromium targets the **HDMI desktop** (remote shells have no display by default).
+
+**Login keyring / “new keyring” password dialog (no keyboard)** — Chromium may try to use **GNOME Keyring** and block on **Unlock Login Keyring**. For a wall-mounted Pi, add **`--password-store=basic`** so Chromium does not use the keyring (fine for kiosk; do not use for a shared PC with saved passwords). All stub / preview commands below include it.
+
+**Stuck on that dialog right now:** from your Mac, `ssh pi@mirror-pi4.local 'pkill -f chromium || true'` then relaunch with **`--password-store=basic`** (see commands below or re-run `sync-design-preview-to-pi.sh --open` from the repo after `git pull`).
 
 **SSH only (no keyboard/mouse on the Pi)** — remote shells lack a display, and Chromium’s **sandbox** often breaks when started from **sshd** (e.g. `Failed global descriptor lookup`). Use the **full environment + flags** below (stub page only; **`--no-sandbox`** is for this local test, not general browsing):
 
@@ -171,15 +177,17 @@ export DISPLAY=:0
 export XAUTHORITY="$HOME/.Xauthority"
 export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 chromium \
-  --no-sandbox --disable-dev-shm-usage \
+  --no-sandbox --disable-dev-shm-usage --password-store=basic \
   --kiosk --noerrdialogs --disable-infobars \
+  --no-first-run --disable-sync --disable-background-networking \
+  --disable-logging \
   "file:///home/pi/mirror-stub/index.html"
 ```
 
 **One shot from your Mac** (single command; replace host):
 
 ```bash
-ssh pi@YOUR_PI_HOST 'export DISPLAY=:0 XAUTHORITY=$HOME/.Xauthority XDG_RUNTIME_DIR=/run/user/$(id -u); chromium --no-sandbox --disable-dev-shm-usage --kiosk --noerrdialogs --disable-infobars "file:///home/pi/mirror-stub/index.html"'
+ssh pi@mirror-pi4.local 'export DISPLAY=:0 XAUTHORITY=$HOME/.Xauthority XDG_RUNTIME_DIR=/run/user/$(id -u); chromium --no-sandbox --disable-dev-shm-usage --password-store=basic --kiosk --noerrdialogs --disable-infobars --no-first-run --disable-sync --disable-background-networking --disable-logging "file:///home/pi/mirror-stub/index.html"'
 ```
 
 If `XDG_RUNTIME_DIR` is wrong, run `ls /run/user` on the Pi and use the numeric directory that matches **`id -u`** for `pi`.
@@ -189,6 +197,19 @@ Updated **`pi-mirror-stub.sh`** applies **`--no-sandbox`** and **`--disable-dev-
 **Autostart (optional):** if you want the stub every boot without SSH, add a **`.desktop`** file under **`~/.config/autostart/`** on the Pi with an `Exec=` line like the desktop case (you can omit **`--no-sandbox`** when the app is started by the graphical session). Example: [mirror-stub.desktop.example](../scripts/mirror-stub.desktop.example).
 
 **Exit kiosk:** **Alt+F4**, or SSH: `pkill chromium` (or `pkill -f chromium`).
+
+#### Chromium stderr on the Pi (often harmless)
+
+| Log line | Meaning | What to do |
+|----------|---------|------------|
+| `Opening: file://...` | **Not Chromium** — printed by **`sync-design-preview-to-pi.sh`** so you see which URL it launched. | Ignore. |
+| `Failed global descriptor lookup` | Chromium’s **sandbox** / shared-memory setup often breaks when the parent is **`sshd`**, or **`/dev/shm`** is small. | Use **`--no-sandbox --disable-dev-shm-usage`** (stub / design preview only — not for untrusted browsing). Export **`DISPLAY`**, **`XAUTHORITY`**, **`XDG_RUNTIME_DIR`** as above. If the window still appears, the line is usually **non-fatal**. |
+| `DEPRECATED_ENDPOINT` / `gcm` / `RegistrationRequest` | Chromium tried **Google Cloud Messaging** registration for sync/push; the server endpoint is deprecated — **cosmetic**. | **Ignore**, or use **`--disable-sync --disable-background-networking`** (included in updated stub / preview scripts). |
+| `GetVSyncParametersIfAvailable() failed` | **GPU / display** path can’t report vsync to the compositor — **common on Raspberry Pi + HDMI**. | **Ignore** if the page looks fine. Last resort: add **`--disable-gpu`** (can hurt scrolling/video). |
+
+These messages are **Chromium / graphics / Google background noise**, not your mirror app or Home Assistant failing. If the **design gallery** or **stub** is on screen, the launch **succeeded**.
+
+**Still seeing the same three lines in the terminal?** Some builds log them from sub-processes where **`--disable-logging` does not apply**. If the UI works, **ignore**. The design-preview helper [sync-design-preview-to-pi.sh](../scripts/sync-design-preview-to-pi.sh) **`--open`** now discards Chromium **stderr** by default so SSH is quiet; use **`PREVIEW_KEEP_CHROMIUM_STDERR=1`** before the same command if you need those lines for debugging.
 
 **Option — run only on the Pi** (if you already copied the repo or the script):
 
@@ -202,7 +223,7 @@ If Chromium is missing: `sudo apt install -y chromium`
 **Option B — Reach HA in browser (read-only sanity)**
 
 ```bash
-chromium --kiosk "http://YOUR_HA_IP:8123"
+chromium --password-store=basic --disable-logging --kiosk "http://YOUR_HA_IP:8123"
 ```
 
 Use the **IP** that works from the Pi (`ping` first). You only need to see the HA login page to prove **network + display**; **do not** leave HA credentials in kiosk mode for unattended use until you have the real mirror app.

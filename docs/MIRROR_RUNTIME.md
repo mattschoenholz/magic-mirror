@@ -54,7 +54,7 @@ Do **not** put token values in environment variables if avoidable (process lists
 
 Mirror Pi must resolve **`homeassistant.local`** (mDNS). If it fails in the field, set **`MIRROR_HA_URL`** to the Pi 5’s **static IP** (document the IP on the hardware label or home network docs — not in this public repo).
 
-### 3.2 Entity IDs (verified 2026-03-21 via HA MCP)
+### 3.2 Entity IDs (verified 2026-03-20 via HA MCP)
 
 Use **exact** `entity_id` strings:
 
