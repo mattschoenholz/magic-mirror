@@ -17,13 +17,14 @@ Open **`http://127.0.0.1:8780/`** — the UI loads and replaces demo data with l
 - **Defaults:** [config/mirror.runtime.example.yaml](../config/mirror.runtime.example.yaml) (committed).
 - **Overrides:** `config/mirror.runtime.local.yaml` (gitignored) — e.g. `home_assistant.base_url` with Pi 5 IP.
 - **Secrets:** [docs/MIRROR_RUNTIME.md](../docs/MIRROR_RUNTIME.md) — create `~/.config/mirror/ha_token` (mode `600`) with your long-lived HA token, or set `MIRROR_SECRETS_DIR` / `MIRROR_HA_TOKEN_FILE`.
+- **Weather / todos / HA API details:** [docs/BACKEND_HA_INTEGRATION_2026-03.md](../docs/BACKEND_HA_INTEGRATION_2026-03.md).
 
 ## Endpoints
 
 | Path | Purpose |
 |------|---------|
 | `GET /api/snapshot` | JSON payload matching `web/js/demo-data.js` shape (weather, calendar, todos, stubs for Spotify/YouTube). |
-| `GET /api/health` | `{ "ok": true }` |
+| `GET /api/health` | `{ "ok": true, "mirror_backend_build": "…" }` — compare to `mirror_backend.main.MIRROR_BACKEND_BUILD` after deploy. |
 
 ## Tests
 
@@ -46,10 +47,11 @@ export PYTHONPATH="$(pwd)"
 ## Pi deployment (from your Mac, no keyboard on Pi)
 
 ```bash
-export PI=pi@mirror-pi4
 cd ~/Desktop/CurrentProjects/General/magic-mirror
 ./scripts/deploy-mirror-to-pi.sh --all
 ```
+
+Default SSH target is **`pi@mirror-pi4.local`**. To use another host: `export PI=pi@192.168.x.x` before the script.
 
 Uses **`~/mirror-app/`** on the Pi (`web`, `backend`, `config`) and sets **`MIRROR_REPO_ROOT`** when starting **uvicorn**. Logs: **`/tmp/mirror-backend.log`** on the Pi.
 

@@ -60,21 +60,25 @@ Use **exact** `entity_id` strings:
 
 | Role | `entity_id` | Friendly name | Notes |
 |------|-------------|---------------|--------|
-| **Weather (Pirate Weather)** | **`weather.pirateweather`** | PirateWeather | Attribution in HA: *Powered by Pirate Weather* |
-| **Weather fallbacks** | Optional list **`entities.weather_entities`** in runtime YAML | e.g. `weather.forecast_home` | Backend uses the **first entity** with a usable state (`unknown` / `unavailable` skipped), then tries forecasts from each until hourly data exists. |
-| **Todo list** | **`todo.elliot`** (default) | e.g. Elliot / “Local To-do” in HA UI | **Friendly name ≠ `entity_id`.** Configure **`entities.todo_list`** or an ordered **`entities.todo_entities`** list in runtime YAML. Backend calls **`todo.get_items`** (WebSocket + REST fallbacks). |
+| **Weather (Open-Meteo)** | **`weather.home`** | Home | Hourly + daily via HA **`weather.get_forecasts`**; common secondary / hourly source. |
+| **Weather (Pirate Weather)** | **`weather.pirateweather`** | PirateWeather | Default first choice for **`entities.weather_now_entities`** and **`entities.forecast_weather_entities`** (often better *current* condition at night). Attribution in HA: *Powered by Pirate Weather* |
+| **“Now” tile chain** | **`entities.weather_now_entities`** | ordered list | Backend tries each entity’s **`state` → large tile** (condition, feels like, icon). Default: Pirate → `weather.home` → `weather.forecast_home`. If none work, falls back to **`entities.weather_entities`**. |
+| **Hourly strip chain** | **`entities.forecast_weather_entities`** | ordered list | **`weather.get_forecasts`** (`type: hourly`). First entity that returns rows wins. **Six** slots: forecast periods **strictly after** “now” (no second “Now” in the strip). If this key is **omitted**, backend uses **`weather_entities`** but tries **`weather.pirateweather` first** when it appears anywhere in that list. |
+| **Legacy fallbacks** | **`entities.weather_entities`** | e.g. `weather.forecast_home` | Used when **`weather_now_entities`** yields nothing usable; also drives the default hourly chain when **`forecast_weather_entities`** is omitted (with Pirate reordered first if listed). |
+| **Todo list** | **`todo.elliot`** (default) | e.g. Elliot / “Local To-do” in HA UI | **Friendly name ≠ `entity_id`.** Configure **`entities.todo_list`** or **`entities.todo_entities`**. Backend calls **`todo.get_items`**; parses HA’s **`service_response`** wrapper. **Empty list** usually means **no open (needs_action) tasks** — check HA’s To-do UI and entity state. |
 
-**Out of scope unless product changes:** `todo.shopping_list` as the primary list. **`weather.forecast_home`** is an **optional** fallback via **`entities.weather_entities`** (see row above).
+**Out of scope unless product changes:** `todo.shopping_list` as the primary list. **`weather.forecast_home`** remains an optional fallback in **`entities.weather_entities`**.
 
 ### 3.3 Mapping → first-screen UI (weather)
 
 Current UI expects **condition**, **feels like**, **precip %** (see `web/`).
 
-| UI field | Source on `weather.pirateweather` |
-|----------|-----------------------------------|
+| UI field | Source |
+|----------|--------|
 | Condition label | `state` (e.g. `cloudy` → humanize “Cloudy”) + icon map |
-| Feels like | `attributes.apparent_temperature` + `attributes.temperature_unit` |
-| Precipitation % | **Not** guaranteed on entity attributes alone. **Implementation:** use HA **`weather.get_forecasts`** (or equivalent for your HA core version) for `weather.pirateweather` and read **`precipitation_probability`** from the first relevant **hourly** or **daily** forecast entry. If missing, show **“—”** or omit (do not invent a number). |
+| Feels like | `attributes.apparent_temperature` or `temperature` + `temperature_unit` |
+| Hourly row | Same as above, from **`forecast_weather_entities`** (or **`weather_entities`**). **Six** entries: next forecast buckets after the current time (clock labels only). |
+| Precipitation % | From hourly/daily forecast rows when present (`precipitation_probability`, etc.). Open-Meteo hourly may expose **`precipitation`** (amount) instead of a probability — mirror may show **“—”** for POP. |
 
 Other useful attributes on the entity today: `temperature`, `humidity`, `wind_speed`, etc. — optional for future tiles.
 
@@ -82,7 +86,7 @@ Other useful attributes on the entity today: `temperature`, `humidity`, `wind_sp
 
 | UI field | Source |
 |----------|--------|
-| To-Do grid | Items from configured todo entity(ies), default **`todo.elliot`**, via **`todo.get_items`**. Map `status` / `completed` to done styling. Text from `title` / `summary` / `name` / `subject`. |
+| To-Do grid | Items from configured todo entity(ies), default **`todo.elliot`**, via **`todo.get_items`**. Map `status` / `completed` to done styling. Text from `title` / `summary` / `name` / `subject`. If **more than six** items are returned after merge/dedupe, the mirror shows **only incomplete** tasks, up to **six**. |
 
 ### 3.5 Alexa / Echo (v1)
 

@@ -50,7 +50,10 @@ Domain reference skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **
 | [DESIGN_READINESS.md](DESIGN_READINESS.md) | Checklist before UX theme; outputs in [design/](design/) |
 | [UI_MODES.md](UI_MODES.md) | Four UI modes, dual viewing distance, weather hierarchy |
 | [HA_DEV.md](HA_DEV.md) | HA on Pi 5 vs mirror Pi 4, MCP, token hygiene |
+| [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) | **Locked** HA entity IDs, ICS URLs, timezone, secrets layout, Spotify/YouTube policy |
+| [BACKEND_HA_INTEGRATION_2026-03.md](BACKEND_HA_INTEGRATION_2026-03.md) | **Snapshot / HA handoff:** weather-now vs hourly, todos overflow, API shapes, code map, new-machine checklist |
 | [PI_BRINGUP.md](PI_BRINGUP.md) | Mirror Pi 4 OS + display + network baseline |
+| [MAC_VS_PI_COMMANDS.md](MAC_VS_PI_COMMANDS.md) | **Copy-paste**: Mac Terminal vs SSH (no keyboard on Pi) |
 
 ---
 
@@ -71,7 +74,7 @@ Full detail in `agents/planner.md`. Phases **0–5**:
 
 - [ ] Long-lived token on Pi only; file perms **600**; never in git or browser bundle  
 - [ ] Prefer WebSocket for live state; define reconnect/backoff  
-- [ ] Whitelist service calls / intents; document entity IDs in ARCHITECTURE as templates only  
+- [ ] Whitelist service calls / intents; entity IDs for mirror tiles: **[MIRROR_RUNTIME.md](MIRROR_RUNTIME.md)**  
 - [ ] Behavior when HA unreachable: show stale state + indicator vs blank (decide in FSD)  
 - [ ] See **`.cursor/skills/mm-home-assistant/reference.md`** for API patterns
 
@@ -92,6 +95,7 @@ Full detail in `agents/planner.md`. Phases **0–5**:
 - **Night mode:** lower peak luminance, no decorative use of alarm reds/oranges  
 - **Voice:** always pair listening / success / error with **on-screen** state  
 - Layout safe area: account for bezel; canvas **1080×1920** portrait (verify with [PI_BRINGUP.md](PI_BRINGUP.md) stub)
+- **Wood / mechanical frame** can cover **~20–30 px** of the LCD at edges — keep touch targets and critical UI inside an **extra inset** (see [design/tokens.md](design/tokens.md) safe area)
 
 ---
 

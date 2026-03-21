@@ -1,7 +1,7 @@
 # Architecture — Wall Magic Mirror
 
-**Version:** 0.6 (draft)  
-**Last updated:** 2026-03-20
+**Version:** 0.8 (draft)  
+**Last updated:** 2026-03-21
 
 ---
 
@@ -53,10 +53,18 @@ flowchart LR
 
 ## 3. Integration boundaries
 
-- **Home Assistant (Pi 5):** Source of truth for **weather**, **calendar** (school), **todo/list** entities, **Pomodoro** timers, **mirror UI mode** (`input_select` or equivalent — see [UI_MODES.md](UI_MODES.md)). Mirror **displays**; limited **write** only if FSD whitelists (e.g. future “complete task” from UI).
+- **Home Assistant (Pi 5):** Source of truth for **weather**, **todo/list** entities, **Pomodoro** timers, **mirror UI mode** (`input_select` or equivalent — see [UI_MODES.md](UI_MODES.md)). **School calendar** for v1 is **not** HA — see [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) (ICS feeds on mirror backend). Mirror **displays**; limited **write** only if FSD whitelists (e.g. future “complete task” from UI).
 - **Echo Dot:** Wake word **“Echo”**. All **v1** voice paths end in **HA** for anything the mirror must show (use HA timers/scripts, not Alexa-only kitchen timers, for Pomodoro sync).
 - **GitHub:** Code + docs; no secrets.
 - **MCP (Cursor):** Dev PC → HA on Pi 5 — **`mm-dev-mcp-ha`**; see [HA_DEV.md](HA_DEV.md).
+
+### 3.1 Runtime contract (entities, ICS, secrets)
+
+**Canonical spec:** **[MIRROR_RUNTIME.md](MIRROR_RUNTIME.md)** — HA **`weather.pirateweather`**, **`todo.elliot`**, five Bishop Blanchet **ICS URLs** (fetched by mirror **backend**, 15‑min refresh), timezone **`America/Los_Angeles`**, Spotify Web API + YouTube rules, secrets paths.
+
+**Snapshot / HA client behavior (weather chains, hourly strip, todos, API quirks):** [BACKEND_HA_INTEGRATION_2026-03.md](BACKEND_HA_INTEGRATION_2026-03.md).
+
+**Example config (no secrets):** [config/mirror.runtime.example.yaml](../config/mirror.runtime.example.yaml). Local overrides: `config/mirror.runtime.local.yaml` (gitignored).
 
 ---
 
@@ -68,6 +76,7 @@ flowchart LR
 | **Voice (v1)** | Echo only vs Echo + AIY on Pi | **Chosen: Echo → HA only**; AIY **deferred** |
 | **Display mode** | Portrait FHD | **1080×1920** CSS viewport (1920×1080 panel rotated); confirm on device |
 | **Audio (v1)** | Pi vs Echo | **Echo + speakers** for TTS/music; Pi **HDMI display** primary |
+| **Mirror local API** | Python **FastAPI** in `backend/` | **Chosen 2026-03-21** — [backend/README.md](../backend/README.md) |
 | OS | Pi OS Lite + kiosk vs desktop | TBD |
 | Remote access | SSH / Tailscale | TBD |
 
