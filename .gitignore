@@ -2,6 +2,8 @@
 .env
 .env.*
 !.env.example
+config/mirror.runtime.local.yaml
+config/mirror.runtime.local.yml
 *.pem
 id_rsa*
 
@@ -12,12 +14,15 @@ Thumbs.db
 .idea/
 .vscode/
 
+# Python (mirror backend venv — optional local install)
+backend/.venv/
+
 # Future common stacks (uncomment when used)
 # node_modules/
 # dist/
 # build/
-# __pycache__/
-# *.pyc
+__pycache__/
+*.pyc
 # .venv/
 
 # Large artifacts (prefer LFS or do not commit)
