@@ -267,10 +267,35 @@ For stable URLs and firewall rules, reserve **DHCP** on your router for the Pi�
 
 ---
 
-## 9. What’s *not* in this doc yet
+## 9. Boot auto-start (power-loss recovery)
 
-- **systemd** kiosk unit and **magic-mirror-backend** (comes with app implementation).
-- **HA long-lived token** on the Pi — only after backend exists; file perms **600**, never in git ([MIRROR_CONTEXT.md](MIRROR_CONTEXT.md)).
+Once the app is deployed (`~/mirror-app` exists with backend venv), install boot services:
+
+```bash
+cd ~/mirror-app
+bash scripts/install-pi-autostart.sh
+```
+
+This enables:
+
+- `mirror-backend.service` → uvicorn on `:8780`
+- `mirror-kiosk.service` → Chromium kiosk to `http://127.0.0.1:8780/`
+
+Both are `Restart=always` and enabled at boot, so the mirror returns after power loss.
+
+Quick checks:
+
+```bash
+systemctl status mirror-backend.service --no-pager
+systemctl status mirror-kiosk.service --no-pager
+curl -sS http://127.0.0.1:8780/api/health
+```
+
+Disable:
+
+```bash
+sudo systemctl disable --now mirror-kiosk.service mirror-backend.service
+```
 
 ---
 

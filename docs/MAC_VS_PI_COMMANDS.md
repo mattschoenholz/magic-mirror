@@ -46,6 +46,28 @@ cd ~/Desktop/CurrentProjects/General/magic-mirror
 
 **`--install-deps`** · **`--copy-ha-token`** · **`--start-backend`** · **`--open`** — see `./scripts/deploy-mirror-to-pi.sh --help`
 
+### Enable auto-restart after power loss (recommended)
+
+Install systemd units on the Pi so both backend and Chromium kiosk auto-start on boot:
+
+```bash
+cd ~/Desktop/CurrentProjects/General/magic-mirror
+./scripts/deploy-mirror-to-pi.sh --install-deps --enable-autostart
+```
+
+Verify from your Mac:
+
+```bash
+ssh pi@mirror-pi4.local 'systemctl status mirror-backend.service --no-pager | sed -n "1,14p"'
+ssh pi@mirror-pi4.local 'systemctl status mirror-kiosk.service --no-pager | sed -n "1,14p"'
+```
+
+Disable later if needed:
+
+```bash
+ssh pi@mirror-pi4.local 'sudo systemctl disable --now mirror-kiosk.service mirror-backend.service'
+```
+
 ---
 
 ## Test the API from your Mac (same LAN)

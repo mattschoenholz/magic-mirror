@@ -10,6 +10,8 @@
 #   ./scripts/deploy-mirror-to-pi.sh
 # With venv refresh + restart + browser:
 #   ./scripts/deploy-mirror-to-pi.sh --install-deps --start-backend --open
+# Enable boot-time recovery (systemd backend + kiosk):
+#   ./scripts/deploy-mirror-to-pi.sh --install-deps --enable-autostart
 #
 # Remote layout: ~/mirror-app/{web,backend,config}  (matches MIRROR_REPO_ROOT on Pi)
 #
@@ -37,6 +39,7 @@ INSTALL_DEPS=0
 COPY_HA_TOKEN=0
 START_BACKEND=0
 OPEN_BROWSER=0
+ENABLE_AUTOSTART=0
 
 for a in "$@"; do
   case "$a" in
@@ -44,6 +47,7 @@ for a in "$@"; do
     --copy-ha-token) COPY_HA_TOKEN=1 ;;
     --start-backend) START_BACKEND=1 ;;
     --open) OPEN_BROWSER=1 ;;
+    --enable-autostart) ENABLE_AUTOSTART=1 ;;
     --all)
       INSTALL_DEPS=1
       COPY_HA_TOKEN=1
@@ -51,7 +55,7 @@ for a in "$@"; do
       OPEN_BROWSER=1
       ;;
     -h|--help)
-      echo "Usage: $0 [--all] [--install-deps] [--copy-ha-token] [--start-backend] [--open]"
+      echo "Usage: $0 [--all] [--install-deps] [--copy-ha-token] [--start-backend] [--open] [--enable-autostart]"
       echo "  Default SSH: pi@mirror-pi4.local  Override: export PI=pi@host"
       echo "  SSH multiplexing (fewer passwords): on by default; MIRROR_SSH_NO_MUX=1 to disable"
       exit 0
@@ -60,14 +64,15 @@ for a in "$@"; do
 done
 
 # Rsync does not always create missing parent dirs on the receiver; ensure tree exists.
-echo "==> mkdir -p ~/${RDIR}/{web,backend,config} on Pi"
+echo "==> mkdir -p ~/${RDIR}/{web,backend,config,scripts} on Pi"
 # shellcheck disable=SC2029
-ssh "${_SSH_EXTRA[@]}" "$TARGET" "mkdir -p \"\$HOME/${RDIR}/web\" \"\$HOME/${RDIR}/backend\" \"\$HOME/${RDIR}/config\""
+ssh "${_SSH_EXTRA[@]}" "$TARGET" "mkdir -p \"\$HOME/${RDIR}/web\" \"\$HOME/${RDIR}/backend\" \"\$HOME/${RDIR}/config\" \"\$HOME/${RDIR}/scripts\""
 
 echo "==> rsync → ${TARGET}:~/${RDIR}/"
 rsync -avz --delete "${ROOT}/web/" "${TARGET}:~/${RDIR}/web/"
 rsync -avz --delete --exclude ".venv" "${ROOT}/backend/" "${TARGET}:~/${RDIR}/backend/"
 rsync -avz "${ROOT}/config/" "${TARGET}:~/${RDIR}/config/"
+rsync -avz "${ROOT}/scripts/" "${TARGET}:~/${RDIR}/scripts/"
 
 if [[ "$INSTALL_DEPS" -eq 1 ]]; then
   echo "==> Python venv + pip on Pi"
@@ -86,6 +91,12 @@ if [[ "$COPY_HA_TOKEN" -eq 1 ]]; then
   else
     echo "WARN: No ${HOME}/.config/mirror/ha_token on this Mac — skipping (--copy-ha-token)." >&2
   fi
+fi
+
+if [[ "$ENABLE_AUTOSTART" -eq 1 ]]; then
+  echo "==> Install/enable systemd autostart services on Pi"
+  # shellcheck disable=SC2029
+  ssh "${_SSH_EXTRA[@]}" "$TARGET" "chmod +x \"\$HOME/${RDIR}/scripts/install-pi-autostart.sh\" \"\$HOME/${RDIR}/scripts/pi-launch-kiosk.sh\" && MIRROR_APP_DIR=\"\$HOME/${RDIR}\" \"\$HOME/${RDIR}/scripts/install-pi-autostart.sh\""
 fi
 
 if [[ "$START_BACKEND" -eq 1 ]]; then
