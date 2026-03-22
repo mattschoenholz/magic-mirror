@@ -14,7 +14,7 @@
 # (Restart=always + DRM repaint). Set MIRROR_DISPLAY_SLEEP_STOP_KIOSK=0 to skip.
 set -euo pipefail
 
-METHOD="${MIRROR_DISPLAY_SLEEP_METHOD:-hdmi}"
+METHOD="${MIRROR_DISPLAY_SLEEP_METHOD:-both}"
 
 stop_mirror_kiosk_if_configured() {
   [[ "${MIRROR_DISPLAY_SLEEP_STOP_KIOSK:-1}" != "1" ]] && return 0
@@ -143,7 +143,7 @@ case "$ACTION" in
     ;;
   *)
     echo "Usage: $0 off|on|status" >&2
-    echo "  MIRROR_DISPLAY_SLEEP_METHOD=hdmi|cec|both  (default: hdmi)" >&2
+    echo "  MIRROR_DISPLAY_SLEEP_METHOD=hdmi|cec|both  (default: both)" >&2
     echo "  MIRROR_DISPLAY_SLEEP_STOP_KIOSK=0 to not stop/start mirror-kiosk.service" >&2
     exit 1
     ;;

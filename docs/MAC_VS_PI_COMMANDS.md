@@ -70,7 +70,9 @@ ssh pi@mirror-pi4.local 'sudo systemctl disable --now mirror-kiosk.service mirro
 
 ### Nightly display sleep (default **23:00** off, **06:00** on — Pi **local** time)
 
-Uses `vcgencmd display_power` (HDMI blank) by default; optional **HDMI-CEC** if you set `MIRROR_DISPLAY_SLEEP_METHOD=cec` or `both` and install **`cec-utils`**. See [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) §8.
+Uses **`both`** by default: **`vcgencmd`** (HDMI blank) **and** **`cec-client`** (TV standby over HDMI-CEC). Install **`cec-utils`** on the Pi once:  
+`ssh pi@mirror-pi4.local 'sudo apt-get install -y cec-utils'`.  
+Override with `MIRROR_DISPLAY_SLEEP_METHOD=hdmi` if you skip CEC. See [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) §8.
 
 ```bash
 cd ~/Desktop/CurrentProjects/General/magic-mirror

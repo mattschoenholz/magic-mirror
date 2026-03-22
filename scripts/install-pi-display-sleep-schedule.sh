@@ -21,7 +21,7 @@ ENV_FILE="${SERVICE_DIR}/mirror-display-sleep.env"
 
 MIRROR_SLEEP_OFF="${MIRROR_SLEEP_OFF:-23:00}"
 MIRROR_SLEEP_ON="${MIRROR_SLEEP_ON:-06:00}"
-METHOD="${MIRROR_DISPLAY_SLEEP_METHOD:-hdmi}"
+METHOD="${MIRROR_DISPLAY_SLEEP_METHOD:-both}"
 
 if ! command -v sudo >/dev/null 2>&1; then
   echo "sudo is required." >&2
@@ -31,6 +31,11 @@ fi
 if [[ ! -x "$SCRIPT" ]]; then
   echo "Missing executable $SCRIPT — deploy the repo to the Pi first." >&2
   exit 1
+fi
+
+if [[ "$METHOD" == "cec" || "$METHOD" == "both" ]] && ! command -v cec-client >/dev/null 2>&1; then
+  echo "WARN: MIRROR_DISPLAY_SLEEP_METHOD=$METHOD but cec-client missing." >&2
+  echo "      Install: sudo apt-get install -y cec-utils" >&2
 fi
 
 parse_hhmm() {

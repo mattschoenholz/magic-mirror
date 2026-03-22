@@ -63,4 +63,4 @@ school_calendar:
 # display_sleep:
 #   off_time: "23:00" # local wall clock
 #   on_time: "06:00"
-#   method: "hdmi" # hdmi | cec | both — see docs/MIRROR_RUNTIME.md §8
+#   method: "both" # hdmi | cec | both — default deploy uses both (cec-utils on Pi)

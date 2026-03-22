@@ -109,7 +109,7 @@ if [[ "$INSTALL_DISPLAY_SLEEP" -eq 1 ]]; then
   echo "==> Install nightly display sleep timers on Pi"
   OFF="${MIRROR_SLEEP_OFF:-23:00}"
   ON="${MIRROR_SLEEP_ON:-06:00}"
-  DSM="${MIRROR_DISPLAY_SLEEP_METHOD:-hdmi}"
+  DSM="${MIRROR_DISPLAY_SLEEP_METHOD:-both}"
   # shellcheck disable=SC2029
   ssh "${_SSH_EXTRA[@]}" "$TARGET" "chmod +x \"\$HOME/${RDIR}/scripts/install-pi-display-sleep-schedule.sh\" \"\$HOME/${RDIR}/scripts/pi-display-sleep.sh\" && MIRROR_APP_DIR=\"\$HOME/${RDIR}\" MIRROR_SLEEP_OFF=\"${OFF}\" MIRROR_SLEEP_ON=\"${ON}\" MIRROR_DISPLAY_SLEEP_METHOD=\"${DSM}\" \"\$HOME/${RDIR}/scripts/install-pi-display-sleep-schedule.sh\""
 fi
