@@ -15,6 +15,9 @@
 # If mirror-kiosk.service is installed (systemd Chromium), it must be stopped before HDMI
 # blanking — otherwise Chromium/Wayland can turn the panel back on within seconds
 # (Restart=always + DRM repaint). Set MIRROR_DISPLAY_SLEEP_STOP_KIOSK=0 to skip.
+#
+# For CEC-only “instant” sleep (TV standby via CEC, keep Chromium running): METHOD=cec,
+# STOP_KIOSK=0, USE_WLR=0 — see docs/MIRROR_RUNTIME.md §8.
 set -euo pipefail
 
 METHOD="${MIRROR_DISPLAY_SLEEP_METHOD:-both}"
