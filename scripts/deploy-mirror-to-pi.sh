@@ -12,9 +12,10 @@
 #   ./scripts/deploy-mirror-to-pi.sh --install-deps --start-backend --open
 # Enable boot-time recovery (systemd backend + kiosk):
 #   ./scripts/deploy-mirror-to-pi.sh --install-deps --enable-autostart
-# Nightly display blank + morning restore (local Pi time, default 23:00 / 06:00):
+# Nightly display sleep + morning wake (local Pi time, default 23:00 / 06:00):
 #   ./scripts/deploy-mirror-to-pi.sh --install-display-sleep
-#   MIRROR_SLEEP_OFF=23:30 MIRROR_SLEEP_ON=7:00 MIRROR_DISPLAY_SLEEP_METHOD=both ./scripts/deploy-mirror-to-pi.sh --install-display-sleep
+#   MIRROR_SLEEP_PROFILE=both ./scripts/deploy-mirror-to-pi.sh --install-display-sleep   # harder blank
+#   MIRROR_SLEEP_OFF=23:30 MIRROR_SLEEP_ON=7:00 ./scripts/deploy-mirror-to-pi.sh --install-display-sleep
 #
 # Remote layout: ~/mirror-app/{web,backend,config}  (matches MIRROR_REPO_ROOT on Pi)
 #
@@ -63,7 +64,7 @@ for a in "$@"; do
       echo "Usage: $0 [--all] [--install-deps] [--copy-ha-token] [--start-backend] [--open] [--enable-autostart] [--install-display-sleep]"
       echo "  Default SSH: pi@mirror-pi4.local  Override: export PI=pi@host"
       echo "  SSH multiplexing (fewer passwords): on by default; MIRROR_SSH_NO_MUX=1 to disable"
-      echo "  Display sleep env: MIRROR_SLEEP_OFF MIRROR_SLEEP_ON MIRROR_DISPLAY_SLEEP_METHOD"
+      echo "  Display sleep env: MIRROR_SLEEP_OFF MIRROR_SLEEP_ON MIRROR_SLEEP_PROFILE (instant|both)"
       exit 0
       ;;
   esac
@@ -109,9 +110,9 @@ if [[ "$INSTALL_DISPLAY_SLEEP" -eq 1 ]]; then
   echo "==> Install nightly display sleep timers on Pi"
   OFF="${MIRROR_SLEEP_OFF:-23:00}"
   ON="${MIRROR_SLEEP_ON:-06:00}"
-  DSM="${MIRROR_DISPLAY_SLEEP_METHOD:-both}"
+  PROFILE="${MIRROR_SLEEP_PROFILE:-instant}"
   # shellcheck disable=SC2029
-  ssh "${_SSH_EXTRA[@]}" "$TARGET" "chmod +x \"\$HOME/${RDIR}/scripts/install-pi-display-sleep-schedule.sh\" \"\$HOME/${RDIR}/scripts/pi-display-sleep.sh\" && MIRROR_APP_DIR=\"\$HOME/${RDIR}\" MIRROR_SLEEP_OFF=\"${OFF}\" MIRROR_SLEEP_ON=\"${ON}\" MIRROR_DISPLAY_SLEEP_METHOD=\"${DSM}\" \"\$HOME/${RDIR}/scripts/install-pi-display-sleep-schedule.sh\""
+  ssh "${_SSH_EXTRA[@]}" "$TARGET" "chmod +x \"\$HOME/${RDIR}/scripts/install-pi-display-sleep-schedule.sh\" \"\$HOME/${RDIR}/scripts/pi-display-sleep.sh\" && MIRROR_APP_DIR=\"\$HOME/${RDIR}\" MIRROR_SLEEP_OFF=\"${OFF}\" MIRROR_SLEEP_ON=\"${ON}\" MIRROR_SLEEP_PROFILE=\"${PROFILE}\" \"\$HOME/${RDIR}/scripts/install-pi-display-sleep-schedule.sh\""
 fi
 
 if [[ "$START_BACKEND" -eq 1 ]]; then

@@ -70,19 +70,19 @@ ssh pi@mirror-pi4.local 'sudo systemctl disable --now mirror-kiosk.service mirro
 
 ### Nightly display sleep (default **23:00** off, **06:00** on — Pi **local** time)
 
-Uses **`both`** by default: **`vcgencmd`** (HDMI blank) **and** **`cec-client`** (TV standby over HDMI-CEC). Install **`cec-utils`** on the Pi once:  
+Default **`MIRROR_SLEEP_PROFILE=instant`**: CEC TV standby only; kiosk keeps running; fast wake. Install **`cec-utils`** on the Pi once:  
 `ssh pi@mirror-pi4.local 'sudo apt-get install -y cec-utils'`.  
-Override with `MIRROR_DISPLAY_SLEEP_METHOD=hdmi` if you skip CEC. See [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) §8.
+Harder blank (stop kiosk + HDMI + Wayland + CEC): `MIRROR_SLEEP_PROFILE=both`. See [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) §8.
 
 ```bash
 cd ~/Desktop/CurrentProjects/General/magic-mirror
 ./scripts/deploy-mirror-to-pi.sh --install-display-sleep
 ```
 
-Custom times / CEC:
+Custom times / profile:
 
 ```bash
-MIRROR_SLEEP_OFF=23:00 MIRROR_SLEEP_ON=6:30 MIRROR_DISPLAY_SLEEP_METHOD=both \
+MIRROR_SLEEP_OFF=23:00 MIRROR_SLEEP_ON=6:30 MIRROR_SLEEP_PROFILE=both \
   ./scripts/deploy-mirror-to-pi.sh --install-display-sleep
 ```
 

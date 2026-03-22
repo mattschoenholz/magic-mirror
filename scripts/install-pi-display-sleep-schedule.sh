@@ -6,7 +6,9 @@
 #   MIRROR_APP_DIR       — default ~/mirror-app
 #   MIRROR_SLEEP_OFF     — "HH:MM" default 23:00
 #   MIRROR_SLEEP_ON      — "HH:MM" default 06:00
-#   MIRROR_DISPLAY_SLEEP_METHOD — passed into pi-display-sleep.sh (hdmi|cec|both)
+#   MIRROR_SLEEP_PROFILE — instant | both (default: instant)
+#     instant = CEC TV standby only; kiosk keeps running; fast wake (see MIRROR_RUNTIME.md §8)
+#     both    = stop kiosk + wlr-randr + vcgencmd + CEC (harder blank, slower wake)
 #
 set -euo pipefail
 
@@ -21,7 +23,24 @@ ENV_FILE="${SERVICE_DIR}/mirror-display-sleep.env"
 
 MIRROR_SLEEP_OFF="${MIRROR_SLEEP_OFF:-23:00}"
 MIRROR_SLEEP_ON="${MIRROR_SLEEP_ON:-06:00}"
-METHOD="${MIRROR_DISPLAY_SLEEP_METHOD:-both}"
+PROFILE="${MIRROR_SLEEP_PROFILE:-instant}"
+
+case "$PROFILE" in
+  instant)
+    METHOD=cec
+    STOP_KIOSK=0
+    USE_WLR=0
+    ;;
+  both)
+    METHOD=both
+    STOP_KIOSK=1
+    USE_WLR=1
+    ;;
+  *)
+    echo "MIRROR_SLEEP_PROFILE must be 'instant' or 'both' (got: $PROFILE)" >&2
+    exit 1
+    ;;
+esac
 
 if ! command -v sudo >/dev/null 2>&1; then
   echo "sudo is required." >&2
@@ -34,7 +53,7 @@ if [[ ! -x "$SCRIPT" ]]; then
 fi
 
 if [[ "$METHOD" == "cec" || "$METHOD" == "both" ]] && ! command -v cec-client >/dev/null 2>&1; then
-  echo "WARN: MIRROR_DISPLAY_SLEEP_METHOD=$METHOD but cec-client missing." >&2
+  echo "WARN: method uses CEC but cec-client missing." >&2
   echo "      Install: sudo apt-get install -y cec-utils" >&2
 fi
 
@@ -56,7 +75,7 @@ ON_CAL="$(parse_hhmm "$MIRROR_SLEEP_ON")" || exit 1
 IFS=: read -r OFF_H OFF_M <<<"$OFF_CAL"
 IFS=: read -r ON_H ON_M <<<"$ON_CAL"
 
-echo "Using schedule (Pi local timezone): OFF ${OFF_H}:${OFF_M}  ON ${ON_H}:${ON_M}  method=${METHOD}"
+echo "Using profile=${PROFILE}  schedule OFF ${OFF_H}:${OFF_M}  ON ${ON_H}:${OFF_M}  method=${METHOD}  STOP_KIOSK=${STOP_KIOSK}  USE_WLR=${USE_WLR}"
 if command -v timedatectl >/dev/null 2>&1; then
   timedatectl status --no-pager | sed -n '1,6p' || true
 fi
@@ -64,15 +83,15 @@ fi
 echo "Installing ${ENV_FILE}"
 sudo tee "$ENV_FILE" >/dev/null <<EOF
 # Managed by install-pi-display-sleep-schedule.sh
+# MIRROR_SLEEP_PROFILE=${PROFILE}
 MIRROR_DISPLAY_SLEEP_METHOD=${METHOD}
-MIRROR_DISPLAY_SLEEP_STOP_KIOSK=1
-MIRROR_DISPLAY_SLEEP_USE_WLR=1
+MIRROR_DISPLAY_SLEEP_STOP_KIOSK=${STOP_KIOSK}
+MIRROR_DISPLAY_SLEEP_USE_WLR=${USE_WLR}
 # If CEC scan shows no TV, try the other HDMI: MIRROR_CEC_DEVICE=/dev/cec1
 #
-# Optional instant profile (CEC TV standby only; kiosk keeps running — see MIRROR_RUNTIME.md §8):
-# MIRROR_DISPLAY_SLEEP_METHOD=cec
-# MIRROR_DISPLAY_SLEEP_STOP_KIOSK=0
-# MIRROR_DISPLAY_SLEEP_USE_WLR=0
+# Harder blank (stop kiosk + Wayland + vcgencmd + CEC): reinstall with
+#   MIRROR_SLEEP_PROFILE=both ${APP_DIR}/scripts/install-pi-display-sleep-schedule.sh
+# or set METHOD=both, STOP_KIOSK=1, USE_WLR=1 by hand.
 EOF
 sudo chmod 644 "$ENV_FILE"
 

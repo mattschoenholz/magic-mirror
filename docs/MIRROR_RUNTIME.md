@@ -165,7 +165,14 @@ Auth files on Pi when enabled — same secrets dir pattern as §2.
 |--------|----------|
 | **`hdmi`** | **`vcgencmd display_power`** — blanks Pi HDMI output. TV may show **no signal** or dim; no extra packages. |
 | **`cec`** | **`cec-client`** (package **`cec-utils`**) — asks the TV to **standby** over **HDMI-CEC** (Samsung **Anynet+** on). May need **`sudo`** for `/dev/cec0`; wake is TV‑model dependent. |
-| **`both`** (default for deploy) | HDMI blank **and** CEC standby — use when the **backlight stays on** with HDMI-only; install **`sudo apt install -y cec-utils`** on the Pi first. |
+| **`both`** | HDMI blank **and** CEC standby — use when the **backlight stays on** with HDMI-only or Chromium keeps re-enabling the output; install **`sudo apt install -y cec-utils`** on the Pi first. |
+
+**Deploy profile** (`MIRROR_SLEEP_PROFILE` — written to **`/etc/systemd/system/mirror-display-sleep.env`** by the install script):
+
+| Profile | Effect |
+|---------|--------|
+| **`instant`** (default) | **`METHOD=cec`**, **`STOP_KIOSK=0`**, **`USE_WLR=0`** — TV standby via CEC only; **kiosk keeps running**; **fast wake**. |
+| **`both`** | **`METHOD=both`**, **`STOP_KIOSK=1`**, **`USE_WLR=1`** — stop kiosk, Wayland output off, **`vcgencmd`**, and CEC — **harder blank**, **slower wake**. |
 
 **TV checklist (required for CEC to do anything):**
 
@@ -174,20 +181,14 @@ Auth files on Pi when enabled — same secrets dir pattern as §2.
 3. **Pi:** prefer **HDMI0** (the port **next to USB-C**) for CEC.
 4. Re-check: **`sudo ~/mirror-app/scripts/pi-display-sleep.sh cec-scan`** — you want to see a **TV** (or similar), not only **Recorder 1**.
 
-**Do you need to kill the mirror UI?** **No**, if you only want the **TV** to go to standby over CEC. The kiosk exists because **HDMI blanking** (`vcgencmd` / `wlr-randr`) was fighting Chromium — the compositor would turn the output back on. If you **don’t** blank HDMI and **only** send `standby`/`on` to the TV, Chromium can keep running; wake is **faster** (no Chromium cold start). Use this **“instant”** profile in `/etc/systemd/system/mirror-display-sleep.env`:
+**Why “instant” is the default:** **HDMI blanking** (`vcgencmd` / `wlr-randr`) can fight **Chromium** — the compositor turns the output back on — which is why the **`both`** profile **stops `mirror-kiosk`** before a hard blank. If you **only** send CEC `standby`/`on` to the TV (**`instant`**), Chromium can keep running; wake is **faster** (no cold start). Tradeoff: Pi uses **full power** overnight; if CEC fails, the **mirror image may still be visible** until you fix CEC or switch to **`MIRROR_SLEEP_PROFILE=both`**.
 
-```text
-MIRROR_DISPLAY_SLEEP_METHOD=cec
-MIRROR_DISPLAY_SLEEP_STOP_KIOSK=0
-MIRROR_DISPLAY_SLEEP_USE_WLR=0
-```
-
-Edit the env file on the Pi (or redeploy **`--install-display-sleep`** with the right env vars from your Mac). The oneshot services read **`EnvironmentFile`** on each run; **`sudo systemctl restart mirror-display-sleep-off.timer mirror-display-sleep-on.timer`** is optional (forces the next trigger to use the file you just saved). Tradeoff: Pi uses **full power** overnight (CPU/GPU still on); if CEC fails, the **mirror image may still be visible** on the panel until you fix CEC or fall back to the **`both`** profile.
+From the Mac, default install is **`instant`**: `./scripts/deploy-mirror-to-pi.sh --install-display-sleep`. For the harder blank: `MIRROR_SLEEP_PROFILE=both ./scripts/deploy-mirror-to-pi.sh --install-display-sleep`. On the Pi you can edit **`mirror-display-sleep.env`** or re-run the install script with the same variable. The oneshot services read **`EnvironmentFile`** on each run; **`sudo systemctl restart mirror-display-sleep-off.timer mirror-display-sleep-on.timer`** is optional after edits.
 
 **TV OSD / banners when the set comes on:** There is **no standard Pi/CEC command** to suppress Samsung’s **on-screen menus** (input name, Anynet+, “new device,” etc.) — that’s **TV firmware**. Reduce noise in the TV’s own menus: **disable Store/Demo mode**, use **Home** (not retail) mode, turn off **logo/indicator** options if listed, **reduce HDMI CEC notifications** / device discovery prompts where the model allows, and **disable Smart Hub** startup banners if present. Exact paths vary by **Samsung model year**; treat as a one-time TV setup task, not something the mirror repo can automate.
 
 **Install:** [scripts/install-pi-display-sleep-schedule.sh](../scripts/install-pi-display-sleep-schedule.sh) (creates `mirror-display-sleep-off.timer` / `mirror-display-sleep-on.timer`). From Mac: `./scripts/deploy-mirror-to-pi.sh --install-display-sleep` (see [MAC_VS_PI_COMMANDS.md](MAC_VS_PI_COMMANDS.md)).
-**Manual test:** `~/mirror-app/scripts/pi-display-sleep.sh off` then `on` (same `MIRROR_DISPLAY_SLEEP_METHOD` as the install).
+**Manual test:** `~/mirror-app/scripts/pi-display-sleep.sh off` then `on` (env matches **`mirror-display-sleep.env`** / your profile).
 
 **Disable:** `sudo systemctl disable --now mirror-display-sleep-off.timer mirror-display-sleep-on.timer`
 
@@ -217,7 +218,7 @@ Edit the env file on the Pi (or redeploy **`--install-display-sleep`** with the 
 | 2026-03-21 | Initial locked spec: HA entities, five ICS feeds, timezone, secrets layout, Spotify/YouTube rules. |
 | 2026-03-21 | Backend = Python FastAPI; `/api/snapshot` + static `web/`. |
 | 2026-03-21 | §8 Display sleep: `vcgencmd` + optional CEC; systemd timers; deploy flag. |
-| 2026-03-22 | §8 Default sleep method **`both`**; **`cec-utils`** on Pi for CEC path. |
+| 2026-03-22 | §8 Deploy default **`MIRROR_SLEEP_PROFILE=instant`** (CEC-only); **`both`** still available; **`cec-utils`** on Pi for CEC path. |
 | 2026-03-22 | §8 Wayland **`wlr-randr`** output off/on; **`cec-scan`** when TV missing from CEC bus. |
 | 2026-03-22 | §8 TV checklist: Samsung **Anynet+/HDMI-CEC must be ON** for CEC control. |
 | 2026-03-22 | §8 CEC-only instant profile (no kiosk kill); TV OSD note (firmware). |

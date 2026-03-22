@@ -4,7 +4,7 @@
 |--------|----------------|--------|
 | [install-pi-autostart.sh](install-pi-autostart.sh) | **Mirror Pi 4** | Install + enable systemd services so backend + Chromium kiosk recover automatically after reboot/power loss. |
 | [pi-launch-kiosk.sh](pi-launch-kiosk.sh) | **Mirror Pi 4** | Chromium launcher used by `mirror-kiosk.service` (waits for display, starts kiosk URL). |
-| [pi-display-sleep.sh](pi-display-sleep.sh) | **Mirror Pi 4** | Blank or restore HDMI (`vcgencmd`); optional **CEC** via `cec-client`. Default method **`both`** — install **`cec-utils`** on the Pi once. |
+| [pi-display-sleep.sh](pi-display-sleep.sh) | **Mirror Pi 4** | Blank or restore HDMI (`vcgencmd`); optional **CEC** via `cec-client`. Install script defaults **`MIRROR_SLEEP_PROFILE=instant`** (CEC-only; **`both`** = harder blank). Install **`cec-utils`** on the Pi once. |
 | [install-pi-display-sleep-schedule.sh](install-pi-display-sleep-schedule.sh) | **Mirror Pi 4** | Systemd timers for nightly off / morning on (local Pi time). |
 | [pi-mirror-stub.sh](pi-mirror-stub.sh) | **Mirror Pi 4** | Create `~/mirror-stub/index.html` and optionally open **Chromium kiosk** to verify resolution (especially **portrait** viewport). |
 | [pi-display-rotate.sh](pi-display-rotate.sh) | **Mirror Pi 4** | **`xrandr`** over SSH: `list` / `left` / `right` / `normal` for portrait. See [PI_BRINGUP.md](../docs/PI_BRINGUP.md). |

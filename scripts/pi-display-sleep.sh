@@ -9,8 +9,7 @@
 #
 # Usage: pi-display-sleep.sh off | on | status | cec-scan
 #
-# Wayland (labwc): if wlr-randr is available, we also disable the HDMI output as user `pi`
-# (MIRROR_DISPLAY_SLEEP_USE_WLR=1, default). This often darkens the TV when CEC sees no TV.
+# Wayland (labwc): optional wlr-randr off/on when MIRROR_DISPLAY_SLEEP_USE_WLR=1 (e.g. profile "both").
 #
 # If mirror-kiosk.service is installed (systemd Chromium), it must be stopped before HDMI
 # blanking — otherwise Chromium/Wayland can turn the panel back on within seconds
@@ -20,7 +19,7 @@
 # STOP_KIOSK=0, USE_WLR=0 — see docs/MIRROR_RUNTIME.md §8.
 set -euo pipefail
 
-METHOD="${MIRROR_DISPLAY_SLEEP_METHOD:-both}"
+METHOD="${MIRROR_DISPLAY_SLEEP_METHOD:-cec}"
 CEC_DEV="${MIRROR_CEC_DEVICE:-}"
 WLR_OUT="${MIRROR_WLR_OUTPUT:-HDMI-A-1}"
 
@@ -49,19 +48,19 @@ wlr_randr_as_pi() {
 }
 
 wayland_output_off() {
-  [[ "${MIRROR_DISPLAY_SLEEP_USE_WLR:-1}" != "1" ]] && return 0
+  [[ "${MIRROR_DISPLAY_SLEEP_USE_WLR:-0}" == "1" ]] || return 0
   wlr_randr_as_pi --output "$WLR_OUT" --off && echo "wlr-randr: output $WLR_OUT off (Wayland)."
 }
 
 wayland_output_on() {
-  [[ "${MIRROR_DISPLAY_SLEEP_USE_WLR:-1}" != "1" ]] && return 0
+  [[ "${MIRROR_DISPLAY_SLEEP_USE_WLR:-0}" == "1" ]] || return 0
   if wlr_randr_as_pi --output "$WLR_OUT" --on --preferred; then
     echo "wlr-randr: output $WLR_OUT on (Wayland)."
   fi
 }
 
 stop_mirror_kiosk_if_configured() {
-  [[ "${MIRROR_DISPLAY_SLEEP_STOP_KIOSK:-1}" != "1" ]] && return 0
+  [[ "${MIRROR_DISPLAY_SLEEP_STOP_KIOSK:-0}" == "1" ]] || return 0
   if ! command -v systemctl >/dev/null 2>&1; then
     return 0
   fi
@@ -72,7 +71,7 @@ stop_mirror_kiosk_if_configured() {
 }
 
 start_mirror_kiosk_if_configured() {
-  [[ "${MIRROR_DISPLAY_SLEEP_STOP_KIOSK:-1}" != "1" ]] && return 0
+  [[ "${MIRROR_DISPLAY_SLEEP_STOP_KIOSK:-0}" == "1" ]] || return 0
   if ! command -v systemctl >/dev/null 2>&1; then
     return 0
   fi
@@ -191,8 +190,8 @@ case "$ACTION" in
     ;;
   *)
     echo "Usage: $0 off|on|status|cec-scan" >&2
-    echo "  MIRROR_DISPLAY_SLEEP_METHOD=hdmi|cec|both  (default: both)" >&2
-    echo "  MIRROR_DISPLAY_SLEEP_STOP_KIOSK=0 to not stop/start mirror-kiosk.service" >&2
+    echo "  MIRROR_DISPLAY_SLEEP_METHOD=hdmi|cec|both  (default: cec)" >&2
+    echo "  MIRROR_DISPLAY_SLEEP_STOP_KIOSK=1 to stop/start mirror-kiosk (default: 0 instant profile)" >&2
     echo "  MIRROR_CEC_DEVICE=/dev/cec0|/dev/cec1  MIRROR_WLR_OUTPUT=HDMI-A-1" >&2
     echo "  MIRROR_DISPLAY_SLEEP_USE_WLR=0 to skip wlr-randr" >&2
     exit 1
