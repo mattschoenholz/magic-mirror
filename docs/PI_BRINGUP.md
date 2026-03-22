@@ -297,6 +297,16 @@ Disable:
 sudo systemctl disable --now mirror-kiosk.service mirror-backend.service
 ```
 
+### Nightly display sleep (optional)
+
+After `timedatectl` is set to your home timezone, install **23:00 off / 06:00 on** (adjust via env from Mac — see [MAC_VS_PI_COMMANDS.md](MAC_VS_PI_COMMANDS.md)):
+
+```bash
+bash ~/mirror-app/scripts/install-pi-display-sleep-schedule.sh
+```
+
+Or from your Mac: `./scripts/deploy-mirror-to-pi.sh --install-display-sleep`. Default method blanks **HDMI** from the Pi; **CEC** (TV standby) is optional — [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) §8.
+
 ---
 
 ## Checklist (copy to your notes)

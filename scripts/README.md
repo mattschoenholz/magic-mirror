@@ -4,6 +4,8 @@
 |--------|----------------|--------|
 | [install-pi-autostart.sh](install-pi-autostart.sh) | **Mirror Pi 4** | Install + enable systemd services so backend + Chromium kiosk recover automatically after reboot/power loss. |
 | [pi-launch-kiosk.sh](pi-launch-kiosk.sh) | **Mirror Pi 4** | Chromium launcher used by `mirror-kiosk.service` (waits for display, starts kiosk URL). |
+| [pi-display-sleep.sh](pi-display-sleep.sh) | **Mirror Pi 4** | Blank or restore HDMI (`vcgencmd`); optional **CEC** standby via `cec-client`. |
+| [install-pi-display-sleep-schedule.sh](install-pi-display-sleep-schedule.sh) | **Mirror Pi 4** | Systemd timers for nightly off / morning on (local Pi time). |
 | [pi-mirror-stub.sh](pi-mirror-stub.sh) | **Mirror Pi 4** | Create `~/mirror-stub/index.html` and optionally open **Chromium kiosk** to verify resolution (especially **portrait** viewport). |
 | [pi-display-rotate.sh](pi-display-rotate.sh) | **Mirror Pi 4** | **`xrandr`** over SSH: `list` / `left` / `right` / `normal` for portrait. See [PI_BRINGUP.md](../docs/PI_BRINGUP.md). |
 | [sync-design-preview-to-pi.sh](sync-design-preview-to-pi.sh) | **Dev machine → Pi** | `rsync` [docs/design/](../docs/design/) to `~/mirror-design-preview/`; `--open` launches Chromium in **`--kiosk`** (use **`PREVIEW_WINDOWED=1`** for normal window + back button). See [preview/README.md](../docs/design/preview/README.md). |

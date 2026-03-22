@@ -55,3 +55,12 @@ school_calendar:
 
 # spotify: deferred — client_id, client_secret, refresh_token on Pi only (see MIRROR_RUNTIME.md)
 # youtube: deferred — OAuth on Pi only; hide Video Radar if missing or error
+
+# --- Pi-only (not read by backend today): nightly display blanking ---
+# Match Pi system timezone: sudo timedatectl set-timezone America/Los_Angeles
+# Install timers: ./scripts/deploy-mirror-to-pi.sh --install-display-sleep
+# Or on Pi: MIRROR_APP_DIR=~/mirror-app bash ~/mirror-app/scripts/install-pi-display-sleep-schedule.sh
+# display_sleep:
+#   off_time: "23:00" # local wall clock
+#   on_time: "06:00"
+#   method: "hdmi" # hdmi | cec | both — see docs/MIRROR_RUNTIME.md §8

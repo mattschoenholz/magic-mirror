@@ -50,7 +50,7 @@ Domain reference skills: `mm-home-assistant`, `mm-kiosk-pi`, `mm-dev-mcp-ha`. **
 | [DESIGN_READINESS.md](DESIGN_READINESS.md) | Checklist before UX theme; outputs in [design/](design/) |
 | [UI_MODES.md](UI_MODES.md) | Four UI modes, dual viewing distance, weather hierarchy |
 | [HA_DEV.md](HA_DEV.md) | HA on Pi 5 vs mirror Pi 4, MCP, token hygiene |
-| [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) | **Locked** HA entity IDs, ICS URLs, timezone, secrets layout, Spotify/YouTube policy |
+| [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) | **Locked** HA entity IDs, ICS URLs, timezone, secrets layout, Spotify/YouTube policy, **display sleep** (§8) |
 | [BACKEND_HA_INTEGRATION_2026-03.md](BACKEND_HA_INTEGRATION_2026-03.md) | **Snapshot / HA handoff:** weather-now vs hourly, todos overflow, API shapes, code map, new-machine checklist |
 | [POMODORO_TIMER_PLAN.md](POMODORO_TIMER_PLAN.md) | **Planner handoff:** focused Pomodoro UI (overlay vs route), links FR-008 / FR-010 / UC-6, design SVGs |
 | [PI_BRINGUP.md](PI_BRINGUP.md) | Mirror Pi 4 OS + display + network baseline |

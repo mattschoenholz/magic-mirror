@@ -157,21 +157,40 @@ Auth files on Pi when enabled — same secrets dir pattern as §2.
 
 ---
 
-## 8. Related files in repo
+## 8. Display sleep (Pi — optional)
+
+**Goal:** After a chosen local time (default **23:00**), turn the **screen off** for the bedroom; restore in the morning (default **06:00**). Times follow the **Pi system timezone** — set **`America/Los_Angeles`** with `sudo timedatectl set-timezone America/Los_Angeles` so they match `timezone:` in the runtime YAML.
+
+| Method | Behavior |
+|--------|----------|
+| **`hdmi`** (default) | **`vcgencmd display_power`** — blanks Pi HDMI output. TV may show **no signal** or dim; no extra packages. |
+| **`cec`** | **`cec-client`** (package **`cec-utils`**) — asks the TV to **standby** over **HDMI-CEC** (Samsung **Anynet+** on). May need **`sudo`** for `/dev/cec0`; wake is TV‑model dependent. |
+| **`both`** | HDMI blank + CEC (maximize chance the panel actually goes dark). |
+
+**Install:** [scripts/install-pi-display-sleep-schedule.sh](../scripts/install-pi-display-sleep-schedule.sh) (creates `mirror-display-sleep-off.timer` / `mirror-display-sleep-on.timer`). From Mac: `./scripts/deploy-mirror-to-pi.sh --install-display-sleep` (see [MAC_VS_PI_COMMANDS.md](MAC_VS_PI_COMMANDS.md)).
+**Manual test:** `~/mirror-app/scripts/pi-display-sleep.sh off` then `on` (same `MIRROR_DISPLAY_SLEEP_METHOD` as the install).
+
+**Disable:** `sudo systemctl disable --now mirror-display-sleep-off.timer mirror-display-sleep-on.timer`
+
+---
+
+## 9. Related files in repo
 
 | File | Role |
 |------|------|
 | [config/mirror.runtime.example.yaml](../config/mirror.runtime.example.yaml) | **Committed** defaults: URLs, entity IDs, ICS list, intervals — **no secrets** |
 | `config/mirror.runtime.local.yaml` | **Gitignored** — optional local overrides (IP instead of `.local`, etc.) |
 | [scripts/deploy-mirror-to-pi.sh](../scripts/deploy-mirror-to-pi.sh) | **Mac → Pi**: rsync app tree, venv, token copy, start API, open Chromium |
+| [scripts/pi-display-sleep.sh](../scripts/pi-display-sleep.sh), [scripts/install-pi-display-sleep-schedule.sh](../scripts/install-pi-display-sleep-schedule.sh) | Nightly HDMI blank + morning restore; optional CEC |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Diagrams, high-level boundaries |
 | [HA_DEV.md](HA_DEV.md) | Dev machine MCP token (not mirror Pi) |
 
 ---
 
-## 9. Changelog
+## 10. Changelog
 
 | Date | Change |
 |------|--------|
 | 2026-03-21 | Initial locked spec: HA entities, five ICS feeds, timezone, secrets layout, Spotify/YouTube rules. |
 | 2026-03-21 | Backend = Python FastAPI; `/api/snapshot` + static `web/`. |
+| 2026-03-21 | §8 Display sleep: `vcgencmd` + optional CEC; systemd timers; deploy flag. |

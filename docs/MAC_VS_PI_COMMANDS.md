@@ -68,6 +68,30 @@ Disable later if needed:
 ssh pi@mirror-pi4.local 'sudo systemctl disable --now mirror-kiosk.service mirror-backend.service'
 ```
 
+### Nightly display sleep (default **23:00** off, **06:00** on — Pi **local** time)
+
+Uses `vcgencmd display_power` (HDMI blank) by default; optional **HDMI-CEC** if you set `MIRROR_DISPLAY_SLEEP_METHOD=cec` or `both` and install **`cec-utils`**. See [MIRROR_RUNTIME.md](MIRROR_RUNTIME.md) §8.
+
+```bash
+cd ~/Desktop/CurrentProjects/General/magic-mirror
+./scripts/deploy-mirror-to-pi.sh --install-display-sleep
+```
+
+Custom times / CEC:
+
+```bash
+MIRROR_SLEEP_OFF=23:00 MIRROR_SLEEP_ON=6:30 MIRROR_DISPLAY_SLEEP_METHOD=both \
+  ./scripts/deploy-mirror-to-pi.sh --install-display-sleep
+```
+
+Ensure the Pi timezone matches home: `ssh pi@mirror-pi4.local 'timedatectl'` (expect **`America/Los_Angeles`**).
+
+Disable timers:
+
+```bash
+ssh pi@mirror-pi4.local 'sudo systemctl disable --now mirror-display-sleep-off.timer mirror-display-sleep-on.timer'
+```
+
 ---
 
 ## Test the API from your Mac (same LAN)
