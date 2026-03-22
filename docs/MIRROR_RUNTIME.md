@@ -172,6 +172,8 @@ Auth files on Pi when enabled — same secrets dir pattern as §2.
 
 **Disable:** `sudo systemctl disable --now mirror-display-sleep-off.timer mirror-display-sleep-on.timer`
 
+**Troubleshooting — blanking “doesn’t stick”:** If **`mirror-kiosk.service`** is running (Chromium), it can **re-enable HDMI** right after `vcgencmd` turns it off. The sleep script **stops `mirror-kiosk` before** blanking and **starts it again after** wake (see `MIRROR_DISPLAY_SLEEP_STOP_KIOSK` in `/etc/systemd/system/mirror-display-sleep.env`). Requires **root** (or `sudo`) for `systemctl`.
+
 ---
 
 ## 9. Related files in repo

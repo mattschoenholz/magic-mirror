@@ -60,6 +60,7 @@ echo "Installing ${ENV_FILE}"
 sudo tee "$ENV_FILE" >/dev/null <<EOF
 # Managed by install-pi-display-sleep-schedule.sh
 MIRROR_DISPLAY_SLEEP_METHOD=${METHOD}
+MIRROR_DISPLAY_SLEEP_STOP_KIOSK=1
 EOF
 sudo chmod 644 "$ENV_FILE"
 

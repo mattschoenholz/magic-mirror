@@ -8,9 +8,35 @@
 # to standby/wake over HDMI-CEC (Samsung Anynet+ must be on). May require sudo for /dev/cec0.
 #
 # Usage: pi-display-sleep.sh off | on | status
+#
+# If mirror-kiosk.service is installed (systemd Chromium), it must be stopped before HDMI
+# blanking — otherwise Chromium/Wayland can turn the panel back on within seconds
+# (Restart=always + DRM repaint). Set MIRROR_DISPLAY_SLEEP_STOP_KIOSK=0 to skip.
 set -euo pipefail
 
 METHOD="${MIRROR_DISPLAY_SLEEP_METHOD:-hdmi}"
+
+stop_mirror_kiosk_if_configured() {
+  [[ "${MIRROR_DISPLAY_SLEEP_STOP_KIOSK:-1}" != "1" ]] && return 0
+  if ! command -v systemctl >/dev/null 2>&1; then
+    return 0
+  fi
+  if systemctl cat mirror-kiosk.service &>/dev/null; then
+    systemctl stop mirror-kiosk.service || true
+    echo "Stopped mirror-kiosk.service (so HDMI blank can stick)."
+  fi
+}
+
+start_mirror_kiosk_if_configured() {
+  [[ "${MIRROR_DISPLAY_SLEEP_STOP_KIOSK:-1}" != "1" ]] && return 0
+  if ! command -v systemctl >/dev/null 2>&1; then
+    return 0
+  fi
+  if systemctl cat mirror-kiosk.service &>/dev/null; then
+    systemctl start mirror-kiosk.service || true
+    echo "Started mirror-kiosk.service."
+  fi
+}
 
 vcgencmd_display_power() {
   local state="$1" # 0 = off, 1 = on
@@ -71,6 +97,7 @@ cec_on() {
 ACTION="${1:-}"
 case "$ACTION" in
   off|sleep)
+    stop_mirror_kiosk_if_configured
     case "$METHOD" in
       hdmi)
         vcgencmd_display_power 0
@@ -105,6 +132,7 @@ case "$ACTION" in
         exit 1
         ;;
     esac
+    start_mirror_kiosk_if_configured
     ;;
   status)
     if command -v vcgencmd >/dev/null 2>&1; then
@@ -116,6 +144,7 @@ case "$ACTION" in
   *)
     echo "Usage: $0 off|on|status" >&2
     echo "  MIRROR_DISPLAY_SLEEP_METHOD=hdmi|cec|both  (default: hdmi)" >&2
+    echo "  MIRROR_DISPLAY_SLEEP_STOP_KIOSK=0 to not stop/start mirror-kiosk.service" >&2
     exit 1
     ;;
 esac
