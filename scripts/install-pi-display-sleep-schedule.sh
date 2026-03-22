@@ -66,6 +66,8 @@ sudo tee "$ENV_FILE" >/dev/null <<EOF
 # Managed by install-pi-display-sleep-schedule.sh
 MIRROR_DISPLAY_SLEEP_METHOD=${METHOD}
 MIRROR_DISPLAY_SLEEP_STOP_KIOSK=1
+MIRROR_DISPLAY_SLEEP_USE_WLR=1
+# If CEC scan shows no TV, try the other HDMI: MIRROR_CEC_DEVICE=/dev/cec1
 EOF
 sudo chmod 644 "$ENV_FILE"
 

@@ -174,6 +174,8 @@ Auth files on Pi when enabled — same secrets dir pattern as §2.
 
 **Troubleshooting — blanking “doesn’t stick”:** If **`mirror-kiosk.service`** is running (Chromium), it can **re-enable HDMI** right after `vcgencmd` turns it off. The sleep script **stops `mirror-kiosk` before** blanking and **starts it again after** wake (see `MIRROR_DISPLAY_SLEEP_STOP_KIOSK` in `/etc/systemd/system/mirror-display-sleep.env`). Requires **root** (or `sudo`) for `systemctl`.
 
+**Troubleshooting — TV stays on, CEC “does nothing”:** Run **`sudo ~/mirror-app/scripts/pi-display-sleep.sh cec-scan`**. If the list only shows **Recorder 1** (the Pi) and **no TV**, HDMI-CEC is not reaching the set (Anynet+ off, wrong **Pi HDMI port** — use **HDMI0** next to USB-C — bad cable/passthrough, or mirror hardware blocking the CEC pin). In that case **`cec-client` cannot turn the TV off**; the script also uses **`wlr-randr --output HDMI-A-1 --off`** (Wayland) and **`vcgencmd`** to drop the signal. If the **backlight** still stays on, use a **smart plug**, **Samsung network / SmartThings** via Home Assistant, or fix the HDMI/CEC path.
+
 ---
 
 ## 9. Related files in repo
@@ -197,3 +199,4 @@ Auth files on Pi when enabled — same secrets dir pattern as §2.
 | 2026-03-21 | Backend = Python FastAPI; `/api/snapshot` + static `web/`. |
 | 2026-03-21 | §8 Display sleep: `vcgencmd` + optional CEC; systemd timers; deploy flag. |
 | 2026-03-22 | §8 Default sleep method **`both`**; **`cec-utils`** on Pi for CEC path. |
+| 2026-03-22 | §8 Wayland **`wlr-randr`** output off/on; **`cec-scan`** when TV missing from CEC bus. |

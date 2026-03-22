@@ -7,7 +7,10 @@
 # Optional: MIRROR_DISPLAY_SLEEP_METHOD=cec|both — use cec-utils (cec-client) to ask the TV
 # to standby/wake over HDMI-CEC (Samsung Anynet+ must be on). May require sudo for /dev/cec0.
 #
-# Usage: pi-display-sleep.sh off | on | status
+# Usage: pi-display-sleep.sh off | on | status | cec-scan
+#
+# Wayland (labwc): if wlr-randr is available, we also disable the HDMI output as user `pi`
+# (MIRROR_DISPLAY_SLEEP_USE_WLR=1, default). This often darkens the TV when CEC sees no TV.
 #
 # If mirror-kiosk.service is installed (systemd Chromium), it must be stopped before HDMI
 # blanking — otherwise Chromium/Wayland can turn the panel back on within seconds
@@ -15,6 +18,44 @@
 set -euo pipefail
 
 METHOD="${MIRROR_DISPLAY_SLEEP_METHOD:-both}"
+CEC_DEV="${MIRROR_CEC_DEVICE:-}"
+WLR_OUT="${MIRROR_WLR_OUTPUT:-HDMI-A-1}"
+
+run_cec_pipe() {
+  local pipe="$1"
+  if [[ -n "$CEC_DEV" ]]; then
+    echo "$pipe" | cec-client "$CEC_DEV" -s -d 1 2>/dev/null && return 0
+    echo "$pipe" | sudo cec-client "$CEC_DEV" -s -d 1 && return 0
+  else
+    echo "$pipe" | cec-client -s -d 1 2>/dev/null && return 0
+    echo "$pipe" | sudo cec-client -s -d 1 && return 0
+  fi
+  return 1
+}
+
+wlr_randr_as_pi() {
+  local wlr_args=("$@")
+  command -v wlr-randr >/dev/null 2>&1 || return 0
+  id pi &>/dev/null || return 0
+  local uid run
+  uid=$(id -u pi)
+  run="/run/user/${uid}"
+  [[ -d "$run" ]] || return 0
+  sudo -u pi env DISPLAY=:0 XAUTHORITY=/home/pi/.Xauthority XDG_RUNTIME_DIR="$run" \
+    wlr-randr "${wlr_args[@]}" 2>/dev/null
+}
+
+wayland_output_off() {
+  [[ "${MIRROR_DISPLAY_SLEEP_USE_WLR:-1}" != "1" ]] && return 0
+  wlr_randr_as_pi --output "$WLR_OUT" --off && echo "wlr-randr: output $WLR_OUT off (Wayland)."
+}
+
+wayland_output_on() {
+  [[ "${MIRROR_DISPLAY_SLEEP_USE_WLR:-1}" != "1" ]] && return 0
+  if wlr_randr_as_pi --output "$WLR_OUT" --on --preferred; then
+    echo "wlr-randr: output $WLR_OUT on (Wayland)."
+  fi
+}
 
 stop_mirror_kiosk_if_configured() {
   [[ "${MIRROR_DISPLAY_SLEEP_STOP_KIOSK:-1}" != "1" ]] && return 0
@@ -62,17 +103,11 @@ cec_standby() {
     echo "cec-client not installed. Install: sudo apt install -y cec-utils" >&2
     return 1
   fi
-  # Device 0 = TV in CEC topology for most setups.
-  if echo "standby 0" | cec-client -s -d 1 2>/dev/null; then
-    echo "CEC: sent standby to TV (device 0)"
+  if run_cec_pipe "standby 0"; then
+    echo "CEC: sent standby to TV (device 0)${CEC_DEV:+ on $CEC_DEV}"
     return 0
   fi
-  if sudo -n true 2>/dev/null; then
-    echo "standby 0" | sudo cec-client -s -d 1
-    echo "CEC: sent standby (via sudo cec-client)"
-    return 0
-  fi
-  echo "CEC standby failed (try: sudo usermod -aG video pi, or run cec-client as root)" >&2
+  echo "CEC standby failed (TV may be missing from CEC bus — run: $0 cec-scan)" >&2
   return 1
 }
 
@@ -81,13 +116,8 @@ cec_on() {
     echo "cec-client not installed." >&2
     return 1
   fi
-  if echo "on 0" | cec-client -s -d 1 2>/dev/null; then
-    echo "CEC: sent on to TV (device 0)"
-    return 0
-  fi
-  if sudo -n true 2>/dev/null; then
-    echo "on 0" | sudo cec-client -s -d 1
-    echo "CEC: sent on (via sudo cec-client)"
+  if run_cec_pipe "on 0"; then
+    echo "CEC: sent on to TV (device 0)${CEC_DEV:+ on $CEC_DEV}"
     return 0
   fi
   echo "CEC on failed" >&2
@@ -98,6 +128,7 @@ ACTION="${1:-}"
 case "$ACTION" in
   off|sleep)
     stop_mirror_kiosk_if_configured
+    wayland_output_off
     case "$METHOD" in
       hdmi)
         vcgencmd_display_power 0
@@ -132,7 +163,21 @@ case "$ACTION" in
         exit 1
         ;;
     esac
+    wayland_output_on
     start_mirror_kiosk_if_configured
+    ;;
+  cec-scan)
+    if ! command -v cec-client >/dev/null 2>&1; then
+      echo "cec-client not installed." >&2
+      exit 1
+    fi
+    for dev in /dev/cec0 /dev/cec1; do
+      [[ -e "$dev" ]] || continue
+      echo "=== scan $dev ==="
+      echo scan | sudo cec-client "$dev" -s -d 3 2>&1 | tail -30
+    done
+    echo "If you only see 'Recorder 1' (the Pi), the TV is not on the CEC bus — check Anynet+, HDMI port (Pi HDMI0), and cable CEC pin."
+    exit 0
     ;;
   status)
     if command -v vcgencmd >/dev/null 2>&1; then
@@ -142,9 +187,11 @@ case "$ACTION" in
     fi
     ;;
   *)
-    echo "Usage: $0 off|on|status" >&2
+    echo "Usage: $0 off|on|status|cec-scan" >&2
     echo "  MIRROR_DISPLAY_SLEEP_METHOD=hdmi|cec|both  (default: both)" >&2
     echo "  MIRROR_DISPLAY_SLEEP_STOP_KIOSK=0 to not stop/start mirror-kiosk.service" >&2
+    echo "  MIRROR_CEC_DEVICE=/dev/cec0|/dev/cec1  MIRROR_WLR_OUTPUT=HDMI-A-1" >&2
+    echo "  MIRROR_DISPLAY_SLEEP_USE_WLR=0 to skip wlr-randr" >&2
     exit 1
     ;;
 esac
