@@ -253,7 +253,7 @@ Expect **200** or **302** (redirect to login) — not timeout. If **`homeassista
 | **Scenes / bedtime** | Later: **Home Assistant** or a script on the Pi using **`cec-client`** (Debian package **`cec-utils`**) can align “mirror off” with TV power. |
 | **TV remote → Pi** | CEC can carry **some** key events; often inconsistent — don’t rely on it for v1. |
 
-**Samsung TV:** turn on **Anynet+ (HDMI-CEC)** in settings. Review **Device Auto Power** / **HDMI CEC** so the TV doesn’t power-cycle unexpectedly when the Pi reboots.
+**Samsung TV:** turn on **Anynet+ (HDMI-CEC)** in settings — if this is **off**, **`cec-client`** / **`cec-scan`** will only see the Pi (**Recorder 1**), and **CEC cannot power the TV off or on**. After enabling, select the Pi’s HDMI input and re-run **`pi-display-sleep.sh cec-scan`** on the Pi. Review **Device Auto Power** / **HDMI CEC** so the TV doesn’t power-cycle unexpectedly when the Pi reboots.
 
 **Raspberry Pi 4:** Prefer the HDMI port **closest to USB-C** (**HDMI0**) for CEC. The device is often **`/dev/cec0`**. Test with e.g. **`cec-client`** from **`cec-utils`**; treat results as TV-specific.
 

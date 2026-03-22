@@ -167,6 +167,13 @@ Auth files on Pi when enabled — same secrets dir pattern as §2.
 | **`cec`** | **`cec-client`** (package **`cec-utils`**) — asks the TV to **standby** over **HDMI-CEC** (Samsung **Anynet+** on). May need **`sudo`** for `/dev/cec0`; wake is TV‑model dependent. |
 | **`both`** (default for deploy) | HDMI blank **and** CEC standby — use when the **backlight stays on** with HDMI-only; install **`sudo apt install -y cec-utils`** on the Pi first. |
 
+**TV checklist (required for CEC to do anything):**
+
+1. On the **Samsung**: turn **HDMI-CEC / Anynet+** **ON** (you had it off — that matches **`cec-scan`** showing only the Pi, not a TV).
+2. **Input** on the TV must be the **Pi’s HDMI** when you test.
+3. **Pi:** prefer **HDMI0** (the port **next to USB-C**) for CEC.
+4. Re-check: **`sudo ~/mirror-app/scripts/pi-display-sleep.sh cec-scan`** — you want to see a **TV** (or similar), not only **Recorder 1**.
+
 **Install:** [scripts/install-pi-display-sleep-schedule.sh](../scripts/install-pi-display-sleep-schedule.sh) (creates `mirror-display-sleep-off.timer` / `mirror-display-sleep-on.timer`). From Mac: `./scripts/deploy-mirror-to-pi.sh --install-display-sleep` (see [MAC_VS_PI_COMMANDS.md](MAC_VS_PI_COMMANDS.md)).
 **Manual test:** `~/mirror-app/scripts/pi-display-sleep.sh off` then `on` (same `MIRROR_DISPLAY_SLEEP_METHOD` as the install).
 
@@ -200,3 +207,4 @@ Auth files on Pi when enabled — same secrets dir pattern as §2.
 | 2026-03-21 | §8 Display sleep: `vcgencmd` + optional CEC; systemd timers; deploy flag. |
 | 2026-03-22 | §8 Default sleep method **`both`**; **`cec-utils`** on Pi for CEC path. |
 | 2026-03-22 | §8 Wayland **`wlr-randr`** output off/on; **`cec-scan`** when TV missing from CEC bus. |
+| 2026-03-22 | §8 TV checklist: Samsung **Anynet+/HDMI-CEC must be ON** for CEC control. |
