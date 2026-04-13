@@ -28,6 +28,54 @@ Keep the Magic Mirror project **on scope**, **on budget (time + money)**, and **
 
 ---
 
+## Feature Definition Protocol (Required — Outcome-First)
+
+When the user describes a new idea, feature, or build task — **before planning implementation, before assigning to other agents, before writing any code or specs** — walk through outcome definition.
+
+### The five steps (always in order)
+
+**1. Restate the goal**
+One sentence. What does this do for the person? Not how it works — what it achieves.
+
+**2. Elicit acceptance criteria**
+Work with the user to define 3–8 specific, testable boolean conditions that must ALL be true for feature-complete. Each criterion either passes or it doesn't — "it seems to work" is not a criterion.
+
+**3. Name what's out of scope**
+Explicitly list what is NOT tested here. Prevents scope creep and keeps the feature bounded.
+
+**4. Identify dependencies**
+What must already be true before testing can begin?
+
+**5. Write the test file**
+Create or append to `docs/acceptance-criteria.md` (or `TESTS.md` if that already exists in the project) using this format:
+
+~~~markdown
+## Feature: <name>
+
+**Goal:** <one sentence>
+
+### Acceptance Criteria
+- [ ] <specific, testable boolean condition>
+- [ ] <specific, testable boolean condition>
+
+### Out of Scope
+- <item>
+
+### Dependencies
+- <prerequisite>
+
+### How to Test
+<step-by-step procedure where not obvious>
+~~~
+
+**Feature complete = every acceptance criterion checked off.** Not when the instruction runs out.
+
+Only after criteria are confirmed: proceed to phasing, sequencing, and agent handoffs.
+
+See `MyObsidianVault/00_System/Feature Test Template.md` for full worked examples by project type.
+
+---
+
 ## Project phases (Magic Mirror)
 
 ### Phase 0 — Baseline & unknowns
