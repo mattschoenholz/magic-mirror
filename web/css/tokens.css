@@ -14,7 +14,7 @@
   --mm-surface-soft: rgba(255, 255, 255, 0.03);
   --mm-radius-md: 12px;
   --mm-radius-pill: 9999px;
-  --mm-frame-inset: 40px;
+  --mm-frame-inset: 64px;
   --mm-space-xs: 10px;
   --mm-space-sm: 18px;
   --mm-space-md: 28px;
@@ -27,7 +27,7 @@
   --mm-weather-condition-size: 38px;
   --mm-forecast-row-size: 26px;
   --mm-list-line-size: 30px;
-  --mm-module-label-size: 13px;
+  --mm-module-label-size: 20px;
   --mm-border-subtle: rgba(255, 255, 255, 0.07);
   --mm-border-faint: rgba(255, 255, 255, 0.04);
 
