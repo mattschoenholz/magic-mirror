@@ -21,12 +21,14 @@
   --mm-space-xl: 64px;
 
   /* Display type — ~10 ft minimums (tokens.md) */
-  --mm-clock-size: 112px;
-  --mm-weather-value-size: 72px;
+  --mm-clock-size: 128px;
+  --mm-weather-value-size: 96px;
   --mm-weather-condition-size: 40px;
   --mm-forecast-row-size: 28px;
   --mm-list-line-size: 30px;
-  --mm-module-label-size: 24px;
+  --mm-module-label-size: 28px;
+  --mm-border-subtle: rgba(255, 255, 255, 0.08);
+  --mm-border-faint: rgba(255, 255, 255, 0.05);
 
   /* Weather icon paints (symbols use var(--wx-*)) */
   --wx-sun: #fbbf24;
@@ -43,7 +45,12 @@
 
 :root.mirror--night {
   --mm-bg: #0a0a0c;
-  --mm-text-primary: #d8d8dc;
-  --mm-text-secondary: #94949c;
+  --mm-bg-elevated: #111116;
+  --mm-surface-soft: #131318;
+  --mm-text-primary: #c0bfbe;
+  --mm-text-secondary: #888890;
+  --mm-text-muted: #555560;
   --mm-accent-teal: #26b8a5;
+  --mm-border-subtle: rgba(255, 255, 255, 0.05);
+  --mm-border-faint: rgba(255, 255, 255, 0.03);
 }

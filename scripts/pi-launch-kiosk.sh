@@ -34,6 +34,11 @@ for _ in $(seq 1 60); do
   sleep 1
 done
 
+# Clear Chromium disk cache so CSS/JS changes are always picked up on restart.
+rm -rf "${HOME}/.config/chromium/Default/Cache" \
+       "${HOME}/.config/chromium/Default/Code Cache" \
+       "${HOME}/.config/chromium/Default/GPUCache" 2>/dev/null || true
+
 # Prefer Wayland; fall back to X11.
 if [[ -S "${XDG_RUNTIME_DIR}/wayland-0" ]]; then
   export WAYLAND_DISPLAY="wayland-0"
@@ -49,6 +54,7 @@ exec "$CHROME" \
   --password-store=basic \
   --kiosk --noerrdialogs --disable-infobars \
   --disable-dev-shm-usage \
+  --disk-cache-size=1 --media-cache-size=1 \
   --no-first-run --disable-sync --disable-background-networking \
   --disable-logging \
   "$URL"

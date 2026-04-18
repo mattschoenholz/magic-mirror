@@ -102,7 +102,7 @@ body.mirror {
   flex: 0 0 min(32%, 300px);
   max-width: 320px;
   padding-left: var(--mm-space-md);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 1px solid var(--mm-border-subtle);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -112,9 +112,9 @@ body.mirror {
 
 .now-playing__next-heading {
   margin: 0 0 4px;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--mm-text-muted);
 }
@@ -199,7 +199,7 @@ body.mirror {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--mm-text-muted);
+  color: var(--mm-text-secondary);
 }
 
 /* ----- Weather (M-002) — colored icons via global --wx-* on svg.wx-svg ----- */
@@ -245,7 +245,7 @@ body.mirror {
 
 .weather-today__temp {
   margin: 0;
-  font-size: 80px;
+  font-size: var(--mm-weather-value-size);
   font-weight: 600;
   color: var(--mm-text-primary);
   line-height: 1;
@@ -265,7 +265,7 @@ body.mirror {
   align-items: stretch;
   gap: 6px;
   padding: var(--mm-space-md) 0 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--mm-border-faint);
 }
 
 .weather-hourly__slot {
@@ -386,14 +386,14 @@ body.mirror {
 }
 
 .calendar-weekday__event {
-  font-size: 20px;
+  font-size: 24px;
   line-height: 1.3;
   color: var(--mm-text-primary);
 }
 
 .calendar-weekday__event-time {
   display: block;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--mm-accent-teal);
   margin-bottom: 2px;
@@ -490,7 +490,7 @@ body.mirror {
 
 .video-radar__title {
   margin: 0;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 600;
   color: var(--mm-text-primary);
   line-height: 1.3;
@@ -502,7 +502,7 @@ body.mirror {
 
 .video-radar__creator {
   margin: 0;
-  font-size: 21px;
+  font-size: 22px;
   color: var(--mm-text-secondary);
   line-height: 1.25;
   white-space: nowrap;
@@ -513,7 +513,7 @@ body.mirror {
 .video-radar__ago {
   margin: 0;
   margin-top: auto;
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--mm-accent-teal);
   letter-spacing: 0.04em;
