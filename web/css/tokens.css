@@ -3,32 +3,33 @@
  * FR-005 glance sizes; wood-frame safe inset; weather icon palette.
  */
 :root {
-  --mm-bg: #0f0f10;
-  --mm-bg-elevated: #16161c;
-  --mm-text-primary: #f2f2f4;
-  --mm-text-secondary: #a8a8b0;
-  --mm-text-muted: #6e6e78;
+  --mm-bg: #0a0a0b;
+  --mm-bg-elevated: #111114;
+  --mm-text-primary: #ededef;
+  --mm-text-secondary: #8e8e98;
+  --mm-text-muted: #48484f;
   --mm-accent: #7eb8ff;
   --mm-accent-teal: #2dd4bf;
-  --mm-accent-teal-soft: rgba(45, 212, 191, 0.22);
-  --mm-surface-soft: #16161c;
-  --mm-radius-md: 14px;
+  --mm-accent-teal-soft: rgba(45, 212, 191, 0.15);
+  --mm-surface-soft: rgba(255, 255, 255, 0.03);
+  --mm-radius-md: 12px;
   --mm-radius-pill: 9999px;
-  --mm-frame-inset: 36px;
-  --mm-space-sm: 16px;
-  --mm-space-md: 24px;
-  --mm-space-lg: 40px;
-  --mm-space-xl: 64px;
+  --mm-frame-inset: 40px;
+  --mm-space-xs: 10px;
+  --mm-space-sm: 18px;
+  --mm-space-md: 28px;
+  --mm-space-lg: 48px;
+  --mm-space-xl: 72px;
 
   /* Display type — ~10 ft minimums (tokens.md) */
   --mm-clock-size: 128px;
   --mm-weather-value-size: 96px;
-  --mm-weather-condition-size: 40px;
-  --mm-forecast-row-size: 28px;
+  --mm-weather-condition-size: 38px;
+  --mm-forecast-row-size: 26px;
   --mm-list-line-size: 30px;
-  --mm-module-label-size: 28px;
-  --mm-border-subtle: rgba(255, 255, 255, 0.08);
-  --mm-border-faint: rgba(255, 255, 255, 0.05);
+  --mm-module-label-size: 13px;
+  --mm-border-subtle: rgba(255, 255, 255, 0.07);
+  --mm-border-faint: rgba(255, 255, 255, 0.04);
 
   /* Weather icon paints (symbols use var(--wx-*)) */
   --wx-sun: #fbbf24;
@@ -44,13 +45,13 @@
 }
 
 :root.mirror--night {
-  --mm-bg: #0a0a0c;
-  --mm-bg-elevated: #111116;
-  --mm-surface-soft: #131318;
-  --mm-text-primary: #c0bfbe;
-  --mm-text-secondary: #888890;
-  --mm-text-muted: #555560;
+  --mm-bg: #060607;
+  --mm-bg-elevated: #0d0d10;
+  --mm-surface-soft: rgba(255, 255, 255, 0.02);
+  --mm-text-primary: #bdbcbb;
+  --mm-text-secondary: #76767e;
+  --mm-text-muted: #3a3a40;
   --mm-accent-teal: #26b8a5;
-  --mm-border-subtle: rgba(255, 255, 255, 0.05);
-  --mm-border-faint: rgba(255, 255, 255, 0.03);
+  --mm-border-subtle: rgba(255, 255, 255, 0.04);
+  --mm-border-faint: rgba(255, 255, 255, 0.02);
 }
