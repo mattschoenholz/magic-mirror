@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from typing import Any
 from zoneinfo import ZoneInfo
 
-from mirror_backend import ha_client, ics_merge, weather_map
+from mirror_backend import ha_client, ics_merge, spotify_client, weather_map, youtube_client
 from mirror_backend.settings import read_ha_token
 
 logger = logging.getLogger(__name__)
@@ -170,6 +170,7 @@ def build_snapshot(cfg: dict[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
     weather_today: dict[str, Any] = {
         "condition": "—",
+        "tempF": None,
         "feelsLikeF": None,
         "precipChance": None,
         "icon": "partly-cloudy",
@@ -221,6 +222,10 @@ def build_snapshot(cfg: dict[str, Any]) -> dict[str, Any]:
             state = chosen_state.get("state")
             weather_today["condition"] = weather_map.condition_label(state)
             weather_today["icon"] = weather_map.condition_icon_key(state)
+            weather_today["tempF"] = weather_map.first_fahrenheit_from_attrs(
+                attrs,
+                ("temperature", "native_temperature"),
+            )
             weather_today["feelsLikeF"] = weather_map.first_fahrenheit_from_attrs(
                 attrs,
                 ("apparent_temperature", "temperature", "native_temperature"),
@@ -295,6 +300,8 @@ def build_snapshot(cfg: dict[str, Any]) -> dict[str, Any]:
             if len(todo_items) >= todo_cap:
                 break
 
+        todo_items.reverse()  # HA returns oldest-first; reverse so newest leads
+        todo_items.sort(key=lambda t: t["done"])  # incomplete first, done last (stable)
         if len(todo_items) > 6:
             todo_items = [t for t in todo_items if not t["done"]][:6]
 
@@ -303,18 +310,12 @@ def build_snapshot(cfg: dict[str, Any]) -> dict[str, Any]:
     return {
         "source": "live" if token else "degraded",
         "errors": errors,
-        "nowPlaying": {
-            "title": "",
-            "artist": "",
-            "artworkUrl": "",
-            "isIdle": True,
-            "nextUp": None,
-        },
+        "nowPlaying": spotify_client.get_now_playing(),
         "weather": {
             "today": weather_today,
             "hourlyToday": hourly_today,
         },
         "calendar": {"events": calendar_events},
         "todos": {"items": todo_items},
-        "videoRadar": {"videos": []},
+        "videoRadar": {"videos": youtube_client.get_video_radar()},
     }

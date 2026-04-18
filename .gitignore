@@ -2,6 +2,8 @@
 .env
 .env.*
 !.env.example
+.claude/mcp.json
+.claude/settings.local.json
 config/mirror.runtime.local.yaml
 config/mirror.runtime.local.yml
 *.pem

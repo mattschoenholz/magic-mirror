@@ -12,6 +12,7 @@ from starlette.responses import Response
 
 from mirror_backend.settings import REPO_ROOT, load_runtime_config
 from mirror_backend.snapshot import build_snapshot
+from mirror_backend import spotify_client
 
 logging.basicConfig(level=logging.INFO)
 
@@ -41,6 +42,11 @@ app.add_middleware(_NoCacheStaticMiddleware)
 def api_snapshot():
     cfg = load_runtime_config()
     return build_snapshot(cfg)
+
+
+@app.get("/api/now-playing")
+def api_now_playing():
+    return spotify_client.get_now_playing()
 
 
 @app.get("/api/health")

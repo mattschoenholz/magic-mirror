@@ -1,5 +1,6 @@
 (function () {
-  var SNAPSHOT_POLL_MS = 120000;
+  var SNAPSHOT_POLL_MS = 60000;
+  var NOW_PLAYING_POLL_MS = 5000;
   var API_BASE = "";
 
   function pad(n) {
@@ -302,9 +303,11 @@
         var me = document.getElementById("weather-metrics");
         var iconHost = document.getElementById("weather-today-icon");
         if (ce) ce.textContent = t.condition || "—";
+        var tempEl = document.getElementById("weather-temp");
+        if (tempEl) tempEl.textContent = t.tempF != null ? t.tempF + "°" : "—";
         if (me) {
           var parts = [];
-          if (t.feelsLikeF != null) parts.push("Feels like " + t.feelsLikeF + "°");
+          if (t.feelsLikeF != null && t.feelsLikeF !== t.tempF) parts.push("Feels like " + t.feelsLikeF + "°");
           if (t.precipChance != null) parts.push(t.precipChance + "% precip");
           me.textContent = parts.join(" · ");
         }
@@ -346,6 +349,12 @@
         setInterval(function () {
           fetchSnapshot().then(applyPayload).catch(function () {});
         }, SNAPSHOT_POLL_MS);
+        setInterval(function () {
+          fetch(API_BASE + "/api/now-playing", { credentials: "same-origin" })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (np) { if (np) hydrateNowPlaying(np); })
+            .catch(function () {});
+        }, NOW_PLAYING_POLL_MS);
       })
       .catch(function () {
         hydrateFromDemo();
